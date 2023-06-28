@@ -34,9 +34,10 @@ export function CommentForm({
 	autoFocus,
 	isCommentForm,
 	setIsFormActive,
+	params,
 }: Props) {
 	const { user: userid } = useAuthContext();
-	const { postid } = useParams();
+	const { postid } = params;
 	const { formData, setFormData, handleChange } = useForm(commentFields);
 	const { isFormValid } = useValidation(commentVal, formData);
 	const { text } = formData;

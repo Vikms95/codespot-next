@@ -9,12 +9,11 @@ import { usePostsContext } from '../../context/PostsContext';
 import { useHtmlAsText } from '../../hooks/useHtmlAsText';
 import { usePost } from '../../hooks/usePost';
 import { getPosts } from '../../services/post';
-/* eslint-disable react/prop-types */
 
 type Params = { postid: string };
 
-export function PostBody({ children }: TChildren) {
-	const { postid } = useParams<keyof Params>() as Params;
+export function PostBody({ children, params }: TChildren) {
+	const { postid } = params;
 	const { posts, setPosts } = usePostsContext();
 	const post = usePost(postid, posts);
 	const { title, image, text } = post;
