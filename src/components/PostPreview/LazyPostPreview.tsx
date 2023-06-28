@@ -20,7 +20,7 @@ export function LazyPostPreview(props: Props) {
 	const { isNearScreen, fromRef } = useNearScreen({ distance: '200px' });
 	return (
 		<StyledPostPreview ref={fromRef}>
-			{isNearScreen ? <PostPreview {...props}></PostPreview> : null}
+			<PostPreview {...props}></PostPreview>
 		</StyledPostPreview>
 	);
 }

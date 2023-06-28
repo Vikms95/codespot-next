@@ -1,6 +1,7 @@
-/* eslint-disable react/prop-types */
+'use client';
 import React, { Dispatch, SetStateAction } from 'react';
 import PostPreview from './PostPreview';
+import { useRouter } from 'next/navigation';
 import { useNavigate } from 'react-router-dom';
 import { PostButtonContainer } from './_styles';
 import { Button } from '../../style/Button';
@@ -19,10 +20,10 @@ type Props = {
 
 export default function PostPreviewWithButtons(props: Props) {
 	const { id, setIsModalActive, setLastClickedPost } = props;
-	const navigate = useNavigate();
+	const router = useRouter();
 
 	const handleUpdate = () => {
-		return navigate('/update/' + id);
+		return router.push('/update/' + id);
 	};
 
 	const revealDeleteModal = () => {

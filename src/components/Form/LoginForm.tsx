@@ -32,7 +32,7 @@ import {
 	ErrorMessage,
 	ServerErrorDisplay,
 } from './_styles';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 type Props = {
 	setUser: Dispatch<SetStateAction<string>>;
@@ -62,7 +62,7 @@ export function LoginForm({ setUser }: Props) {
 			return redirectToPost();
 		}
 		return router.push('/dashboard');
-	});
+	}, [data]);
 
 	const handleSubmit = async (e: Event) => {
 		e.preventDefault();
@@ -71,7 +71,7 @@ export function LoginForm({ setUser }: Props) {
 
 	const redirectToPost = () => {
 		const postid = getFromStorage('postToRedirect');
-		return navigate(`/posts/${postid}`);
+		return router.push(`/posts/${postid}`);
 	};
 
 	const hasPostToRedirect = () => {

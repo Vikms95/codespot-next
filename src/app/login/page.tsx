@@ -1,4 +1,6 @@
 'use client';
+import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import loginImage from '../../assets/login-image.webp';
 import { loginFields } from '../../data/formFields';
@@ -11,13 +13,6 @@ import { loginUser } from '../../services/user';
 import { Spinner } from '../../style/Spinner';
 import { getFromStorage } from '../../utils/getFromStorage';
 import { setToStorage } from '../../utils/setToStorage';
-import {
-	Dispatch,
-	FormEventHandler,
-	SetStateAction,
-	useEffect,
-	useState,
-} from 'react';
 
 import {
 	UserFormContainer,
@@ -31,15 +26,12 @@ import {
 	ErrorMessage,
 	ServerErrorDisplay,
 } from './_styles';
-import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/context/AuthContext';
 
-type Props = {
-	setUser: Dispatch<SetStateAction<string>>;
-};
-
-export default function LoginForm({ setUser }: Props) {
+export default function LoginForm() {
 	const router = useRouter();
 	const isActive = useFadeIn();
+	const { setUser } = useAuthContext();
 
 	const { formData, handleChange, handleBlur } = useForm(loginFields);
 	const { isFormValid, shouldMarkErr } = useValidation(loginVal, formData);

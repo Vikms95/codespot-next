@@ -89,6 +89,7 @@ const NavItem = styled.li`
 const StyledNavbar = styled.nav`
 	background-color: white;
 	position: fixed;
+	left: 0;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

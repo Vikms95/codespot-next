@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+'use client';
 import { getImage } from '../../services/post';
 import { getCommentsCount } from '../../services/comment';
 import defaultPostImage from '../../assets/default-image.jpg';
@@ -33,7 +33,7 @@ export function PostPreviewImage({ image, id }: Props) {
 			{isLoading ? (
 				<ImageItem />
 			) : (
-				<PostLink to={'/posts/' + id}>
+				<PostLink href={'/posts/' + id}>
 					<BookText>Read more → </BookText>
 
 					{hasComments() && (

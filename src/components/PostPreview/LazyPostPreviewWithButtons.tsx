@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { useNearScreen } from '../../hooks/useNearScreen';
 import { StyledPostPreview } from './_styles';
@@ -20,11 +21,12 @@ const PostPreviewWithButtons = React.lazy(
 
 export function LazyPostPreviewWithButtons(props: Props) {
 	const { isNearScreen, fromRef } = useNearScreen({ distance: '200px' });
+
 	return (
 		<StyledPostPreview ref={fromRef}>
-			{isNearScreen ? (
-				<PostPreviewWithButtons {...props}></PostPreviewWithButtons>
-			) : null}
+			{/* {isNearScreen ? ( */}
+			<PostPreviewWithButtons {...props}></PostPreviewWithButtons>
+			{/* ) : null} */}
 		</StyledPostPreview>
 	);
 }
