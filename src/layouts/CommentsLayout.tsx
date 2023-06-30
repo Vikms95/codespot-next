@@ -20,6 +20,7 @@ type Props = {
 };
 
 export function CommentsLayout({ comments, getChildComments }: Props) {
+	console.warn('com', comments);
 	return (
 		<StyledCommentsLayout>
 			{comments?.map(comment => {

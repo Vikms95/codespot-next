@@ -20,7 +20,7 @@ export function LazyComment(props: Props) {
 	return (
 		// TODO create styled comment
 		// <StyledComment ref={fromRef}>
-		<>{isNearScreen ? <Comment {...props}></Comment> : null}</>
+		<>{<Comment {...props}></Comment>}</>
 		// </StyledComment>
 	);
 }

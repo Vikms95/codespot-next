@@ -1,31 +1,38 @@
 'use client';
-import { TChildren } from '@/types';
-import { useEffect } from 'react';
-import { StyledPost } from './_styles';
-import { PostBodyWithGuest, PostBodyWithUser } from '../../../components/Post';
-import { useAuthContext } from '../../../context/AuthContext';
-import { useFadeIn } from '../../../hooks/useFadeIn';
-import { setToStorage } from '../../../utils/setToStorage';
+import React, { useState, useEffect } from 'react';
+import { getComments } from '../../../services/comment';
+import { Post } from '../../../components/Post/Post';
+import { PostWithComments } from '../../../components/Post/PostWithComments';
+import { CommentsContextProvider } from '../../../context/CommentsContext';
+import useSWR from 'swr';
+import { TComment } from '@/types';
 import { useParams } from 'next/navigation';
 
-export default function Post({ children }: TChildren) {
+export default function PostWrapper() {
 	const { postid } = useParams();
-	console.warn('postid', postid);
-	const { user } = useAuthContext();
-	const isActive = useFadeIn();
+	const [comments, setComments] = useState<TComment[]>([
+		{
+			_id: '',
+			isDeletedWithChildren: false,
+			parent: '',
+			post: '',
+			text: '',
+			timestamp: '',
+			user: {
+				_id: '',
+				username: '',
+			},
+		},
+	]);
+	const { data } = useSWR(`/api/${postid}/comments`, () =>
+		getComments(postid!)
+	);
 
-	useEffect(() => {
-		if (!user) {
-			setToStorage('postToRedirect', postid);
-		} else {
-			localStorage.removeItem('postToRedirect');
-		}
-	}, [user]);
+	useEffect(() => setComments(data), [data]);
 
 	return (
-		<StyledPost isActive={isActive}>
-			{user ? <PostBodyWithUser /> : <PostBodyWithGuest />}
-			{children}
-		</StyledPost>
+		<CommentsContextProvider value={{ comments, setComments }}>
+			{comments?.length === 0 ? <Post /> : <PostWithComments />}
+		</CommentsContextProvider>
 	);
 }
