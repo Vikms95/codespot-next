@@ -3,7 +3,6 @@ import { createComment, updateComment } from '@/services/comment';
 import { Spinner } from '@/style/Spinner';
 import { TComment, TFormFuncionality, TSetter } from '@/types';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import useSWRMutation from 'swr/mutation';
 import { useAuthContext } from '../../context/AuthContext';
 import { commentFields } from '../../data/formFields';
@@ -17,6 +16,7 @@ import {
 	CommentInputButtons,
 	CommentFormButton,
 } from './_styles';
+import { useParams } from 'next/navigation';
 
 type Props = {
 	type?: TFormFuncionality;
@@ -34,10 +34,9 @@ export function CommentForm({
 	autoFocus,
 	isCommentForm,
 	setIsFormActive,
-	params,
 }: Props) {
 	const { user: userid } = useAuthContext();
-	const { postid } = params;
+	const { postid } = useParams();
 	const { formData, setFormData, handleChange } = useForm(commentFields);
 	const { isFormValid } = useValidation(commentVal, formData);
 	const { text } = formData;

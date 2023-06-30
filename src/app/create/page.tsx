@@ -30,7 +30,6 @@ import {
 	ErrorMessage,
 	StyledEditor,
 } from './_styles';
-import { Router } from 'react-router-dom';
 
 export default function PostForm() {
 	const isActive = useFadeIn();

@@ -6,7 +6,6 @@ import {
 	useEffect,
 	useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 import loginImage from '../../assets/login-image.webp';
 import { loginFields } from '../../data/formFields';
