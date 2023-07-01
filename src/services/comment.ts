@@ -23,6 +23,8 @@ const getCommentsCount = async (commentID: string) => {
 	}
 };
 
+//
+
 const getComments = async (postID: string) => {
 	if (!postID) return;
 	try {
