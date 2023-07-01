@@ -2,10 +2,10 @@ import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import useSWR from 'swr';
 import { StyledDashboard } from './_styles';
 import { EmptyDashboard } from './EmptyDashboard';
-import { useAuthContext } from '../../context/AuthContext';
-import { usePostsContext } from '../../context/PostsContext';
-import { getUserPosts } from '../../services/post';
-import { TPost } from '../../types';
+import { useAuthContext } from '@context/AuthContext';
+import { usePostsContext } from '@context/PostsContext';
+import { getUserPosts } from '@services/post';
+import { TPost } from '@types';
 import { addPropsToChildren } from '../../utils/addPropsToChildren';
 
 type Props = {

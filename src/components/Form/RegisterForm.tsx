@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
-import { useForm } from '../../hooks/useForm';
-import { useValidation } from '../../hooks/useValidation';
-import { useFadeIn } from '../../hooks/useFadeIn';
-import { createUser } from '../../services/user';
+import { useForm } from '@hooks/useForm';
+import { useValidation } from '@hooks/useValidation';
+import { useFadeIn } from '@hooks/useFadeIn';
+import { createUser } from '@services/user';
 import { registerFields } from '../../data/formFields';
 import { registerVal } from '../../data/validationValues';
 import { UserFormLayout } from '../../layouts/UserFormLayout';
 import { Spinner } from '../../style/Spinner';
-import registerImage from '../../assets/register-image.webp';
+import registerImage from '@assets/register-image.webp';
 import useSWRMutation from 'swr/mutation';
 
 import {

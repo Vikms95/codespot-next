@@ -1,8 +1,8 @@
 'use client';
-import { getImage } from '../../services/post';
-import { getCommentsCount } from '../../services/comment';
-import defaultPostImage from '../../assets/default-image.jpg';
-import { ImageItem } from '../../assets/imageItem';
+import { getImage } from '@services/post';
+import { getCommentsCount } from '@services/comment';
+import defaultPostImage from '@assets/default-image.jpg';
+import { ImageItem } from '@assets/imageItem';
 import { FaComments } from 'react-icons/fa';
 import useSWR from 'swr';
 

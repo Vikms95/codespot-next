@@ -1,14 +1,14 @@
 'use client';
 import { useEffect } from 'react';
 import useSWRMutation from 'swr/mutation';
-import registerImage from '../../assets/register-image.webp';
+import registerImage from '@assets/register-image.webp';
 import { registerFields } from '../../data/formFields';
 import { registerVal } from '../../data/validationValues';
-import { useFadeIn } from '../../hooks/useFadeIn';
-import { useForm } from '../../hooks/useForm';
-import { useValidation } from '../../hooks/useValidation';
+import { useFadeIn } from '@hooks/useFadeIn';
+import { useForm } from '@hooks/useForm';
+import { useValidation } from '@hooks/useValidation';
 import { UserFormLayout } from '../../layouts/UserFormLayout';
-import { createUser } from '../../services/user';
+import { createUser } from '@services/user';
 import { Spinner } from '../../style/Spinner';
 
 import {

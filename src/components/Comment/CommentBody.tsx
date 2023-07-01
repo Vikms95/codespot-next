@@ -1,9 +1,9 @@
 import { TChildren, TComment, TSetter } from '@/types';
 import React, { useState } from 'react';
 import { CommentBorder, IconsContainer, Text } from './_styles';
-import { useAuthContext } from '../../context/AuthContext';
-import { useCommentsContext } from '../../context/CommentsContext';
-import { deleteComment, flagComment } from '../../services/comment';
+import { useAuthContext } from '@context/AuthContext';
+import { useCommentsContext } from '@context/CommentsContext';
+import { deleteComment, flagComment } from '@services/comment';
 import { addPropsToChildren } from '../../utils/addPropsToChildren';
 import { findByID } from '../../utils/findbyID';
 import { CommentForm } from '../Form/CommentForm';

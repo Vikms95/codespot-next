@@ -2,8 +2,8 @@
 import { useEffect } from 'react';
 import { LazyPostPreview as PostPreview } from '../PostPreview/';
 import { PostsLayout } from '../../layouts';
-import { usePostsContext } from '../../context/PostsContext';
-import { getPosts } from '../../services/post';
+import { usePostsContext } from '@context/PostsContext';
+import { getPosts } from '@services/post';
 import { StyledHome } from './_styles';
 import { TSetter } from '@/types';
 import useSWR from 'swr';

@@ -2,13 +2,13 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import useSWR from 'swr';
 import { StyledDashboard } from './_styles';
-import { EmptyDashboard } from '../../components/Dashboard/EmptyDashboard';
-import { useAuthContext } from '../../context/AuthContext';
-import { usePostsContext } from '../../context/PostsContext';
-import { getUserPosts } from '../../services/post';
+import { EmptyDashboard } from '@components/Dashboard/EmptyDashboard';
+import { useAuthContext } from '@context/AuthContext';
+import { usePostsContext } from '@context/PostsContext';
+import { getUserPosts } from '@services/post';
 import { PostsLayout } from '../../layouts';
-import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '../../components/PostPreview';
-import { TPost } from '../../types';
+import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '@components/PostPreview';
+import { TPost } from '@types';
 
 type Props = {
 	setIsModalActive: Dispatch<SetStateAction<boolean>>;

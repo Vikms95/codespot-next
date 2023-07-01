@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { useHtmlAsText } from '../../hooks/useHtmlAsText';
+import { useHtmlAsText } from '@hooks/useHtmlAsText';
 import {
 	PostDesc,
 	PostTitle,

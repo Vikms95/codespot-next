@@ -3,11 +3,11 @@ import React, { useEffect } from 'react';
 import useSWR from 'swr';
 import { CommentsTitle, Text } from './_styles';
 import { PostHero } from './PostHero';
-import { useCommentsContext } from '../../context/CommentsContext';
-import { usePostsContext } from '../../context/PostsContext';
-import { useHtmlAsText } from '../../hooks/useHtmlAsText';
-import { usePost } from '../../hooks/usePost';
-import { getPosts } from '../../services/post';
+import { useCommentsContext } from '@context/CommentsContext';
+import { usePostsContext } from '@context/PostsContext';
+import { useHtmlAsText } from '@hooks/useHtmlAsText';
+import { usePost } from '@hooks/usePost';
+import { getPosts } from '@services/post';
 import { useParams } from 'next/navigation';
 
 type Params = { postid: string };

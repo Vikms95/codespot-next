@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { useNearScreen } from '../../hooks/useNearScreen';
+import { useNearScreen } from '@hooks/useNearScreen';
 import { StyledPostPreview } from './_styles';
 import { TChildren, TSetter, TUser } from '@/types';
 

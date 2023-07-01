@@ -1,6 +1,6 @@
 import React from 'react';
-import emptyDashboardImage from '../../assets/empty-dashboard.webp';
-import { useFadeIn } from '../../hooks/useFadeIn';
+import emptyDashboardImage from '@assets/empty-dashboard.webp';
+import { useFadeIn } from '@hooks/useFadeIn';
 import { EmptyDashboardContainer, EmptyDashboardImage } from './_styles';
 
 export function EmptyDashboard() {

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { PostsLayout } from '../../layouts';
-import { TGetPreviewProps, TPost } from '../../types';
+import { TGetPreviewProps, TPost } from '@types';
 import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '../PostPreview';
 
 type Props = { posts?: TPost[]; getPreviewProps?: TGetPreviewProps };

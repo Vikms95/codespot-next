@@ -1,7 +1,7 @@
 import React from 'react';
 
-import errorImage from '../../assets/error-404-image.webp';
-import { useFadeIn } from '../../hooks/useFadeIn';
+import errorImage from '@assets/error-404-image.webp';
+import { useFadeIn } from '@hooks/useFadeIn';
 import { ErrorContainer, ErrorImage } from './_styles';
 
 export function Error() {

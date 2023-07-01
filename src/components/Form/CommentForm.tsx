@@ -4,11 +4,11 @@ import { Spinner } from '@/style/Spinner';
 import { TComment, TFormFuncionality, TSetter } from '@/types';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import useSWRMutation from 'swr/mutation';
-import { useAuthContext } from '../../context/AuthContext';
+import { useAuthContext } from '@context/AuthContext';
 import { commentFields } from '../../data/formFields';
 import { commentVal } from '../../data/validationValues';
-import { useForm } from '../../hooks/useForm';
-import { useValidation } from '../../hooks/useValidation';
+import { useForm } from '@hooks/useForm';
+import { useValidation } from '@hooks/useValidation';
 /* eslint-disable react/prop-types */
 import {
 	StyledCommentInput,

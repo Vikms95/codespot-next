@@ -1,7 +1,7 @@
 import React from 'react';
-import { useNearScreen } from '../../hooks/useNearScreen';
+import { useNearScreen } from '@hooks/useNearScreen';
 // import { StyledComment } from './_styles.js';
-import { TComment, TUser } from '../../types.js';
+import { TComment, TUser } from '@types.js';
 
 type Props = {
 	text: string;

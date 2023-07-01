@@ -1,15 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter, BrowserRouter } from 'react-router-dom';
 import App from './App';
 
 describe('App', () => {
-	beforeEach(() =>
-		render(
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
-		)
-	);
+	beforeEach(() => render(<App />));
 	it('should render the app', () => {
 		const button = screen.getByText(/CODESPOT/i);
 		expect(button).toBeInTheDocument();
@@ -28,19 +21,11 @@ describe('App', () => {
 		expect(screen.getByTestId('login-button')).toBeInTheDocument();
 	});
 	it('should show 404 page when landing on a bad page', () => {
-		render(
-			<MemoryRouter initialEntries={['/badroute']}>
-				<App />
-			</MemoryRouter>
-		);
+		render(<App />);
 		expect(screen.getByTestId('404-message')).toBeInTheDocument();
 	});
 	it('should show unauthorized access page when accesing dashboard while not logged', () => {
-		render(
-			<MemoryRouter initialEntries={['/dashboard']}>
-				<App />
-			</MemoryRouter>
-		);
+		render(<App />);
 		expect(screen.getByTestId('unauthorized-message')).toBeInTheDocument();
 	});
 });

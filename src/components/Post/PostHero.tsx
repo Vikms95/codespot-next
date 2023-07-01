@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect } from 'react';
-import { getImage } from '../../services/post';
+import { getImage } from '@services/post';
 import { Title, Image } from './_styles';
 import { TPost } from '@/types';
 import useSWRMutation from 'swr/mutation';

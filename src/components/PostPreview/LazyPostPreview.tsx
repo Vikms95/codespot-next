@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { useNearScreen } from '../../hooks/useNearScreen';
+import { useNearScreen } from '@hooks/useNearScreen';
 import { StyledPostPreview } from './_styles';
 import { TChildren, TUser } from '@/types';
 

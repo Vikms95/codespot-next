@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-import unauthorizedImage from '../../assets/unauthorized-image.webp';
-import { useFadeIn } from '../../hooks/useFadeIn';
+import unauthorizedImage from '@assets/unauthorized-image.webp';
+import { useFadeIn } from '@hooks/useFadeIn';
 import { formatError } from '../../utils/formatError';
 import { UnauthorizedContainer, UnauthorizedImage } from './_styles';
 
