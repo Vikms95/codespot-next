@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { FaReply } from 'react-icons/fa';
 import { IconButton } from './_styles';

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Unauthorized } from '../components/Unauthorized/Unauthorized';

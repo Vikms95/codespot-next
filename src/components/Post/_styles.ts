@@ -1,3 +1,4 @@
+import NextImage from 'next/image';
 import styled from 'styled-components';
 
 const StyledPost = styled.section`
@@ -57,7 +58,7 @@ const Title = styled.h2`
 	font-size: clamp(16px, 5vw, 4em);
 	max-width: 80ch;
 `;
-const Image = styled.img`
+const Image = styled(NextImage)`
 	max-width: 100%;
 	max-height: 100rem;
 	align-self: center;

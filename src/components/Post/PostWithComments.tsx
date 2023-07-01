@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { Post } from './Post';
 import { CommentsLayout } from '../../layouts/CommentsLayout';

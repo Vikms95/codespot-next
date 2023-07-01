@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { CommentTopRow, Username, CommentDate } from './_styles';
 import { getRelativeCurrentDate } from '../../utils/getRelativeCurrentDate';

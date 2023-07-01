@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Dispatch, SetStateAction } from 'react';
 import { FaPen } from 'react-icons/fa';
 import { IconButton, StyledFaTrash } from './_styles';
