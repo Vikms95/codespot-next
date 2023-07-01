@@ -9,7 +9,7 @@ import { commentFields } from '../../data/formFields';
 import { commentVal } from '../../data/validationValues';
 import { useForm } from '@hooks/useForm';
 import { useValidation } from '@hooks/useValidation';
-/* eslint-disable react/prop-types */
+
 import {
 	StyledCommentInput,
 	StyledCommentForm,

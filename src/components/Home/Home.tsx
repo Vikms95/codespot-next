@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect } from 'react';
 import { LazyPostPreview as PostPreview } from '../PostPreview/';
 import { PostsLayout } from '../../layouts';

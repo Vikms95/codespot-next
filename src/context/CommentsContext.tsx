@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { TChildren, TComment, TSetter } from '@/types';
 import React, {
 	Dispatch,

@@ -19,16 +19,12 @@ type Props = {
 };
 
 export function PostPreviewImage({ image, id }: Props) {
-	const { data: imageSrc, isLoading } = useSWR('/images/', () =>
-		getImage(image)
-	);
+	const { data: imageSrc, isLoading } = useSWR('/images/' + image, getImage);
 	const { data: commentsCount } = useSWR(`/api/${id}/comments-count`, () =>
 		getCommentsCount(id)
 	);
 
 	const hasComments = () => commentsCount > 0;
-
-	console.warn('source', imageSrc);
 
 	return (
 		<>
@@ -48,6 +44,8 @@ export function PostPreviewImage({ image, id }: Props) {
 					<PostImage
 						src={image ? imageSrc?.url : defaultPostImage}
 						alt='post-preview'
+						width={640}
+						height={420}
 					/>
 				</PostLink>
 			)}

@@ -32,11 +32,9 @@ const getUserPosts = async (
 	}
 };
 
-const getImage = async (image: string) => {
-	if (!image) return '';
-
+const getImage = async (url: string) => {
 	try {
-		const data = await fetch(rootURL + '/images/' + image);
+		const data = await fetch(rootURL + url);
 
 		return data;
 	} catch (err: any) {

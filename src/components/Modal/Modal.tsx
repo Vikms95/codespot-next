@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { ModalWrapper } from '../../containers/ModalWrapper';
 import { usePostsContext } from '@context/PostsContext';
