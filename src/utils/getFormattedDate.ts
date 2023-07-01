@@ -1,4 +1,4 @@
-import { MONTH_NAMES } from '@/constants';
+import { MONTH_NAMES } from '../constants';
 
 /**
  * Return date as Month, Day, Year. If no parameter is passed,

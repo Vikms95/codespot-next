@@ -3,7 +3,7 @@ import {
 	MS_PER_HOUR,
 	MS_PER_MINUTE,
 	MS_PER_WEEK,
-} from '@/constants';
+} from '../constants';
 
 export const getRelativeCurrentDate = (dateToCompare: string) => {
 	const formatter = new Intl.RelativeTimeFormat('en');

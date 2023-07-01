@@ -28,6 +28,8 @@ export function PostPreviewImage({ image, id }: Props) {
 
 	const hasComments = () => commentsCount > 0;
 
+	console.warn('source', imageSrc);
+
 	return (
 		<>
 			{isLoading ? (

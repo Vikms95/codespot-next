@@ -34,6 +34,7 @@ export default function PostPreview({
 	setLastClickedPostId,
 	children,
 }: Props) {
+	console.warn();
 	return (
 		<>
 			<PostImageContainer>
