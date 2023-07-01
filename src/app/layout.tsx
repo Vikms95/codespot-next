@@ -1,7 +1,7 @@
 'use client';
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { ReactNode, useState } from 'react';
+import { ReactElement, ReactNode, useState } from 'react';
 import { NavbarWithGuest, NavbarWithUser } from '../components/Navbar';
 import { AppLayout } from '../layouts';
 import { AuthContextProvider } from '@/context/AuthContext';
@@ -16,7 +16,7 @@ export const metadata = {
 };
 
 type Props = {
-	children: JSX.Element | JSX.Element[];
+	children: JSX.Element;
 };
 export default function RootLayout({ children }: Props) {
 	const [user, setUser] = useState('');
@@ -26,13 +26,12 @@ export default function RootLayout({ children }: Props) {
 	return (
 		<html lang='en'>
 			<body className={inter.className}>
-				{user ? <NavbarWithUser /> : <NavbarWithGuest />}
-
 				<AppLayout>
 					<AuthContextProvider value={{ user, setUser }}>
 						<PostsContextProvider
 							value={{ posts, setPosts, lastClickedPost, setLastClickedPost }}
 						>
+							{user ? <NavbarWithUser /> : <NavbarWithGuest />}
 							{children}
 						</PostsContextProvider>
 					</AuthContextProvider>
