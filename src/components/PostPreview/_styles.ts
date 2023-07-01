@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { FaBookOpen } from 'react-icons/fa';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export const StyledPostPreview = styled.section`
 	display: flex;
@@ -27,7 +28,7 @@ export const PostImageContainer = styled.article`
 	max-width: 100%;
 `;
 
-export const PostImage = styled.img`
+export const PostImage = styled(Image)`
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	width: 100%;

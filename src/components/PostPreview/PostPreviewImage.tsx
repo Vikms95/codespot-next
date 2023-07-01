@@ -28,7 +28,8 @@ export function PostPreviewImage({ image, id }: Props) {
 
 	const hasComments = () => commentsCount > 0;
 
-	console.warn('source', imageSrc);
+	console.warn('image default', defaultPostImage);
+	console.warn('image src', imageSrc);
 
 	return (
 		<>
@@ -46,8 +47,10 @@ export function PostPreviewImage({ image, id }: Props) {
 					)}
 
 					<PostImage
-						src={image ? imageSrc?.url : defaultPostImage}
+						src={image ? imageSrc.url : defaultPostImage}
 						alt='post-preview'
+						width={640}
+						height={420}
 					/>
 				</PostLink>
 			)}
