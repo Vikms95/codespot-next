@@ -1,5 +1,5 @@
-/* eslint react/prop-types: 0 */
-import React from 'react';
+'use client';
+import { useAuth } from '@hooks/useAuth';
 import { useWindowDimensions } from '@hooks/useWindowDimensions';
 import { FaHouseUser } from 'react-icons/fa';
 
@@ -11,7 +11,6 @@ import {
 	StyledNavbar,
 	TitleText,
 } from './_styles';
-import { useAuth } from '@hooks/useAuth';
 
 type Props = { children: JSX.Element[] };
 
