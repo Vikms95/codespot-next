@@ -79,7 +79,7 @@ export function LoginForm({ setUser }: Props) {
 	};
 
 	return (
-		<UserFormLayout isActive={isActive}>
+		<UserFormLayout data-testid='login-form' isActive={isActive}>
 			<UserFormContainer>
 				<UserForm onSubmit={handleSubmit} autoComplete='on'>
 					<HeroTitle> Share your ideas with the world.</HeroTitle>

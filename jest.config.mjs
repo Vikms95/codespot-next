@@ -25,11 +25,11 @@ const config = {
     "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
 
     // Handle CSS imports (without CSS modules)
-    "^.+\\.(css|sass|scss)$": "<rootDir>/__mocks__/styleMock.js",
+    "^.+\\.(css|sass|scss)$": "<rootDir>/__mocks__/styleMock.ts",
 
     // Handle image imports
     // https://jestjs.io/docs/webpack#handling-static-assets
-    "^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i": `<rootDir>/__mocks__/fileMock.js`,
+    "^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i": `<rootDir>/__mocks__/fileMock.ts`,
 
     // Handle module aliases
     "^@/components/(.*)$": "<rootDir>/components/$1",
@@ -39,7 +39,7 @@ const config = {
     "^@/utils/(.*)$": "<rootDir>/utils/$1",
   },
   // Add more setup options before each test is run
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
   testEnvironment: "jsdom",
   transform: {
