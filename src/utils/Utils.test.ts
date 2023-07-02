@@ -1,5 +1,4 @@
 import { TPost } from '@/types';
-import { assert, describe, expect, it, SpyInstance, vi } from 'vitest';
 import { createFormData } from './createFormData';
 import { findByID } from './findbyID';
 import { formatError } from './formatError';
@@ -25,23 +24,27 @@ const posts = [
 	{ _id: '3', title: 'three' },
 ];
 
-global.localStorage = {
-	length: 0,
-	state: {
-		'access-token': 'superHashedString',
-	},
-	setItem(key, item) {
-		this.state[key] = item;
-	},
-	getItem(key) {
-		return this.state[key];
-	},
-	clear() {},
-	key(index: number) {
-		return index.toString();
-	},
-	removeItem() {},
-};
+const localStorageMock = (function () {
+	let store = {};
+	return {
+		getItem: function (key: string) {
+			return store[key] || null;
+		},
+		setItem: function (key: string, value: string) {
+			store[key] = value.toString();
+		},
+		removeItem: function (key: string) {
+			delete store[key];
+		},
+		clear: function () {
+			store = {};
+		},
+	};
+})();
+
+Object.defineProperty(window, 'localStorage', {
+	value: localStorageMock,
+});
 
 describe('createFormData', () => {
 	it('creates form data of a post', () => {
@@ -54,7 +57,7 @@ describe('createFormData', () => {
 		mockFormData.append('user', user as any as string);
 
 		const formData = createFormData(form);
-		assert.deepEqual(mockFormData, formData);
+		expect(mockFormData).toStrictEqual(formData);
 	});
 });
 
@@ -67,7 +70,6 @@ describe('getFormattedDate', () => {
 
 // TODO this will fail on certain hours of the day, so ignore if fails
 describe('getRelativeCurrentDate', () => {
-	//  vi.setSystemTime(date)
 	it('returns the correct days', () => {
 		const diff = new Date(new Date().getTime() - MS_PER_DAY * 3);
 		const timestamp = getFormattedDate(diff);
@@ -102,7 +104,7 @@ describe('findByID', () => {
 
 describe('getFromStorage', () => {
 	it('invokes get item from local storage', () => {
-		const getItem = vi.spyOn(global.localStorage, 'getItem');
+		const getItem = jest.spyOn(global.localStorage, 'getItem');
 		getFromStorage('1');
 
 		expect(getItem).toHaveBeenCalled();

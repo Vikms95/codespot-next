@@ -15,7 +15,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "incremental": true,
     "paths": {
@@ -26,8 +26,8 @@
       "@hooks/*": ["./src/hooks/*"],
       "@context/*": ["./src/context/*"],
       "@assets/*": ["./src/assets/*"],
-      "@constants": ["./src/constants.ts"],
-      "@types": ["./src/types.d.ts", "vitest/globals"]
+      "@constants": ["./src/constants.ts"]
+      //   "@types": ["./src/types.d.ts"]
     },
     "plugins": [
       {
@@ -41,7 +41,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/test.ts",
-    "**/test.tsx"
+    "**/test.tsx",
+    "jest.setup.js"
   ],
   "exclude": ["node_modules"]
 }

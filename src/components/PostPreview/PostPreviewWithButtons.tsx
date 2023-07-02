@@ -2,7 +2,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import PostPreview from './PostPreview';
 import { useRouter } from 'next/navigation';
-import { useNavigate } from 'react-router-dom';
 import { PostButtonContainer } from './_styles';
 import { Button } from '../../style/Button';
 import { TChildren, TSetter, TUser } from '@/types';

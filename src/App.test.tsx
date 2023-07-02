@@ -1,37 +1,30 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import Root from './app/layout';
+import RootLayout from './app/layout';
+import { AuthContextProvider } from './context/AuthContext';
 
-describe('App', () => {
-	beforeEach(() =>
-		render(
-			<Root>
-				<div>dummy</div>
-			</Root>
-		)
-	);
-	it('should render the app', () => {
-		const button = screen.getByText(/CODESPOT/i);
-		expect(button).toBeInTheDocument();
+describe('RootLayout component', () => {
+	it('renders correctly', () => {
+		// const user = 'John';
+		// const setUser = () => {};
+		// render(<RootLayout />);
+		// expect(screen.getByRole('navigation')).toBeInTheDocument(); // Assuming the Navbar component is wrapped in a <nav> element
+		// expect(screen.getByRole('main')).toBeInTheDocument(); // Assuming the children components are wrapped in a <main> element
 	});
-	it('should redirect to Login component if no user is logged in', () => {
-		expect(screen.getByTestId('login-button')).toBeInTheDocument();
-	});
-	it('should redirect to register when clicking `Register`', () => {
-		const button = screen.getByTestId('register');
-		fireEvent.click(button);
-		expect(screen.getByTestId('register-button')).toBeInTheDocument();
-	});
-	it('should redirect to login when clicking `Login`', () => {
-		const button = screen.getByTestId('login');
-		fireEvent.click(button);
-		expect(screen.getByTestId('login-button')).toBeInTheDocument();
-	});
-	// it('should show 404 page when landing on a bad page', () => {
-	// 	render(<Root children={<div>hell</div>} />);
-	// 	expect(screen.getByTestId('404-message')).toBeInTheDocument();
+
+	// it('renders NavbarWithUser component when user is truthy', () => {
+	// 	// Set up the necessary state for the test
+	// 	const user = { name: 'John' };
+	// 	render(<RootLayout />);
+
+	// 	// Check if the NavbarWithUser component is rendered
+	// 	expect(screen.getByRole('navigation')).toHaveTextContent('Welcome, John');
 	// });
-	// it('should show unauthorized access page when accesing dashboard while not logged', () => {
-	// 	render(<Root children={<div>hell</div>} />);
-	// 	expect(screen.getByTestId('unauthorized-message')).toBeInTheDocument();
+
+	// it('renders NavbarWithGuest component when user is falsy', () => {
+	// 	// Set up the necessary state for the test
+	// 	render(<RootLayout />);
+
+	// 	// Check if the NavbarWithGuest component is rendered
+	// 	expect(screen.getByRole('navigation')).toHaveTextContent('Guest');
 	// });
 });

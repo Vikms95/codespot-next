@@ -8,7 +8,7 @@ import { AuthContextProvider } from '@/context/AuthContext';
 import { PostsContextProvider } from '@/context/PostsContext';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
 	title: 'Codespot',
@@ -25,7 +25,9 @@ export default function RootLayout({ children }: Props) {
 
 	return (
 		<html lang='en'>
-			<body className={inter.className}>
+			<body
+			// className={inter.className}
+			>
 				<AppLayout>
 					<AuthContextProvider value={{ user, setUser }}>
 						<PostsContextProvider
