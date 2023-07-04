@@ -1,9 +1,11 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import RootLayout from './app/layout';
 import Home from './app/page';
 import * as postService from './services/post';
+import { NextRouter, useRouter } from 'next/router';
+import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { mockIntersectionObserver } from '../__mocks__/mockIntersectionObserver';
 import { mockPostArray } from '../__mocks__/mockPostArray';
 
@@ -18,12 +20,32 @@ describe('RootLayout component', () => {
 describe('Routes', () => {
 	setupTests();
 
-	it('renders login page', () => {
+	it('renders login page', async () => {
+		const mockRouter: Partial<NextRouter> = {
+			push: mockPush,
+			prefetch: () => Promise.resolve(),
+			reload: () => {},
+			back: () => {},
+			beforePopState: () => {},
+			events: {
+				on: () => {},
+				off: () => {},
+				emit: () => {},
+			},
+			isFallback: false,
+			isReady: true,
+		};
+
+		jest.mocked(useRouter).mockReturnValue(mockRouter as NextRouter);
+
 		const loginButton = screen.getByTestId('login-button');
+
 		act(() => fireEvent.click(loginButton));
 
-		const loginForm = screen.queryByTestId('login-form');
-		expect(loginForm).toBeInTheDocument();
+		expect(mockPush).toHaveBeenCalledWith(
+			'/login',
+			expect.objectContaining({ forceOptimisticNavigation: false })
+		);
 	});
 });
 
@@ -31,9 +53,14 @@ function setupTests() {
 	beforeEach(() =>
 		act(() => {
 			render(
-				<RootLayout>
-					<Home setIsModalActive={jest.fn()} setLastClickedPostId={jest.fn()} />
-				</RootLayout>
+				<RouterContext.Provider value={{ push: mockPush }}>
+					<RootLayout>
+						<Home
+							setIsModalActive={jest.fn()}
+							setLastClickedPostId={jest.fn()}
+						/>
+					</RootLayout>
+				</RouterContext.Provider>
 			);
 			jest.clearAllMocks();
 		})
@@ -46,6 +73,11 @@ function setupTests() {
 
 jest.mock('./services/post');
 jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
+
+let mockPush = jest.fn();
+jest.mock('next/router', () => ({
+	useRouter: jest.fn(),
+}));
 
 window.IntersectionObserver = jest
 	.fn()

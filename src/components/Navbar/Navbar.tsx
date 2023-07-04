@@ -18,7 +18,7 @@ export function Navbar({ children }: Props) {
 	const { width } = useWindowDimensions();
 	useAuth();
 	return (
-		<StyledNavbar>
+		<StyledNavbar data-testid='navigation-bar'>
 			<InnerNav>
 				<StyledLink href='/'>
 					<NavItem>
