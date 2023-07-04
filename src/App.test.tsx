@@ -20,9 +20,9 @@ describe('Routes', () => {
 
 	it('renders login page', () => {
 		const loginButton = screen.getByTestId('login-button');
-		fireEvent.click(loginButton);
+		act(() => fireEvent.click(loginButton));
 
-		const loginForm = screen.getByTestId('login-form');
+		const loginForm = screen.queryByTestId('login-form');
 		expect(loginForm).toBeInTheDocument();
 	});
 });
@@ -45,7 +45,7 @@ function setupTests() {
 }
 
 jest.mock('./services/post');
-postService.getPosts.mockImplementation(() => mockPostArray);
+jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
 
 window.IntersectionObserver = jest
 	.fn()
