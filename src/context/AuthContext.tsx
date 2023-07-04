@@ -1,11 +1,5 @@
 import { TSetter } from '@/types';
-import {
-	Dispatch,
-	SetStateAction,
-	createContext,
-	useContext,
-	JSX,
-} from 'react';
+import { createContext, useContext, JSX } from 'react';
 
 type Context = {
 	user: string;

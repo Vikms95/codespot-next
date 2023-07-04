@@ -1,4 +1,3 @@
-// __mocks__/next/router.js
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 const nextRouterMock = {
@@ -11,6 +10,7 @@ const nextRouterMock = {
   asPath: "/",
   basePath: "/",
 };
+
 jest.doMock("next/router", () => ({
   useRouter: () => nextRouterMock,
 }));
