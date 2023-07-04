@@ -20,7 +20,7 @@ export function Navbar({ children }: Props) {
 	return (
 		<StyledNavbar data-testid='navigation-bar'>
 			<InnerNav>
-				<StyledLink href='/'>
+				<StyledLink data-testid='dashboard-button' href='/'>
 					<NavItem>
 						{width > 600 ? (
 							<>

@@ -1,18 +1,19 @@
-const useRouter = jest.spyOn(require("next/router"), "useRouter");
+import { NextRouter, useRouter } from "next/router";
 
-const nextRouterMock = {
-  push: jest.fn().mockResolvedValue(""),
-  replace: jest.fn().mockResolvedValue(""),
-  prefetch: jest.fn().mockResolvedValue(""),
-  route: "/",
-  pathname: "/",
-  query: "",
-  asPath: "/",
-  basePath: "/",
+const mockRouterPush = jest.fn();
+const mockNextRouter: Partial<NextRouter> = {
+  push: mockRouterPush,
+  prefetch: () => Promise.resolve(),
+  reload: () => {},
+  back: () => {},
+  beforePopState: () => {},
+  events: {
+    on: () => {},
+    off: () => {},
+    emit: () => {},
+  },
+  isFallback: false,
+  isReady: true,
 };
 
-jest.doMock("next/router", () => ({
-  useRouter: () => nextRouterMock,
-}));
-
-export { nextRouterMock };
+export { mockNextRouter, mockRouterPush };

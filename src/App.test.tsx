@@ -1,59 +1,78 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { NextRouter, useRouter } from 'next/router';
 import * as React from 'react';
 import { act } from 'react-dom/test-utils';
 import RootLayout from './app/layout';
 import Home from './app/page';
 import * as postService from './services/post';
-import { NextRouter, useRouter } from 'next/router';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
+import * as userService from './services/user';
 import { mockIntersectionObserver } from '../__mocks__/mockIntersectionObserver';
 import { mockPostArray } from '../__mocks__/mockPostArray';
+import { mockNextRouter, mockRouterPush } from '../__mocks__/mockRouter';
+
+// Mocks //
+jest.mock('./services/post');
+jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
+
+jest.mock('next/router', () => ({
+	useRouter: jest.fn(),
+}));
+
+window.IntersectionObserver = jest
+	.fn()
+	.mockImplementation(mockIntersectionObserver);
+
+//
 
 describe('RootLayout component', () => {
 	setupTests();
+
 	it('renders correctly', () => {
 		expect(screen.getByRole('navigation')).toBeInTheDocument(); // Assuming the Navbar component is wrapped in a <nav> element
 		expect(screen.getByRole('main')).toBeInTheDocument(); // Assuming the children components are wrapped in a <main> element
 	});
 });
 
-describe('Routes', () => {
+describe('guest routes', () => {
 	setupTests();
 
-	it('renders login page', async () => {
-		const mockRouter: Partial<NextRouter> = {
-			push: mockPush,
-			prefetch: () => Promise.resolve(),
-			reload: () => {},
-			back: () => {},
-			beforePopState: () => {},
-			events: {
-				on: () => {},
-				off: () => {},
-				emit: () => {},
-			},
-			isFallback: false,
-			isReady: true,
-		};
-
-		jest.mocked(useRouter).mockReturnValue(mockRouter as NextRouter);
-
+	it('navigates to login page', () => {
+		jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
 		const loginButton = screen.getByTestId('login-button');
-
 		act(() => fireEvent.click(loginButton));
-
-		expect(mockPush).toHaveBeenCalledWith(
+		expect(mockRouterPush).toHaveBeenCalledWith(
 			'/login',
+			expect.objectContaining({ forceOptimisticNavigation: false })
+		);
+	});
+	it('navigates to register page', () => {
+		jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
+		const registerButton = screen.getByTestId('register-button');
+		act(() => fireEvent.click(registerButton));
+		expect(mockRouterPush).toHaveBeenCalledWith(
+			'/register',
+			expect.objectContaining({ forceOptimisticNavigation: false })
+		);
+	});
+	it('navigates to home page', () => {
+		jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
+		const dashboardButton = screen.getByTestId('dashboard-button');
+		act(() => fireEvent.click(dashboardButton));
+		expect(mockRouterPush).toHaveBeenCalledWith(
+			'/',
 			expect.objectContaining({ forceOptimisticNavigation: false })
 		);
 	});
 });
 
+describe('user routes', () => {});
+
 function setupTests() {
 	beforeEach(() =>
 		act(() => {
 			render(
-				<RouterContext.Provider value={{ push: mockPush }}>
+				<RouterContext.Provider value={{ push: mockRouterPush }}>
 					<RootLayout>
 						<Home
 							setIsModalActive={jest.fn()}
@@ -70,15 +89,3 @@ function setupTests() {
 		jest.clearAllMocks();
 	});
 }
-
-jest.mock('./services/post');
-jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
-
-let mockPush = jest.fn();
-jest.mock('next/router', () => ({
-	useRouter: jest.fn(),
-}));
-
-window.IntersectionObserver = jest
-	.fn()
-	.mockImplementation(mockIntersectionObserver);
