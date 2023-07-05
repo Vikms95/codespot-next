@@ -1,28 +1,12 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { RouterContext } from "next/dist/shared/lib/router-context";
-import { NextRouter, useRouter } from "next/router";
-import * as React from "react";
 import { act } from "react-dom/test-utils";
 import RootLayout from "@/app/layout";
 import Home from "@/app/page";
 import * as postService from "@services/post";
-import * as userService from "@services/user";
 import { mockIntersectionObserver } from "../__mocks__/mockIntersectionObserver";
 import { mockPostArray } from "../__mocks__/mockPostArray";
-import { mockNextRouter, mockRouterPush } from "../__mocks__/mockRouter";
-
-jest.mock("../src/services/post");
-jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
-
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}));
-
-window.IntersectionObserver = jest
-  .fn()
-  .mockImplementation(mockIntersectionObserver);
-
-//
+import { mockRouterPush } from "../__mocks__/mockRouter";
 
 describe("init", () => {
   setupTests();
@@ -55,3 +39,13 @@ function setupTests() {
     jest.clearAllMocks();
   });
 }
+
+// MOCKS //
+mockIntersectionObserver();
+
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}));
+
+jest.mock("../src/services/post");
+jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);

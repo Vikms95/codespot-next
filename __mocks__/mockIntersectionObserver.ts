@@ -1,4 +1,6 @@
-export const mockIntersectionObserver = () => ({
-  observe: () => null,
-  disconnect: () => null,
-});
+export function mockIntersectionObserver() {
+  window.IntersectionObserver = jest.fn().mockImplementation(() => ({
+    observe: () => null,
+    disconnect: () => null,
+  }));
+}

@@ -1,5 +1,6 @@
-import { NextRouter, useRouter } from "next/router";
+import { NextRouter } from "next/router";
 
+// export const useRouter = jest.fn();
 const mockRouterPush = jest.fn();
 const mockNextRouter: Partial<NextRouter> = {
   push: mockRouterPush,
@@ -16,4 +17,10 @@ const mockNextRouter: Partial<NextRouter> = {
   isReady: true,
 };
 
-export { mockNextRouter, mockRouterPush };
+function mockRouter() {
+  jest.mock("next/router", () => ({
+    useRouter: jest.fn(),
+  }));
+}
+
+export { mockRouter, mockNextRouter, mockRouterPush };

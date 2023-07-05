@@ -9,30 +9,11 @@ import * as postService from "@services/post";
 import * as userService from "@services/user";
 import { mockIntersectionObserver } from "../__mocks__/mockIntersectionObserver";
 import { mockPostArray } from "../__mocks__/mockPostArray";
-import { mockNextRouter, mockRouterPush } from "../__mocks__/mockRouter";
-
-// Mocks //
-jest.mock("../src/services/post");
-jest.mock("../src/services/user");
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}));
-
-jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
-jest.mocked(userService).verifyUser.mockImplementation(async () => {
-  return {
-    user: "mockuser",
-  };
-});
-jest.mocked(userService).loginUser.mockImplementation(async () => {
-  return {
-    user: "mockuser",
-  };
-});
-
-window.IntersectionObserver = jest
-  .fn()
-  .mockImplementation(mockIntersectionObserver);
+import {
+  mockNextRouter,
+  mockRouter,
+  mockRouterPush,
+} from "../__mocks__/mockRouter";
 
 describe("user routes", () => {
   setupTests();
@@ -69,3 +50,24 @@ function setupTests() {
     jest.clearAllMocks();
   });
 }
+
+// Mocks //
+mockIntersectionObserver();
+jest.mock("../src/services/user");
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}));
+
+jest.mock("../src/services/post");
+jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
+
+jest.mocked(userService).verifyUser.mockImplementation(async () => {
+  return {
+    user: "mockuser",
+  };
+});
+jest.mocked(userService).loginUser.mockImplementation(async () => {
+  return {
+    user: "mockuser",
+  };
+});
