@@ -27,6 +27,24 @@ describe("user routes", () => {
       expect.objectContaining({ forceOptimisticNavigation: false })
     );
   });
+  it("navigates to dashboard page", () => {
+    jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
+    const dashboardButton = screen.getByTestId("dashboard-button");
+    act(() => fireEvent.click(dashboardButton));
+    expect(mockRouterPush).toHaveBeenCalledWith(
+      "/dashboard",
+      expect.objectContaining({ forceOptimisticNavigation: false })
+    );
+  });
+  it("logs out and navigates to home", () => {
+    jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
+    const logoutButton = screen.getByTestId("logout-button");
+    act(() => fireEvent.click(logoutButton));
+    expect(mockRouterPush).toHaveBeenCalledWith(
+      "/",
+      expect.objectContaining({ forceOptimisticNavigation: false })
+    );
+  });
 });
 
 function setupTests() {

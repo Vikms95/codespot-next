@@ -36,7 +36,7 @@ describe("guest routes", () => {
   });
   it("navigates to home page", () => {
     jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
-    const dashboardButton = screen.getByTestId("dashboard-button");
+    const dashboardButton = screen.getByTestId("home-button");
     act(() => fireEvent.click(dashboardButton));
     expect(mockRouterPush).toHaveBeenCalledWith(
       "/",
