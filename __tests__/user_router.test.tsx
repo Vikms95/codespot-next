@@ -45,6 +45,15 @@ describe("user routes", () => {
       expect.objectContaining({ forceOptimisticNavigation: false })
     );
   });
+  it("navigates to post route", () => {
+    jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
+    const postLink = screen.getByTestId("post-link");
+    act(() => fireEvent.click(postLink));
+    expect(mockRouterPush).toHaveBeenCalledWith(
+      "/posts/" + mockPostArray[0]._id,
+      expect.objectContaining({ forceOptimisticNavigation: false })
+    );
+  });
 });
 
 function setupTests() {

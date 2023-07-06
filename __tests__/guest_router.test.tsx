@@ -7,11 +7,7 @@ import Home from "@/app/page";
 import * as postService from "@services/post";
 import { mockIntersectionObserver } from "../__mocks__/mockIntersectionObserver";
 import { mockPostArray } from "../__mocks__/mockPostArray";
-import {
-  mockNextRouter,
-  mockRouter,
-  mockRouterPush,
-} from "../__mocks__/mockRouter";
+import { mockNextRouter, mockRouterPush } from "../__mocks__/mockRouter";
 
 describe("guest routes", () => {
   setupTests();
@@ -40,6 +36,15 @@ describe("guest routes", () => {
     act(() => fireEvent.click(dashboardButton));
     expect(mockRouterPush).toHaveBeenCalledWith(
       "/",
+      expect.objectContaining({ forceOptimisticNavigation: false })
+    );
+  });
+  it("navigates to post route", () => {
+    jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
+    const postLink = screen.getByTestId("post-link");
+    act(() => fireEvent.click(postLink));
+    expect(mockRouterPush).toHaveBeenCalledWith(
+      "/posts/" + mockPostArray[0]._id,
       expect.objectContaining({ forceOptimisticNavigation: false })
     );
   });

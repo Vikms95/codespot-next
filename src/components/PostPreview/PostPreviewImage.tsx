@@ -31,7 +31,7 @@ export function PostPreviewImage({ image, id }: Props) {
 			{isLoading ? (
 				<ImageItem />
 			) : (
-				<PostLink href={'/posts/' + id}>
+				<PostLink data-testid='post-link' href={'/posts/' + id}>
 					<BookText>Read more → </BookText>
 
 					{hasComments() && (

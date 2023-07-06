@@ -11,9 +11,13 @@ import { mockRouterPush } from "../__mocks__/mockRouter";
 describe("init", () => {
   setupTests();
 
-  it("renders correctly", () => {
-    expect(screen.getByRole("navigation")).toBeInTheDocument(); // Assuming the Navbar component is wrapped in a <nav> element
-    expect(screen.getByRole("main")).toBeInTheDocument(); // Assuming the children components are wrapped in a <main> element
+  it("renders static elements correctly", () => {
+    expect(screen.getByRole("navigation")).toBeInTheDocument();
+    expect(screen.getByRole("main")).toBeInTheDocument();
+  });
+
+  it("renders post layout", () => {
+    expect(screen.getByTestId("posts-layout")).toBeInTheDocument();
   });
 });
 
