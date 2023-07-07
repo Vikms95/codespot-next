@@ -8,24 +8,34 @@ import { RouterContext } from "next/dist/shared/lib/router-context";
 import { act } from "react-dom/test-utils";
 import { verifyUser } from "@/services/user";
 import { getPosts } from "@/services/post";
-import { mockPostArray } from "__mocks__/mockPostArray";
-import { mockIntersectionObserver } from "__mocks__/mockIntersectionObserver";
+import { mockPostArray } from "../__mocks__/mockPostArray";
+import { mockIntersectionObserver } from "../__mocks__/mockIntersectionObserver";
+import useSWR from "swr";
 
 describe("init api calls", () => {
   setupTests();
-  it("verify user", () => {
-    expect(screen.getByText("Dashboard")).toBeInTheDocument();
+
+  it("calls verify user", () => {
+    const verifyUserSpy = jest.spyOn(userService, "verifyUser");
+    expect(verifyUserSpy).toHaveBeenCalledTimes(1);
   });
 
-  //   it("home posts", () => {
-  //     expect(getPosts).toHaveBeenCalledTimes(1);
+  it.todo("calls home posts");
+  //   , async () => {
+  //     const fakeData = { fake: "data" };
+  //     global.fetch = jest.fn().mockImplementation(setupFetchStub(fakeData));
+
+  //     render(
+  //       <RootLayout>
+  //         <Home setIsModalActive={jest.fn()} setLastClickedPostId={jest.fn()} />
+  //       </RootLayout>
+  //     );
+  //     expect(global.fetch).toHaveBeenCalledWith("hi");
   //   });
 });
 
 function setupTests() {
   beforeEach(() => {
-    // verifyUser.mockResolvedValueOnce({ user: "mockUser" });
-    // getPosts.mockResolvedValueOnce(mockPostArray);
     act(() => {
       render(
         <RouterContext.Provider value={{ push: mockRouterPush }}>
@@ -37,8 +47,6 @@ function setupTests() {
           </RootLayout>
         </RouterContext.Provider>
       );
-
-      jest.clearAllMocks();
     });
   });
 
@@ -47,7 +55,21 @@ function setupTests() {
   });
 }
 
+function setupFetchStub(data: any) {
+  return function fetchStub(_url: string) {
+    return new Promise((resolve) => {
+      resolve({
+        json: () =>
+          Promise.resolve({
+            data,
+          }),
+      });
+    });
+  };
+}
+
 mockIntersectionObserver();
+
 jest.mock("../src/services/user");
 jest.mock("../src/services/post");
 jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
