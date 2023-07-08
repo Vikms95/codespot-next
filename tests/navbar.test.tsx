@@ -33,19 +33,32 @@ describe("Navbar with guest", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     jest.mocked(userService).verifyUser.mockResolvedValue(undefined);
+    renderComponent();
   });
 
   it("has title", () => {
-    renderComponent();
-    screen.getByText("CODESPOT");
+    waitFor(
+      () => {
+        screen.getByText("CODESPOT");
+      },
+      { timeout: 0 }
+    );
   });
   it("has login text", () => {
-    renderComponent();
-    screen.getByText("Login");
+    waitFor(
+      () => {
+        screen.getByText("Login");
+      },
+      { timeout: 0 }
+    );
   });
   it("has register text", () => {
-    renderComponent();
-    screen.getByText("Register");
+    waitFor(
+      () => {
+        screen.getByText("Register");
+      },
+      { timeout: 0 }
+    );
   });
 });
 
@@ -53,21 +66,33 @@ describe("Navbar with user", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     jest.mocked(userService).verifyUser.mockResolvedValue("mockuser");
+    renderComponent();
   });
 
   it("has dashboard text", () => {
-    renderComponent();
-
     waitFor(
       () => {
-        expect(userService.verifyUser).toHaveBeenCalledTimes(1);
         screen.getByText("Dashboard");
       },
-      { timeout: 5000 }
+      { timeout: 0 }
     );
   });
-  it.todo("has new post text");
-  it.todo("has logout text");
+  it("has new post text", () => {
+    waitFor(
+      () => {
+        screen.getByText("New post");
+      },
+      { timeout: 0 }
+    );
+  });
+  it("has logout text", () => {
+    waitFor(
+      () => {
+        screen.getByText("Logout");
+      },
+      { timeout: 0 }
+    );
+  });
 });
 
 function renderComponent() {

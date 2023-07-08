@@ -42,10 +42,11 @@ export default function RegisterForm() {
 		router.push('/login');
 	}, [data]);
 
+	console.log(isFormValid);
 	return (
 		<UserFormLayout isActive={isActive}>
 			<UserFormContainer>
-				<UserForm onSubmit={trigger} autoComplete='on'>
+				<UserForm name='register-form' onSubmit={trigger} autoComplete='on'>
 					<HeroTitle> Connect with the world ideas.</HeroTitle>
 					<InputHeader>
 						<StyledLabel htmlFor='username'> Username </StyledLabel>
@@ -57,6 +58,7 @@ export default function RegisterForm() {
 						type='text'
 						id='username'
 						name='username'
+						placeholder='Username123'
 						autoComplete='on'
 						maxLength={20}
 						minLength={1}
@@ -76,6 +78,7 @@ export default function RegisterForm() {
 						type='password'
 						id='password'
 						name='password'
+						placeholder='+5 characters'
 						autoComplete='on'
 						maxLength={20}
 						minLength={5}
@@ -92,6 +95,7 @@ export default function RegisterForm() {
 					</InputHeader>
 					<Input
 						type='password'
+						data-testid='confirm-password'
 						id='password2'
 						name='password2'
 						autoComplete='on'
@@ -106,7 +110,7 @@ export default function RegisterForm() {
 						{error || 'No error'}
 					</ServerErrorDisplay>
 					<LoginButton type='submit' disabled={isFormValid() || isMutating}>
-						{isMutating ? <Spinner /> : 'Register'}
+						{isMutating ? <Spinner data-testid='spinner' /> : 'Register'}
 					</LoginButton>
 				</UserForm>
 			</UserFormContainer>
