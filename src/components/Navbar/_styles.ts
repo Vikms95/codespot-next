@@ -109,7 +109,7 @@ const StyledNavbar = styled.nav`
 
 	@media only screen and (min-width: 600px) {
 		top: 0;
-		width: 7em;
+		width: 7rem;
 		height: 100%;
 
 		&:hover {

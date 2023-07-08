@@ -23,6 +23,7 @@ export default function RootLayout({ children }: Props) {
 	const [posts, setPosts] = useLocalStorage('posts', []);
 	const [lastClickedPost, setLastClickedPost] = useState('');
 
+	console.log('user is: ', user);
 	return (
 		<html lang='en'>
 			<body className={inter.className}>

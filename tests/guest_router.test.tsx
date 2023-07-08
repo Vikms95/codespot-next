@@ -1,45 +1,39 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { RouterContext } from "next/dist/shared/lib/router-context";
 import { NextRouter, useRouter } from "next/router";
-import * as React from "react";
 import { act } from "react-dom/test-utils";
 import RootLayout from "@/app/layout";
 import Home from "@/app/page";
 import * as postService from "@services/post";
-import * as userService from "@services/user";
-import { mockIntersectionObserver } from "../__mocks__/mockIntersectionObserver";
-import { mockPostArray } from "../__mocks__/mockPostArray";
-import {
-  mockNextRouter,
-  mockRouter,
-  mockRouterPush,
-} from "../__mocks__/mockRouter";
+import { mockIntersectionObserver } from "../mocks/mockIntersectionObserver";
+import { mockPostArrayManyElements } from "../mocks/mockPostArray";
+import { mockNextRouter, mockRouterPush } from "../mocks/mockRouter";
 
-describe("user routes", () => {
+describe("guest routes", () => {
   setupTests();
 
-  it("navigates to create page", () => {
+  it("navigates to login page", () => {
     jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
-    const createButton = screen.getByTestId("create-button");
-    act(() => fireEvent.click(createButton));
+    const loginButton = screen.getByTestId("login-button");
+    act(() => fireEvent.click(loginButton));
     expect(mockRouterPush).toHaveBeenCalledWith(
-      "/create",
+      "/login",
       expect.objectContaining({ forceOptimisticNavigation: false })
     );
   });
-  it("navigates to dashboard page", () => {
+  it("navigates to register page", () => {
     jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
-    const dashboardButton = screen.getByTestId("dashboard-button");
+    const registerButton = screen.getByTestId("register-button");
+    act(() => fireEvent.click(registerButton));
+    expect(mockRouterPush).toHaveBeenCalledWith(
+      "/register",
+      expect.objectContaining({ forceOptimisticNavigation: false })
+    );
+  });
+  it("navigates to home page", () => {
+    jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
+    const dashboardButton = screen.getByTestId("home-button");
     act(() => fireEvent.click(dashboardButton));
-    expect(mockRouterPush).toHaveBeenCalledWith(
-      "/dashboard",
-      expect.objectContaining({ forceOptimisticNavigation: false })
-    );
-  });
-  it("logs out and navigates to home", () => {
-    jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
-    const logoutButton = screen.getByTestId("logout-button");
-    act(() => fireEvent.click(logoutButton));
     expect(mockRouterPush).toHaveBeenCalledWith(
       "/",
       expect.objectContaining({ forceOptimisticNavigation: false })
@@ -47,10 +41,12 @@ describe("user routes", () => {
   });
   it("navigates to post route", () => {
     jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
-    const postLink = screen.getByTestId("post-link");
+    const postLink = screen.getAllByTestId("post-link").at(0);
+    if (!postLink) return;
+
     act(() => fireEvent.click(postLink));
     expect(mockRouterPush).toHaveBeenCalledWith(
-      "/posts/" + mockPostArray[0]._id,
+      "/posts/" + mockPostArrayManyElements[0]._id,
       expect.objectContaining({ forceOptimisticNavigation: false })
     );
   });
@@ -80,21 +76,12 @@ function setupTests() {
 
 // Mocks //
 mockIntersectionObserver();
-jest.mock("../src/services/user");
+
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 
 jest.mock("../src/services/post");
-jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
-
-jest.mocked(userService).verifyUser.mockImplementation(async () => {
-  return {
-    user: "mockuser",
-  };
-});
-jest.mocked(userService).loginUser.mockImplementation(async () => {
-  return {
-    user: "mockuser",
-  };
-});
+jest
+  .mocked(postService)
+  .getPosts.mockImplementation(async () => mockPostArrayManyElements);

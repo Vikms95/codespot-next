@@ -24,7 +24,11 @@ export function Navbar({ children }: Props) {
 					<NavItem>
 						{width > 600 ? (
 							<>
-								<TitleText data-testid='title' role='button'>
+								<TitleText
+									data-testid='title'
+									aria-label='button'
+									role='button'
+								>
 									{' '}
 									CODESPOT{' '}
 								</TitleText>

@@ -4,9 +4,9 @@ import { act } from "react-dom/test-utils";
 import RootLayout from "@/app/layout";
 import Home from "@/app/page";
 import * as postService from "@services/post";
-import { mockIntersectionObserver } from "../__mocks__/mockIntersectionObserver";
-import { mockPostArray } from "../__mocks__/mockPostArray";
-import { mockRouterPush } from "../__mocks__/mockRouter";
+import { mockIntersectionObserver } from "../mocks/mockIntersectionObserver";
+import { mockPostArrayManyElements } from "../mocks/mockPostArray";
+import { mockRouterPush } from "../mocks/mockRouter";
 
 describe("init", () => {
   setupTests();
@@ -52,4 +52,6 @@ jest.mock("next/router", () => ({
 }));
 
 jest.mock("../src/services/post");
-jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
+jest
+  .mocked(postService)
+  .getPosts.mockImplementation(async () => mockPostArrayManyElements);

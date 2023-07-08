@@ -3,13 +3,13 @@ import Home from "@/app/page";
 import * as postService from "@services/post";
 import * as userService from "@services/user";
 import { render, screen } from "@testing-library/react";
-import { mockRouterPush } from "../__mocks__/mockRouter";
+import { mockRouterPush } from "../mocks/mockRouter";
 import { RouterContext } from "next/dist/shared/lib/router-context";
 import { act } from "react-dom/test-utils";
 import { verifyUser } from "@/services/user";
 import { getPosts } from "@/services/post";
-import { mockPostArray } from "../__mocks__/mockPostArray";
-import { mockIntersectionObserver } from "../__mocks__/mockIntersectionObserver";
+import { mockPostArrayManyElements } from "../mocks/mockPostArray";
+import { mockIntersectionObserver } from "../mocks/mockIntersectionObserver";
 import useSWR from "swr";
 
 describe("init api calls", () => {
@@ -72,7 +72,9 @@ mockIntersectionObserver();
 
 jest.mock("../src/services/user");
 jest.mock("../src/services/post");
-jest.mocked(postService).getPosts.mockImplementation(async () => mockPostArray);
+jest
+  .mocked(postService)
+  .getPosts.mockImplementation(async () => mockPostArrayManyElements);
 jest.mocked(userService).verifyUser.mockImplementation(async () => {
   return {
     user: "mockuser",
