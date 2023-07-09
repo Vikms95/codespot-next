@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 import loginImage from '@assets/login-image.webp';
 import { loginFields } from '../../data/formFields';
 import { loginVal } from '../../data/validationValues';
@@ -28,6 +28,7 @@ import {
 } from './_styles';
 import { useAuthContext } from '@/context/AuthContext';
 
+// REDO WITH USESWRMUTATION
 export default function LoginForm() {
 	const router = useRouter();
 	const isActive = useFadeIn();
@@ -36,9 +37,9 @@ export default function LoginForm() {
 	const { formData, handleChange, handleBlur } = useForm(loginFields);
 	const { isFormValid, shouldMarkErr } = useValidation(loginVal, formData);
 	const { username, password } = formData;
-	const [shouldFetch, setShouldFetch] = useState(false);
-	const { data, error, isLoading } = useSWR(
-		shouldFetch ? 'api/session' : null,
+	// const [shouldFetch, setShouldFetch] = useState(false);
+	const { data, error, isMutating, trigger } = useSWRMutation(
+		'api/session',
 		() => loginUser(username, password)
 	);
 
@@ -47,7 +48,6 @@ export default function LoginForm() {
 
 		setUser(data.user);
 		setToStorage('token', data.token);
-		setShouldFetch(false);
 
 		if (hasPostToRedirect()) {
 			return redirectToPost();
@@ -58,7 +58,8 @@ export default function LoginForm() {
 
 	const handleSubmit = async (e: Event) => {
 		e.preventDefault();
-		setShouldFetch(true);
+
+		trigger();
 	};
 
 	const redirectToPost = () => {
@@ -118,8 +119,8 @@ export default function LoginForm() {
 					<ServerErrorDisplay serverError={error}>
 						{error || 'No error'}
 					</ServerErrorDisplay>
-					<LoginButton type='submit' disabled={isFormValid() || isLoading}>
-						{isLoading ? <Spinner data-testid='spinner' /> : 'Login'}
+					<LoginButton type='submit' disabled={isFormValid() || isMutating}>
+						{isMutating ? <Spinner data-testid='spinner' /> : 'Login'}
 					</LoginButton>
 				</UserForm>
 			</UserFormContainer>
