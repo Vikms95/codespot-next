@@ -87,6 +87,7 @@ export default function LoginForm() {
 						type='text'
 						id='username'
 						name='username'
+						placeholder='Username123'
 						autoComplete='on'
 						maxLength={20}
 						minLength={1}
@@ -118,11 +119,11 @@ export default function LoginForm() {
 						{error || 'No error'}
 					</ServerErrorDisplay>
 					<LoginButton type='submit' disabled={isFormValid() || isLoading}>
-						{isLoading ? <Spinner></Spinner> : 'Login'}
+						{isLoading ? <Spinner data-testid='spinner' /> : 'Login'}
 					</LoginButton>
 				</UserForm>
 			</UserFormContainer>
-			<FormImage src={loginImage.src}></FormImage>
+			<FormImage alt='login' src={loginImage.src}></FormImage>
 		</UserFormLayout>
 	);
 }
