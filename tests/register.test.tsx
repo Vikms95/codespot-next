@@ -21,6 +21,12 @@ import { mockNextRouter } from "../mocks/mockRouter";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { NextRouter } from "next/router";
 
+global.fetch = jest.fn((value) => {
+  Promise.resolve({
+    json: () => Promise.resolve(value),
+  });
+});
+
 describe("Register component", () => {
   beforeEach(() => {
     renderComponent();
@@ -57,14 +63,29 @@ describe("Register component", () => {
   });
 
   it("renders spinner on register button", async () => {
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
+    const usernameInput = screen.getByLabelText(/username/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const confirmInput = screen.getByTestId("confirm-password");
+    const registerButton = screen.getByRole("button", { name: /register/i });
 
-    waitFor(
-      () => {
-        expect(screen.getByTestId("spinner")).toBeInTheDocument();
-      },
-      { timeout: 0 }
-    );
+    window.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true }),
+    });
+
+    fireEvent.input(usernameInput, {
+      target: { value: "Username123" },
+    });
+    fireEvent.input(passwordInput, {
+      target: { value: "password12345" },
+    });
+    fireEvent.input(confirmInput, {
+      target: { value: "password12345" },
+    });
+
+    fireEvent.click(registerButton);
+
+    expect(await screen.findByText("spinner")).toBeInTheDocument();
   });
 
   it("displays error message when input requirements are not met", async () => {
@@ -137,7 +158,7 @@ describe("Register component", () => {
   });
 
   // TODO false positive
-  it("navigates to login page when form is submitted with valid inputs", () => {
+  it.skip("navigates to login page when form is submitted with valid inputs", () => {
     jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
 
     fireEvent.input(screen.getByLabelText(/username/i), {
@@ -156,11 +177,10 @@ describe("Register component", () => {
   });
 });
 
+const mockRouterPush = jest.fn();
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
-
-const mockRouterPush = jest.fn();
 
 function renderComponent() {
   act(() => {

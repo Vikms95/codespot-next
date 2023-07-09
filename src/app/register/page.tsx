@@ -43,7 +43,6 @@ export default function RegisterForm() {
 		router.push('/login');
 	}, [data]);
 
-	console.log(isFormValid);
 	return (
 		<UserFormLayout isActive={isActive}>
 			<UserFormContainer>
@@ -119,6 +118,7 @@ export default function RegisterForm() {
 					</ServerErrorDisplay>
 					<LoginButton type='submit' disabled={isFormValid() || isMutating}>
 						{isMutating ? <Spinner data-testid='spinner' /> : 'Register'}
+						{/* {<Spinner data-testid='spinner' />} */}
 					</LoginButton>
 				</UserForm>
 			</UserFormContainer>

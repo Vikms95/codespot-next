@@ -122,7 +122,7 @@ export default function LoginForm() {
 					</LoginButton>
 				</UserForm>
 			</UserFormContainer>
-			<FormImage src={loginImage}></FormImage>
+			<FormImage src={loginImage.src}></FormImage>
 		</UserFormLayout>
 	);
 }
