@@ -40,6 +40,7 @@ export default function RegisterForm() {
 
 	useEffect(() => {
 		if (!data) return;
+		console.log('router: ', router);
 		router.push('/login');
 	}, [data]);
 
@@ -118,7 +119,6 @@ export default function RegisterForm() {
 					</ServerErrorDisplay>
 					<LoginButton type='submit' disabled={isFormValid() || isMutating}>
 						{isMutating ? <Spinner data-testid='spinner' /> : 'Register'}
-						{/* {<Spinner data-testid='spinner' />} */}
 					</LoginButton>
 				</UserForm>
 			</UserFormContainer>

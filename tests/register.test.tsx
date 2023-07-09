@@ -17,9 +17,8 @@ import { act } from "react-dom/test-utils";
 import { mockIntersectionObserver } from "../mocks/mockIntersectionObserver";
 import RegisterForm from "@/app/register/page";
 import { useRouter } from "next/navigation";
-import { mockNextRouter } from "../mocks/mockRouter";
+import { mockNextRouter, mockRouterPush } from "../mocks/mockRouter";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { NextRouter } from "next/router";
 
 global.fetch = jest.fn((value) => {
   Promise.resolve({
@@ -63,15 +62,18 @@ describe("Register component", () => {
   });
 
   it("renders spinner on register button", async () => {
-    const usernameInput = screen.getByLabelText(/username/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-    const confirmInput = screen.getByTestId("confirm-password");
-    const registerButton = screen.getByRole("button", { name: /register/i });
-
+    jest
+      .mocked(useRouter)
+      .mockReturnValueOnce(mockNextRouter as AppRouterInstance);
     window.fetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true }),
     });
+
+    const usernameInput = screen.getByLabelText(/username/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const confirmInput = screen.getByTestId("confirm-password");
+    const registerButton = screen.getByRole("button", { name: /register/i });
 
     fireEvent.input(usernameInput, {
       target: { value: "Username123" },
@@ -84,8 +86,7 @@ describe("Register component", () => {
     });
 
     fireEvent.click(registerButton);
-
-    expect(await screen.findByText("spinner")).toBeInTheDocument();
+    expect(screen.getByTestId("spinner"));
   });
 
   it("displays error message when input requirements are not met", async () => {
@@ -129,7 +130,6 @@ describe("Register component", () => {
     const confirmInput = screen.getByTestId("confirm-password");
     const registerButton = screen.getByRole("button", { name: /register/i });
 
-    console.log("con input", confirmInput);
     fireEvent.input(usernameInput, {
       target: { value: "Username123" },
     });
@@ -157,27 +157,35 @@ describe("Register component", () => {
     waitFor(() => expect(preventDefault).toHaveBeenCalled());
   });
 
-  // TODO false positive
-  it.skip("navigates to login page when form is submitted with valid inputs", () => {
-    jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
+  it("navigates to login page when form is submitted with valid inputs", async () => {
+    jest.mocked(useRouter).mockReturnValue(mockNextRouter as AppRouterInstance);
 
-    fireEvent.input(screen.getByLabelText(/username/i), {
+    window.fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true }),
+    });
+
+    const usernameInput = screen.getByLabelText(/username/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const confirmInput = screen.getByTestId("confirm-password");
+    const registerButton = screen.getByRole("button", { name: /register/i });
+
+    fireEvent.input(usernameInput, {
       target: { value: "Username123" },
     });
-    fireEvent.input(screen.getByLabelText(/password/i), {
+    fireEvent.input(passwordInput, {
       target: { value: "password12345" },
     });
-    fireEvent.input(screen.getByLabelText(/confirm password/i), {
+    fireEvent.input(confirmInput, {
       target: { value: "password12345" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
+    fireEvent.click(registerButton);
 
-    waitFor(() => expect(mockRouterPush).toHaveBeenCalledWith("/login"));
+    await waitFor(() => expect(mockRouterPush).toHaveBeenCalledWith("/login"));
   });
 });
 
-const mockRouterPush = jest.fn();
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
