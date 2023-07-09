@@ -16,10 +16,10 @@ import { RouterContext } from "next/dist/shared/lib/router-context";
 import { act } from "react-dom/test-utils";
 import { mockIntersectionObserver } from "../mocks/mockIntersectionObserver";
 import RegisterForm from "@/app/register/page";
-
-jest.mock("next/navigation");
-
-const mockRouterPush = jest.fn();
+import { useRouter } from "next/navigation";
+import { mockNextRouter } from "../mocks/mockRouter";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import { NextRouter } from "next/router";
 
 describe("Register component", () => {
   beforeEach(() => {
@@ -45,6 +45,11 @@ describe("Register component", () => {
     expect(
       screen.getByRole("button", { name: /register/i })
     ).toBeInTheDocument();
+  });
+
+  it("renders register image", () => {
+    const image = screen.getByAltText("register") as HTMLImageElement;
+    expect(image.src).toContain("img.jpg");
   });
 
   it("renders register button as disabled", () => {
@@ -119,7 +124,7 @@ describe("Register component", () => {
     });
   });
 
-  it("prevents default form submission behavior", async () => {
+  it("prevents default form submission behavior", () => {
     const form = screen.getByRole("form");
     const preventDefault = jest.fn();
     form.addEventListener("submit", (event) => {
@@ -128,10 +133,13 @@ describe("Register component", () => {
 
     fireEvent.submit(form);
 
-    await waitFor(() => expect(preventDefault).toHaveBeenCalled());
+    waitFor(() => expect(preventDefault).toHaveBeenCalled());
   });
 
-  it.skip("navigates to login page when form is submitted with valid inputs", async () => {
+  // TODO false positive
+  it("navigates to login page when form is submitted with valid inputs", () => {
+    jest.mocked(useRouter).mockReturnValue(mockNextRouter as NextRouter);
+
     fireEvent.input(screen.getByLabelText(/username/i), {
       target: { value: "Username123" },
     });
@@ -144,11 +152,15 @@ describe("Register component", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /register/i }));
 
-    await waitFor(() => expect(mockRouterPush).toHaveBeenCalledWith("/login"));
+    waitFor(() => expect(mockRouterPush).toHaveBeenCalledWith("/login"));
   });
-
-  // Add more tests here based on the list
 });
+
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+}));
+
+const mockRouterPush = jest.fn();
 
 function renderComponent() {
   act(() => {

@@ -24,6 +24,7 @@ import {
 	ServerErrorDisplay,
 } from './_styles';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function RegisterForm() {
 	const router = useRouter();
@@ -46,7 +47,14 @@ export default function RegisterForm() {
 	return (
 		<UserFormLayout isActive={isActive}>
 			<UserFormContainer>
-				<UserForm name='register-form' onSubmit={trigger} autoComplete='on'>
+				<UserForm
+					name='register-form'
+					onSubmit={e => {
+						e.preventDefault();
+						trigger();
+					}}
+					autoComplete='on'
+				>
 					<HeroTitle> Connect with the world ideas.</HeroTitle>
 					<InputHeader>
 						<StyledLabel htmlFor='username'> Username </StyledLabel>
@@ -114,7 +122,7 @@ export default function RegisterForm() {
 					</LoginButton>
 				</UserForm>
 			</UserFormContainer>
-			<FormImage src={registerImage}></FormImage>
+			<FormImage alt='register' src={registerImage.src}></FormImage>
 		</UserFormLayout>
 	);
 }

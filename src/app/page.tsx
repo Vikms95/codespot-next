@@ -5,7 +5,7 @@ import { LazyPostPreview as PostPreview } from '@/components/PostPreview';
 import { PostsLayout } from '@/layouts';
 import { usePostsContext } from '@/context/PostsContext';
 import { getPosts } from '@/services/post';
-import { StyledHome } from '@/components/Home/_styles';
+import { StyledHome } from './_styles';
 import useSWR from 'swr';
 
 type Props = {
