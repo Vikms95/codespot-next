@@ -14,7 +14,7 @@ import { mockNextRouter, mockRouterPush } from "../mocks/mockRouter";
   });
 });
 
-describe("Register component", () => {
+describe("Login component", () => {
   beforeEach(() => {
     renderComponent();
   });
@@ -28,25 +28,25 @@ describe("Register component", () => {
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
   });
 
-  it("renders placeholder field for username, password and confirm password", () => {
+  it("renders placeholder field for username and password", () => {
     expect(screen.getByPlaceholderText(/Username123/i)).toBeInTheDocument();
     expect(screen.getByLabelText("Password")).toBeInTheDocument();
   });
 
-  it("renders register button", () => {
+  it("renders login button", () => {
     expect(screen.getByRole("button", { name: /login/i })).toBeInTheDocument();
   });
 
-  it("renders register image", () => {
+  it("renders login image", () => {
     const image = screen.getByAltText("login") as HTMLImageElement;
     expect(image.src).toContain("img.jpg");
   });
 
-  it("renders register button as disabled", () => {
+  it("renders login button as disabled", () => {
     expect(screen.getByRole("button", { name: /login/i })).toBeDisabled();
   });
 
-  it("renders spinner on register button", async () => {
+  it("renders spinner on login button", async () => {
     jest
       .mocked(useRouter)
       .mockReturnValueOnce(mockNextRouter as AppRouterInstance);
@@ -91,12 +91,12 @@ describe("Register component", () => {
     );
   });
 
-  it("renders as register button being disabled", async () => {
-    const registerButton = screen.getByRole("button", { name: /login/i });
-    expect(registerButton).toBeDisabled();
+  it("renders as login button being disabled", async () => {
+    const loginButton = screen.getByRole("button", { name: /login/i });
+    expect(loginButton).toBeDisabled();
   });
 
-  it("enables register button when all input fields are correctly filled out", async () => {
+  it("enables login button when all input fields are correctly filled out", async () => {
     const usernameInput = screen.getByLabelText(/username/i);
     const passwordInput = screen.getByLabelText(/password/i);
     const loginButton = screen.getByRole("button", { name: /login/i });
@@ -125,7 +125,7 @@ describe("Register component", () => {
     await waitFor(() => expect(preventDefault).toHaveBeenCalled());
   });
 
-  it.skip("triggers login route when form is submitted with valid inputs and navigates to login page", async () => {
+  it("triggers dashboard route when form is submitted with valid inputs", async () => {
     jest.mocked(useRouter).mockReturnValue(mockNextRouter as AppRouterInstance);
 
     (window.fetch as jest.Mock).mockResolvedValueOnce({
@@ -135,8 +135,7 @@ describe("Register component", () => {
 
     const usernameInput = screen.getByLabelText(/username/i);
     const passwordInput = screen.getByLabelText(/password/i);
-    const confirmInput = screen.getByTestId("confirm-password");
-    const registerButton = screen.getByRole("button", { name: /register/i });
+    const loginButton = screen.getByRole("button", { name: /login/i });
 
     fireEvent.input(usernameInput, {
       target: { value: "Username123" },
@@ -144,13 +143,12 @@ describe("Register component", () => {
     fireEvent.input(passwordInput, {
       target: { value: "password12345" },
     });
-    fireEvent.input(confirmInput, {
-      target: { value: "password12345" },
-    });
 
-    fireEvent.click(registerButton);
+    fireEvent.click(loginButton);
 
-    await waitFor(() => expect(mockRouterPush).toHaveBeenCalledWith("/login"));
+    await waitFor(() =>
+      expect(mockRouterPush).toHaveBeenCalledWith("/dashboard")
+    );
   });
 });
 

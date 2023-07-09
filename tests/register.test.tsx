@@ -164,7 +164,7 @@ describe("Register component", () => {
     await waitFor(() => expect(preventDefault).toHaveBeenCalled());
   });
 
-  it("triggers login route when form is submitted with valid inputs and navigates to login page", async () => {
+  it("triggers login route when form is submitted with valid inputs", async () => {
     jest.mocked(useRouter).mockReturnValue(mockNextRouter as AppRouterInstance);
 
     (window.fetch as jest.Mock).mockResolvedValueOnce({
