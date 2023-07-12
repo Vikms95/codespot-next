@@ -17,9 +17,13 @@ type Props = {
 export default function Dashboard({ setIsModalActive }: Props) {
 	const { user } = useAuthContext();
 	const { posts, setPosts, setLastClickedPost } = usePostsContext();
-	const { data } = useSWR(`/api/${user}/posts`, () => getUserPosts(user));
+	const { data, error } = useSWR(`/api/${user}/posts`, () =>
+		getUserPosts(user)
+	);
 
 	useEffect(() => {
+		if (error) return;
+		console.warn(data);
 		setPosts((data as TPost[])?.reverse());
 	}, [data]);
 

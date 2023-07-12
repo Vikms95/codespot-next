@@ -277,7 +277,7 @@ export const mockPostArrayManyElements: TPost[] = [
   },
 ];
 
-export const mockPostUser = [
+export const mockPostDashboard = [
   {
     _id: "1",
     image: "img1",
@@ -286,7 +286,7 @@ export const mockPostUser = [
     text: "text1",
     timestamp: "aa",
     title: "title1",
-    user: { _id: "uniqueid1", username: "mockuser" },
+    user: { _id: "userid1", username: "mockuser" },
   },
   {
     _id: "2",
@@ -296,7 +296,7 @@ export const mockPostUser = [
     text: "text2",
     timestamp: "aa",
     title: "title2",
-    user: { _id: "uniqueid2", username: "mockuser" },
+    user: { _id: "userid1", username: "mockuser" },
   },
   {
     _id: "3",
@@ -306,6 +306,16 @@ export const mockPostUser = [
     text: "text3",
     timestamp: "aa",
     title: "title3",
-    user: { _id: "uniqueid3", username: "mockuser" },
+    user: { _id: "userid1", username: "mockuser" },
+  },
+  {
+    _id: "4",
+    image: "img4",
+    isDeletedWithChildren: false,
+    public: false,
+    text: "text4",
+    timestamp: "aa",
+    title: "title4",
+    user: { _id: "userid2", username: "mockuser2" },
   },
 ];
