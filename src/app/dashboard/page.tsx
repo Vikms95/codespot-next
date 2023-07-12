@@ -42,6 +42,8 @@ export default function Dashboard({ setIsModalActive }: Props) {
 	const hasPublicPost = () => posts?.some((post: TPost) => post.public);
 	const hasPrivatePost = () => posts?.some((post: TPost) => !post.public);
 
+	console.warn('user is: ', user);
+
 	return (
 		<StyledDashboard>
 			{hasNoPost() ? (
@@ -54,6 +56,7 @@ export default function Dashboard({ setIsModalActive }: Props) {
 								post =>
 									post.public && (
 										<PostPreviewWithButtons
+											data-testid='post-preview'
 											{...getPreviewProps!(post)}
 											key={post._id}
 										/>
@@ -67,6 +70,7 @@ export default function Dashboard({ setIsModalActive }: Props) {
 								post =>
 									!post.public && (
 										<PostPreviewWithButtons
+											data-testid='post-preview'
 											{...getPreviewProps!(post)}
 											key={post._id}
 										/>
