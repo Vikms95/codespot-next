@@ -1,7 +1,13 @@
 import RootLayout from "@/app/layout";
 import Home from "@/app/page";
 import * as postService from "@services/post";
-import { render, screen, waitFor } from "@testing-library/react";
+import {
+  cleanup,
+  getByText,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { mockRouterPush } from "../mocks/mockRouter";
 import { RouterContext } from "next/dist/shared/lib/router-context";
 import { act } from "react-dom/test-utils";
@@ -22,8 +28,9 @@ jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
-describe("Dashboard component", () => {
-  setupTests();
+describe("Dashboard component with user that has 3 post", () => {
+  setupTests("userid1", "mockuser");
+
   it("renders the published post layout title", () => {
     screen.getByRole("heading", { name: "Published posts" });
   });
@@ -43,24 +50,32 @@ describe("Dashboard component", () => {
     expect(layouts[0].children).toHaveLength(1);
     expect(layouts[1].children).toHaveLength(2);
   });
-  it("renders no post layout on user with no post", async () => {
-    (verifyUser as jest.Mock).mockImplementation(async () => {
-      return { id: "userid3", user: "mockuser3" };
-    });
-    const postsLayout = screen.queryByTestId("posts-layout");
-    expect(postsLayout).not.toBeInTheDocument();
+  it("only renders posts that are from the user", () => {
+    expect(screen.queryByText("mockuser2")).not.toBeInTheDocument();
   });
-  it.skip("only renders posts that are from the logged in user", () => {});
 });
 
-function setupTests() {
+describe("Dashboard on user with no post", () => {
+  setupTests("mockid1", "mockuser999");
+
+  it("renders no post layout on user with no post", async () => {
+    const layouts = screen.queryAllByTestId("posts-layout");
+    expect(layouts).toHaveLength(0);
+  });
+
+  it("does not render post from other users", () => {
+    expect(screen.queryByText("mockuser")).not.toBeInTheDocument();
+  });
+});
+
+function setupTests(id: string, user: string) {
   beforeEach(() =>
     act(() => {
       (verifyUser as jest.Mock).mockImplementation(async () => {
-        return { id: "userid1", user: "mockuser" };
+        return { id, user };
       });
       (getUserPosts as jest.Mock).mockImplementation(async () => {
-        return mockPostDashboard.filter((post) => post.user._id === "userid1");
+        return mockPostDashboard.filter((post) => post.user._id === id);
       });
 
       render(

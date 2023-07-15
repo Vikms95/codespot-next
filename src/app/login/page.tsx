@@ -28,7 +28,6 @@ import {
 } from './_styles';
 import { useAuthContext } from '@/context/AuthContext';
 
-// REDO WITH USESWRMUTATION
 export default function LoginForm() {
 	const router = useRouter();
 	const isActive = useFadeIn();

@@ -23,7 +23,6 @@ export default function Dashboard({ setIsModalActive }: Props) {
 
 	useEffect(() => {
 		if (error) return;
-		console.warn(data);
 		setPosts((data as TPost[])?.reverse());
 	}, [data]);
 
@@ -45,8 +44,6 @@ export default function Dashboard({ setIsModalActive }: Props) {
 	const hasNoPost = () => posts?.length === 0;
 	const hasPublicPost = () => posts?.some((post: TPost) => post.public);
 	const hasPrivatePost = () => posts?.some((post: TPost) => !post.public);
-
-	console.warn('user is: ', user);
 
 	return (
 		<StyledDashboard>
