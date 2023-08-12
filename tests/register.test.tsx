@@ -34,7 +34,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 
 describe("Register component", () => {
   beforeEach(() => {
-    renderComponent();
+    setupTests();
   });
 
   it("renders form correctly", () => {
@@ -197,7 +197,7 @@ jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
-function renderComponent() {
+function setupTests() {
   act(() => {
     render(
       <RouterContext.Provider value={{ push: mockRouterPush }}>

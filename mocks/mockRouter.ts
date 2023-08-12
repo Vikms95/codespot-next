@@ -9,20 +9,11 @@ const mockNextRouter: Partial<AppRouterInstance> = {
   forward: () => {},
   refresh: () => {},
   replace: () => {},
-  //   reload: () => {},
-  //   beforePopState: () => {},
-  //   events: {
-  //     on: () => {},
-  //     off: () => {},
-  //     emit: () => {},
-  //   },
-  //   isFallback: false,
-  //   isReady: true,
 };
 
 function mockRouter() {
   jest.mock("next/navigation", () => ({
-    useRouter: jest.fn(),
+    useRouter: mockNextRouter,
   }));
 }
 

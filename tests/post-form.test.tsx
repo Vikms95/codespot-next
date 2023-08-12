@@ -1,4 +1,4 @@
-import Dashboard from "@/app/dashboard/page";
+import PostForm from "@/app/create/page";
 import RootLayout from "@/app/layout";
 import { getUserPosts } from "@/services/post";
 import { verifyUser } from "@/services/user";
@@ -21,27 +21,7 @@ jest.mock("next/navigation", () => ({
 }));
 
 describe("Dashboard component with user that has 3 post", () => {
-  beforeEach(async () =>
-    act(async () => {
-      (verifyUser as jest.Mock).mockResolvedValue({
-        id: "userid1",
-        user: "mockuser",
-      });
-      (getUserPosts as jest.Mock).mockResolvedValue(
-        mockPostDashboard.filter((post) => post.user._id === "userid1")
-      );
-
-      render(
-        <RouterContext.Provider value={{ push: mockRouterPush }}>
-          <RootLayout>
-            <Dashboard setIsModalActive={jest.fn()} />
-          </RootLayout>
-        </RouterContext.Provider>
-      );
-    })
-  );
-
-  afterEach(() => jest.clearAllMocks());
+  setupTests("userid1", "mockuser");
 
   it("renders the published post layout title", () => {
     screen.getByRole("heading", { name: "Published posts" });
@@ -67,36 +47,41 @@ describe("Dashboard component with user that has 3 post", () => {
   });
 });
 
-// describe("Dashboard on user with no post", () => {
-//   beforeEach(async () => {
-//     (verifyUser as jest.Mock)
-//       .mockResolvedValue({
-//         id: "invalidid",
-//         user: "invalidmockuser",
-//       })(getUserPosts as jest.Mock)
-//       .mockResolvedValue(
-//         mockPostDashboard.filter((post) => post.user._id === "invalidid")
-//       );
+describe.skip("Dashboard on user with no post", () => {
+  setupTests("invalidid", "invalidmockuser");
 
-//     await act(async () => {
-//       render(
-//         <RouterContext.Provider value={{ push: mockRouterPush }}>
-//           <RootLayout>
-//             <Dashboard setIsModalActive={jest.fn()} />
-//           </RootLayout>
-//         </RouterContext.Provider>
-//       );
-//     });
-//   });
-//   afterEach(() => jest.clearAllMocks());
-//   it("renders no post layout on user with no post", async () => {
-//     await waitFor(() => {
-//       const layouts = screen.queryAllByTestId("posts-layout");
-//       expect(layouts).toHaveLength(0);
-//     });
-//   });
+  it.skip("renders no post layout on user with no post", async () => {
+    const mockImpl = await Promise.resolve(
+      (verifyUser as jest.Mock).getMockImplementation()!()
+    );
+    console.log(mockImpl);
+    const layouts = screen.queryAllByTestId("posts-layout");
+    expect(layouts).toHaveLength(0);
+  });
 
-//   it("does not render post from other users", () => {
-//     expect(screen.queryByText("mockuser")).not.toBeInTheDocument();
-//   });
-// });
+  it.skip("does not render post from other users", () => {
+    expect(screen.queryByText("mockuser")).not.toBeInTheDocument();
+  });
+});
+
+function setupTests(id: string, user: string) {
+  beforeEach(() =>
+    act(() => {
+      jest.clearAllMocks();
+      (verifyUser as jest.Mock).mockResolvedValue({ id, user });
+      (getUserPosts as jest.Mock).mockResolvedValue(
+        mockPostDashboard.filter((post) => post.user._id === id)
+      );
+
+      render(
+        <RouterContext.Provider value={{ push: mockRouterPush }}>
+          <RootLayout>
+            <Dashboard setIsModalActive={jest.fn()} />
+          </RootLayout>
+        </RouterContext.Provider>
+      );
+    })
+  );
+
+  afterEach(() => {});
+}

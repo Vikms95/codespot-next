@@ -16,7 +16,7 @@ import { mockNextRouter, mockRouterPush } from "../mocks/mockRouter";
 
 describe("Login component", () => {
   beforeEach(() => {
-    renderComponent();
+    setupTests();
   });
 
   it("renders form correctly", () => {
@@ -156,7 +156,7 @@ jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
-function renderComponent() {
+function setupTests() {
   act(() => {
     render(
       <RouterContext.Provider value={{ push: mockRouterPush }}>
