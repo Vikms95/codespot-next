@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const AppLayout = styled.main`
+export const AppLayout = styled.div`
 	min-height: 100vh;
 	margin-top: 2em;
 	margin-bottom: 2em;

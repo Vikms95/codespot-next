@@ -10,16 +10,15 @@ import { PostsLayout } from '../../layouts';
 import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '@components/PostPreview';
 import { TPost } from '@types';
 
-type Props = {
-	setIsModalActive: Dispatch<SetStateAction<boolean>>;
-};
-
-export default function Dashboard({ setIsModalActive }: Props) {
+export default function Dashboard() {
 	const { user } = useAuthContext();
 	const { posts, setPosts, setLastClickedPost } = usePostsContext();
-	const { data } = useSWR(`/api/${user}/posts`, () => getUserPosts(user));
+	const { data, error } = useSWR(`/api/${user}/posts`, () =>
+		getUserPosts(user)
+	);
 
 	useEffect(() => {
+		if (error) return;
 		setPosts((data as TPost[])?.reverse());
 	}, [data]);
 
@@ -54,6 +53,7 @@ export default function Dashboard({ setIsModalActive }: Props) {
 								post =>
 									post.public && (
 										<PostPreviewWithButtons
+											data-testid='post-preview'
 											{...getPreviewProps!(post)}
 											key={post._id}
 										/>
@@ -67,6 +67,7 @@ export default function Dashboard({ setIsModalActive }: Props) {
 								post =>
 									!post.public && (
 										<PostPreviewWithButtons
+											data-testid='post-preview'
 											{...getPreviewProps!(post)}
 											key={post._id}
 										/>

@@ -6,14 +6,14 @@ import { StyledLink, NavItem, LinkText } from './_styles';
 export function NavbarWithGuest() {
 	return (
 		<Navbar>
-			<StyledLink href='/register'>
+			<StyledLink data-testid='register-button' href='/register'>
 				<NavItem>
 					<FaUser />
 					<LinkText> Register </LinkText>
 				</NavItem>
 			</StyledLink>
 
-			<StyledLink href='/login'>
+			<StyledLink data-testid='login-button' href='/login'>
 				<NavItem>
 					<FaSignInAlt />
 					<LinkText> Login </LinkText>

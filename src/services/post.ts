@@ -90,7 +90,6 @@ const updatePost = async (
 
 	formDataRequest.append('formerTimeStamp', formData.timestamp);
 
-	console.warn('Hi');
 	try {
 		const data = await axios.put(
 			rootURL + '/api/posts/' + postToUpdate,

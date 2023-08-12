@@ -113,7 +113,11 @@ export function PostsLayout({ children, title, section }: Props) {
 		<>
 			<PostListTitle section={section}>{title}</PostListTitle>
 
-			<StyledPostsLayout section={section} isActive={isActive}>
+			<StyledPostsLayout
+				data-testid='posts-layout'
+				section={section}
+				isActive={isActive}
+			>
 				{children}
 			</StyledPostsLayout>
 		</>

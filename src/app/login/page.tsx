@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 import loginImage from '@assets/login-image.webp';
 import { loginFields } from '../../data/formFields';
 import { loginVal } from '../../data/validationValues';
@@ -36,9 +36,9 @@ export default function LoginForm() {
 	const { formData, handleChange, handleBlur } = useForm(loginFields);
 	const { isFormValid, shouldMarkErr } = useValidation(loginVal, formData);
 	const { username, password } = formData;
-	const [shouldFetch, setShouldFetch] = useState(false);
-	const { data, error, isLoading } = useSWR(
-		shouldFetch ? 'api/session' : null,
+	// const [shouldFetch, setShouldFetch] = useState(false);
+	const { data, error, isMutating, trigger } = useSWRMutation(
+		'api/session',
 		() => loginUser(username, password)
 	);
 
@@ -47,7 +47,6 @@ export default function LoginForm() {
 
 		setUser(data.user);
 		setToStorage('token', data.token);
-		setShouldFetch(false);
 
 		if (hasPostToRedirect()) {
 			return redirectToPost();
@@ -58,7 +57,8 @@ export default function LoginForm() {
 
 	const handleSubmit = async (e: Event) => {
 		e.preventDefault();
-		setShouldFetch(true);
+
+		trigger();
 	};
 
 	const redirectToPost = () => {
@@ -72,9 +72,9 @@ export default function LoginForm() {
 	};
 
 	return (
-		<UserFormLayout isActive={isActive}>
+		<UserFormLayout data-testid='login-form' isActive={isActive}>
 			<UserFormContainer>
-				<UserForm onSubmit={handleSubmit} autoComplete='on'>
+				<UserForm name='login-form' onSubmit={handleSubmit} autoComplete='on'>
 					<HeroTitle> Share your ideas with the world.</HeroTitle>
 					<InputHeader>
 						<StyledLabel htmlFor='username'> Username </StyledLabel>
@@ -87,6 +87,7 @@ export default function LoginForm() {
 						type='text'
 						id='username'
 						name='username'
+						placeholder='Username123'
 						autoComplete='on'
 						maxLength={20}
 						minLength={1}
@@ -117,12 +118,12 @@ export default function LoginForm() {
 					<ServerErrorDisplay serverError={error}>
 						{error || 'No error'}
 					</ServerErrorDisplay>
-					<LoginButton type='submit' disabled={isFormValid() || isLoading}>
-						{isLoading ? <Spinner></Spinner> : 'Login'}
+					<LoginButton type='submit' disabled={isFormValid() || isMutating}>
+						{isMutating ? <Spinner data-testid='spinner' /> : 'Login'}
 					</LoginButton>
 				</UserForm>
 			</UserFormContainer>
-			<FormImage src={loginImage}></FormImage>
+			<FormImage alt='login' src={loginImage.src}></FormImage>
 		</UserFormLayout>
 	);
 }

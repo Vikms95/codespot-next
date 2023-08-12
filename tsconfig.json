@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "target": "ES6",
     "allowJs": true,
     "noEmitOnError": false,
@@ -19,15 +23,31 @@
     "baseUrl": ".",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@services/*": ["./src/services/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@context/*": ["./src/context/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@constants": ["./src/constants.ts"],
-      "@types": ["./src/types.d.ts"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@context/*": [
+        "./src/context/*"
+      ],
+      "@assets/*": [
+        "./src/assets/*"
+      ],
+      "@constants": [
+        "./src/constants.ts"
+      ]
+      //   "@types": ["./src/types.d.ts"]
     },
     "plugins": [
       {
@@ -35,6 +55,17 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/test.ts",
+    "**/test.tsx",
+    "jest.setup.js",
+    "next.config.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
