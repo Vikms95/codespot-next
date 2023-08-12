@@ -18,6 +18,7 @@ export const metadata = {
 type Props = {
 	children: JSX.Element;
 };
+//
 export default function RootLayout({ children }: Props) {
 	const [user, setUser] = useState('');
 	const [posts, setPosts] = useLocalStorage('posts', []);
