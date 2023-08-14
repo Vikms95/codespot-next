@@ -5,23 +5,13 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 import { NavbarText } from './NavbarText';
-import { MobileNavbar } from './MovileNavbar';
-import {
-	NavigationMenu,
-	NavigationMenuContent,
-	NavigationMenuIndicator,
-	NavigationMenuItem,
-	NavigationMenuLink,
-	NavigationMenuList,
-	NavigationMenuTrigger,
-	NavigationMenuViewport,
-} from '@/components/ui/navigation-menu';
+import { MobileNavbar } from './MobileNavbar';
 
 type Props = { children: JSX.Element[] };
 
 export function Navbar({ children }: Props) {
+	const [isMobileNavbar, setIsMobileNavbar] = useState(false);
 	useAuth();
-	const [mobileNavbar, setMobileNavbar] = useState(false);
 
 	return (
 		<nav data-testid='navigation-bar' className='bg-white flex'>
@@ -33,11 +23,11 @@ export function Navbar({ children }: Props) {
 			</ul>
 
 			<FaBars
-				onClick={() => setMobileNavbar(true)}
+				onClick={() => setIsMobileNavbar(true)}
 				className='sm:hidden flex hover:cursor-pointer'
 			/>
 
-			{mobileNavbar && <MobileNavbar />}
+			{isMobileNavbar && <MobileNavbar childs={children} />}
 		</nav>
 	);
 }
