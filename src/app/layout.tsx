@@ -28,7 +28,7 @@ export default function RootLayout({ children }: TChildren) {
 					<PostsContextProvider
 						value={{ posts, setPosts, lastClickedPost, setLastClickedPost }}
 					>
-						<section>
+						<section className='my-10 mx-24'>
 							{user ? <NavbarWithUser /> : <NavbarWithGuest />}
 							{children}
 						</section>

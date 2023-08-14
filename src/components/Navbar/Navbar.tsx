@@ -12,6 +12,7 @@ import {
 	TitleText,
 } from './_styles';
 import Link from 'next/link';
+import { NavbarText } from './NavbarText';
 
 type Props = { children: JSX.Element[] };
 
@@ -20,9 +21,9 @@ export function Navbar({ children }: Props) {
 
 	return (
 		<nav data-testid='navigation-bar' className='bg-white flex'>
-			<ul className=' list-none flex flex-row justify-around items-center w-full'>
-				<Link className='w-full' data-testid='home-button' href='/'>
-					<li className='flex'></li>
+			<ul className=' group list-none flex flex-row justify-start  w-full gap-x-7 mb-5 '>
+				<Link className='navbar-link' data-testid='home-button' href='/'>
+					<NavbarText text='Home' />
 				</Link>
 				{children}
 			</ul>

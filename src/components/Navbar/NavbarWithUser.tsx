@@ -8,16 +8,20 @@ import { logoutUser } from '../../utils/logoutUser';
 export function NavbarWithUser() {
 	return (
 		<Navbar>
-			<Link className='w-full' data-testid='dashboard-button' href='/dashboard'>
+			<Link
+				className='navbar-link'
+				data-testid='dashboard-button'
+				href='/dashboard'
+			>
 				<NavbarText text='Dashboard' />
 			</Link>
 
-			<Link className='w-full' data-testid='create-button' href='/create'>
+			<Link className='navbar-link' data-testid='create-button' href='/create'>
 				<NavbarText text='New post' />
 			</Link>
 
 			<Link
-				className='w-full'
+				className='navbar-link'
 				data-testid='logout-button'
 				href='/'
 				onClick={logoutUser}

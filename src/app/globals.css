@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.navbar-link {
+	@apply relative block; /* Use relative positioning and make inline become block level */
+}
+
+.navbar-link::before {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	top: 35px;
+	left: 0;
+	right: 0;
+	height: 0; /* Initially, it has no height */
+	background-color: #de004a; /* Use the text color of the anchor tag as the underline color */
+}
+
+.navbar-link:hover::before {
+	height: 2px; /* Adjust this value for the desired underline thickness */
+}

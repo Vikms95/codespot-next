@@ -8,11 +8,15 @@ import { NavbarText } from './NavbarText';
 export function NavbarWithGuest() {
 	return (
 		<Navbar>
-			<Link data-testid='register-button' href='/register'>
+			<Link
+				className='navbar-link'
+				data-testid='register-button'
+				href='/register'
+			>
 				<NavbarText text='Register' />
 			</Link>
 
-			<Link data-testid='login-button' href='/login'>
+			<Link className='navbar-link' data-testid='login-button' href='/login'>
 				<NavbarText text='Login' />
 			</Link>
 		</Navbar>
