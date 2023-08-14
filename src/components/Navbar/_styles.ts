@@ -88,7 +88,7 @@ const NavItem = styled.li`
 
 const StyledNavbar = styled.nav`
 	background-color: white;
-	position: fixed;
+	/* position: fixed;
 	left: 0;
 	display: flex;
 	flex-direction: column;
@@ -142,7 +142,7 @@ const StyledNavbar = styled.nav`
 		&:hover ${LinkText} {
 			display: none;
 		}
-	}
+	} */
 `;
 
 export {

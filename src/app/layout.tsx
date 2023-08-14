@@ -7,6 +7,7 @@ import { AppLayout } from '../layouts';
 import { AuthContextProvider } from '@/context/AuthContext';
 import { PostsContextProvider } from '@/context/PostsContext';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { TChildren } from '@/types';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,12 +16,7 @@ export const metadata = {
 	description: 'Blog to share your code ideas.',
 };
 
-type Props = {
-	children: JSX.Element;
-};
-//
-//
-export default function RootLayout({ children }: Props) {
+export default function RootLayout({ children }: TChildren) {
 	const [user, setUser] = useState('');
 	const [posts, setPosts] = useLocalStorage('posts', []);
 	const [lastClickedPost, setLastClickedPost] = useState('');
@@ -28,16 +24,16 @@ export default function RootLayout({ children }: Props) {
 	return (
 		<html lang='en'>
 			<body className={inter.className}>
-				<AppLayout>
-					<AuthContextProvider value={{ user, setUser }}>
-						<PostsContextProvider
-							value={{ posts, setPosts, lastClickedPost, setLastClickedPost }}
-						>
+				<AuthContextProvider value={{ user, setUser }}>
+					<PostsContextProvider
+						value={{ posts, setPosts, lastClickedPost, setLastClickedPost }}
+					>
+						<section>
 							{user ? <NavbarWithUser /> : <NavbarWithGuest />}
 							{children}
-						</PostsContextProvider>
-					</AuthContextProvider>
-				</AppLayout>
+						</section>
+					</PostsContextProvider>
+				</AuthContextProvider>
 			</body>
 		</html>
 	);

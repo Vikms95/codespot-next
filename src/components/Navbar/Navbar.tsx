@@ -11,36 +11,21 @@ import {
 	StyledNavbar,
 	TitleText,
 } from './_styles';
+import Link from 'next/link';
 
 type Props = { children: JSX.Element[] };
 
 export function Navbar({ children }: Props) {
-	const { width } = useWindowDimensions();
 	useAuth();
+
 	return (
-		<StyledNavbar data-testid='navigation-bar'>
-			<InnerNav>
-				<StyledLink data-testid='home-button' href='/'>
-					<NavItem>
-						{width > 600 ? (
-							<>
-								<TitleText
-									data-testid='title'
-									aria-label='button'
-									role='button'
-								>
-									{' '}
-									CODESPOT{' '}
-								</TitleText>
-								<NavArrow />
-							</>
-						) : (
-							<FaHouseUser />
-						)}
-					</NavItem>
-				</StyledLink>
+		<nav data-testid='navigation-bar' className='bg-white flex'>
+			<ul className=' list-none flex flex-row justify-around items-center w-full'>
+				<Link className='w-full' data-testid='home-button' href='/'>
+					<li className='flex'></li>
+				</Link>
 				{children}
-			</InnerNav>
-		</StyledNavbar>
+			</ul>
+		</nav>
 	);
 }

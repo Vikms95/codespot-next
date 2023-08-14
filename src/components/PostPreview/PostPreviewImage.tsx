@@ -13,6 +13,9 @@ import {
 	PostCommentsContainer,
 } from './_styles';
 
+import Image from 'next/image';
+import Link from 'next/link';
+import { ImageSrc } from '@/types';
 type Props = {
 	image: string;
 	id: string;
@@ -31,23 +34,30 @@ export function PostPreviewImage({ image, id }: Props) {
 			{isLoading ? (
 				<ImageItem />
 			) : (
-				<PostLink data-testid='post-link' href={'/posts/' + id}>
-					<BookText>Read more → </BookText>
+				<Link
+					className='group flex relative'
+					data-testid='post-link'
+					href={'/posts/' + id}
+				>
+					<span className='group-hover:block hidden absolute text-white text-base z-10 font-medium top-[85%] left-[5%]'>
+						Read more →{' '}
+					</span>
 
 					{hasComments() && (
-						<PostCommentsContainer>
+						<span className='absolute z-10 text-white flex text-xl top-[85%] right-[5%] text-end gap-1'>
 							<FaComments />
 							{commentsCount}
-						</PostCommentsContainer>
+						</span>
 					)}
 
-					<PostImage
-						src={image ? imageSrc?.url : defaultPostImage}
+					<Image
+						className='w-full h-72 rounded-tl-sm transition-transform duration-500 group-hover:filter group-hover:brightness-80 group-hover:scale-[1.01]'
+						src={image ? (imageSrc as ImageSrc)?.url : defaultPostImage}
 						alt='post-preview'
 						width={640}
 						height={420}
 					/>
-				</PostLink>
+				</Link>
 			)}
 		</>
 	);

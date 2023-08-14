@@ -40,3 +40,7 @@ export type TChildren = JSX.Element | JSX.Element[] | ReactElement<any, any>;
 export type TSetter<T> = Dispatch<SetStateAction<T>>;
 
 export type TMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+export type ImageSrc = {
+	url: string;
+};

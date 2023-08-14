@@ -2,23 +2,19 @@ import React from 'react';
 import { Navbar } from './Navbar';
 import { FaSignInAlt, FaUser } from 'react-icons/fa';
 import { StyledLink, NavItem, LinkText } from './_styles';
+import Link from 'next/link';
+import { NavbarText } from './NavbarText';
 
 export function NavbarWithGuest() {
 	return (
 		<Navbar>
-			<StyledLink data-testid='register-button' href='/register'>
-				<NavItem>
-					<FaUser />
-					<LinkText> Register </LinkText>
-				</NavItem>
-			</StyledLink>
+			<Link data-testid='register-button' href='/register'>
+				<NavbarText text='Register' />
+			</Link>
 
-			<StyledLink data-testid='login-button' href='/login'>
-				<NavItem>
-					<FaSignInAlt />
-					<LinkText> Login </LinkText>
-				</NavItem>
-			</StyledLink>
+			<Link data-testid='login-button' href='/login'>
+				<NavbarText text='Login' />
+			</Link>
 		</Navbar>
 	);
 }

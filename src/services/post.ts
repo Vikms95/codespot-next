@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getFormattedDate } from '../utils/getFormattedDate';
 import { deleteOptions, getOptions, rootURL } from '../data/requestParams';
-import { TPost, TUser } from '@/types';
+import { ImageSrc, TPost, TUser } from '@/types';
 import { createFormData } from '@/utils/createFormData';
 
 const getPosts = async () => {
@@ -36,7 +36,7 @@ const getImage = async (url: string) => {
 	try {
 		const data = await fetch(rootURL + url);
 
-		return data;
+		return data as Response;
 	} catch (err: any) {
 		return new Error(err);
 	}

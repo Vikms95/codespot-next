@@ -1,11 +1,7 @@
 'use client';
 import React, { Dispatch, SetStateAction } from 'react';
 
-import {
-	PostBotRowContainer,
-	PostContentContainer,
-	PostImageContainer,
-} from './_styles';
+import { PostBotRowContainer } from './_styles';
 import { PostPreviewImage } from './PostPreviewImage';
 import { PostPreviewContent } from './PostPreviewContent';
 import { TChildren } from '@/types';
@@ -36,18 +32,18 @@ export default function PostPreview({
 }: Props) {
 	return (
 		<>
-			<PostImageContainer>
+			<article className='object-cover h-auto max-w-full'>
 				<PostPreviewImage image={image} id={id} />
-			</PostImageContainer>
+			</article>
 
-			<PostContentContainer>
+			<article className='flex flex-col justify-between gap-x-4 p-6 h-full'>
 				<PostPreviewContent
 					text={text}
 					title={title}
 					username={user.username}
 					timestamp={timestamp}
 				/>
-			</PostContentContainer>
+			</article>
 
 			{children && (
 				<PostBotRowContainer>
