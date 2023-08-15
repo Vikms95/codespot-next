@@ -1,7 +1,7 @@
 'use client';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import { useAuth } from '@hooks/useAuth';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useState } from 'react';
 import { FaBars } from 'react-icons/fa';
 import { MobileNavbar } from './MobileNavbar';
@@ -9,6 +9,7 @@ import { NavbarText } from './NavbarText';
 import { Separator } from '../ui/separator';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Navigation } from 'lucide-react';
+import { Link } from './Link';
 
 type Props = { children: JSX.Element[] };
 
@@ -26,13 +27,7 @@ export function Navbar({ children }: Props) {
 			>
 				{width > 640 && (
 					<NavigationMenu.List className='group list-none flex flex-row justify-start w-full gap-x-7 mb-5'>
-						<NavigationMenu.Item>
-							<Link className='navbar-link' data-testid='home-button' href='/'>
-								<NavigationMenu.Link>
-									<NavbarText text='Home' />
-								</NavigationMenu.Link>
-							</Link>
-						</NavigationMenu.Item>
+						<Link href='/' testid='home-button' text='Home' />
 						{children}
 					</NavigationMenu.List>
 				)}
@@ -46,7 +41,10 @@ export function Navbar({ children }: Props) {
 			</NavigationMenu.Root>
 
 			{width <= 640 && isMobileNavbar && (
-				<MobileNavbar childs={children} setIsMobileNavbar={setIsMobileNavbar} />
+				<MobileNavbar
+					children={children}
+					setIsMobileNavbar={setIsMobileNavbar}
+				/>
 			)}
 		</>
 	);

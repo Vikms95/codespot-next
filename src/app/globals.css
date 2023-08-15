@@ -93,3 +93,7 @@
 .navbar-link:hover::before {
 	height: 2px; /* Adjust this value for the desired underline thickness */
 }
+
+.navbar-link[data-active] {
+	height: 2px; /* Adjust this value for the desired underline thickness */
+}

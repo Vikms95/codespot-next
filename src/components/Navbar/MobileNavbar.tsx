@@ -2,12 +2,13 @@ import { Separator } from '@/components/ui/separator';
 import { SetState } from '@/types';
 import { MdClose } from 'react-icons/md';
 import { useEffect } from 'react';
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 export function MobileNavbar({
-	childs,
+	children,
 	setIsMobileNavbar,
 }: {
-	childs: JSX.Element[];
+	children: JSX.Element[];
 	setIsMobileNavbar: SetState<boolean>;
 }) {
 	useEffect(() => {
@@ -23,19 +24,21 @@ export function MobileNavbar({
 	}, []);
 
 	return (
-		<nav className='m-7  bg-white z-50 top-0 left-0 right-0 bottom-0 absolute'>
-			<ul>
-				<MdClose
-					onClick={() => setIsMobileNavbar(false)}
-					className='flex hover:cursor-pointer mb-5 hover:text-main-orange'
-				/>
+		<NavigationMenu.Root className='m-7  bg-white z-50 top-0 left-0 right-0 bottom-0 absolute'>
+			<NavigationMenu.List>
+				<NavigationMenu.Item>
+					<MdClose
+						onClick={() => setIsMobileNavbar(false)}
+						className='flex hover:cursor-pointer mb-5 hover:text-main-orange'
+					/>
+				</NavigationMenu.Item>
 
 				<Separator className='mb-6' />
 
-				{childs.map(child => {
+				{children.map(child => {
 					return <li className='mb-6'>{child}</li>;
 				})}
-			</ul>
-		</nav>
+			</NavigationMenu.List>
+		</NavigationMenu.Root>
 	);
 }
