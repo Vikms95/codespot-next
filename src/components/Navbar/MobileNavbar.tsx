@@ -1,30 +1,34 @@
 import { Separator } from '@/components/ui/separator';
 import { SetState } from '@/types';
-import { MdClose } from 'react-icons/md';
-import { useEffect } from 'react';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import { useEffect, useRef } from 'react';
+import { MdClose } from 'react-icons/md';
 
-export function MobileNavbar({
-	children,
-	setIsMobileNavbar,
-}: {
+type Props = {
 	children: JSX.Element[];
 	setIsMobileNavbar: SetState<boolean>;
-}) {
-	useEffect(() => {
-		const main = document.querySelector('.main-content') as HTMLElement;
+};
 
-		if (main) {
-			main.style.display = 'none';
+export function MobileNavbar({ children, setIsMobileNavbar }: Props) {
+	const mainContentRef = useRef<HTMLElement | null>(null);
+
+	useEffect(() => {
+		mainContentRef.current = document.querySelector(
+			'.main-content'
+		) as HTMLElement;
+
+		if (mainContentRef.current) {
+			mainContentRef.current.style.display = 'none';
 		}
 
 		return () => {
-			if (main) main.style.display = 'block';
+			if (mainContentRef.current)
+				mainContentRef.current.style.display = 'block';
 		};
 	}, []);
 
 	return (
-		<NavigationMenu.Root className='m-7  bg-white z-50 top-0 left-0 right-0 bottom-0 absolute'>
+		<NavigationMenu.Root className='m-7 bg-white z-50 absolute inset-0'>
 			<NavigationMenu.List>
 				<NavigationMenu.Item>
 					<MdClose
@@ -35,9 +39,11 @@ export function MobileNavbar({
 
 				<Separator className='mb-6' />
 
-				{children.map(child => {
-					return <li className='mb-6'>{child}</li>;
-				})}
+				{children.map((child, index) => (
+					<li key={index} className='mb-6'>
+						{child}
+					</li>
+				))}
 			</NavigationMenu.List>
 		</NavigationMenu.Root>
 	);

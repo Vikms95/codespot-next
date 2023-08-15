@@ -79,6 +79,15 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+    variants: {
+      extend: {
+        backgroundColor: ["before", "after"],
+        inset: ["before", "after"],
+        position: ["before", "after"],
+        content: ["before", "after"],
+        height: ["before", "after"],
+      },
+    },
   },
   plugins: [require("tailwindcss-animate")],
 };

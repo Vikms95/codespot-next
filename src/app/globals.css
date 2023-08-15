@@ -83,17 +83,13 @@
 	content: '';
 	position: absolute;
 	bottom: 0;
-	top: 35px;
+	top: 1.75rem;
 	left: 0;
 	right: 0;
-	height: 0; /* Initially, it has no height */
-	background-color: #de004a; /* Use the text color of the anchor tag as the underline color */
+	height: 0;
+	background-color: #de004a;
 }
 
 .navbar-link:hover::before {
-	height: 2px; /* Adjust this value for the desired underline thickness */
-}
-
-.navbar-link[data-active] {
-	height: 2px; /* Adjust this value for the desired underline thickness */
+	height: 1.5px;
 }

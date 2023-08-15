@@ -1,14 +1,9 @@
-'use client';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import { useAuth } from '@hooks/useAuth';
-// import Link from 'next/link';
 import { useState } from 'react';
 import { FaBars } from 'react-icons/fa';
 import { MobileNavbar } from './MobileNavbar';
-import { NavbarText } from './NavbarText';
-import { Separator } from '../ui/separator';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
-import { Navigation } from 'lucide-react';
 import { Link } from './Link';
 
 type Props = { children: JSX.Element[] };
@@ -16,36 +11,33 @@ type Props = { children: JSX.Element[] };
 export function Navbar({ children }: Props) {
 	const [isMobileNavbar, setIsMobileNavbar] = useState(false);
 	const { width } = useWindowDimensions();
+	const isMobileView = width <= 640;
 
 	useAuth();
 
 	return (
-		<>
-			<NavigationMenu.Root
-				data-testid='navigation-bar'
-				className='bg-white flex'
-			>
-				{width > 640 && (
-					<NavigationMenu.List className='group list-none flex flex-row justify-start w-full gap-x-7 mb-5'>
-						<Link href='/' testid='home-button' text='Home' />
-						{children}
-					</NavigationMenu.List>
-				)}
-
-				{width <= 640 && !isMobileNavbar && (
+		<NavigationMenu.Root
+			data-testid='navigation-bar'
+			className='bg-white flex justify-start'
+		>
+			{isMobileView ? (
+				isMobileNavbar ? (
+					<MobileNavbar
+						children={children}
+						setIsMobileNavbar={setIsMobileNavbar}
+					/>
+				) : (
 					<FaBars
 						onClick={() => setIsMobileNavbar(true)}
-						className='flex hover:cursor-pointer text-2xl'
+						className='hover:cursor-pointer text-2xl'
 					/>
-				)}
-			</NavigationMenu.Root>
-
-			{width <= 640 && isMobileNavbar && (
-				<MobileNavbar
-					children={children}
-					setIsMobileNavbar={setIsMobileNavbar}
-				/>
+				)
+			) : (
+				<NavigationMenu.List className='list-none flex flex-row gap-x-7 mb-7'>
+					<Link href='/' testid='home-button' text='Home' />
+					{children}
+				</NavigationMenu.List>
 			)}
-		</>
+		</NavigationMenu.Root>
 	);
 }
