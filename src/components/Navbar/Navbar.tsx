@@ -1,33 +1,53 @@
 'use client';
+import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import { useAuth } from '@hooks/useAuth';
-import { FaBars } from 'react-icons/fa';
-import { useState } from 'react';
-
 import Link from 'next/link';
-import { NavbarText } from './NavbarText';
+import { useState } from 'react';
+import { FaBars } from 'react-icons/fa';
 import { MobileNavbar } from './MobileNavbar';
+import { NavbarText } from './NavbarText';
+import { Separator } from '../ui/separator';
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import { Navigation } from 'lucide-react';
 
 type Props = { children: JSX.Element[] };
 
 export function Navbar({ children }: Props) {
 	const [isMobileNavbar, setIsMobileNavbar] = useState(false);
+	const { width } = useWindowDimensions();
+
 	useAuth();
 
 	return (
-		<nav data-testid='navigation-bar' className='bg-white flex'>
-			<ul className='sm:flex hidden group list-none flex-row justify-start w-full gap-x-7 mb-5'>
-				<Link className='navbar-link' data-testid='home-button' href='/'>
-					<NavbarText text='Home' />
-				</Link>
-				{children}
-			</ul>
+		<>
+			<NavigationMenu.Root
+				data-testid='navigation-bar'
+				className='bg-white flex'
+			>
+				{width > 640 && (
+					<NavigationMenu.List className='group list-none flex flex-row justify-start w-full gap-x-7 mb-5'>
+						<NavigationMenu.Item>
+							<Link className='navbar-link' data-testid='home-button' href='/'>
+								<NavigationMenu.Link>
+									<NavbarText text='Home' />
+								</NavigationMenu.Link>
+							</Link>
+						</NavigationMenu.Item>
+						{children}
+					</NavigationMenu.List>
+				)}
 
-			<FaBars
-				onClick={() => setIsMobileNavbar(true)}
-				className='sm:hidden flex hover:cursor-pointer'
-			/>
+				{width <= 640 && !isMobileNavbar && (
+					<FaBars
+						onClick={() => setIsMobileNavbar(true)}
+						className='flex hover:cursor-pointer text-2xl'
+					/>
+				)}
+			</NavigationMenu.Root>
 
-			{isMobileNavbar && <MobileNavbar childs={children} />}
-		</nav>
+			{width <= 640 && isMobileNavbar && (
+				<MobileNavbar childs={children} setIsMobileNavbar={setIsMobileNavbar} />
+			)}
+		</>
 	);
 }

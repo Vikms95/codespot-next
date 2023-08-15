@@ -44,3 +44,5 @@ export type TMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 export type ImageSrc = {
 	url: string;
 };
+
+export type SetState<T> = Dispatch<React.SetStateAction<T>>;

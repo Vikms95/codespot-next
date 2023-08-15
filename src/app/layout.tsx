@@ -30,7 +30,7 @@ export default function RootLayout({ children }: TChildren) {
 					>
 						<section className='my-10 mx-24'>
 							{user ? <NavbarWithUser /> : <NavbarWithGuest />}
-							{children}
+							<div className='main-content'>{children}</div>
 						</section>
 					</PostsContextProvider>
 				</AuthContextProvider>
