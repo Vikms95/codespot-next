@@ -16,5 +16,7 @@ export function useWindowDimensions() {
 		return () => window.removeEventListener('resize', handleResize);
 	}, []);
 
-	return windowDimensions;
+	const isMobileView = windowDimensions.width <= 640;
+
+	return { windowDimensions, isMobileView };
 }

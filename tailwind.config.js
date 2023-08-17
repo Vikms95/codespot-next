@@ -11,18 +11,13 @@ module.exports = {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+    },
+    screens: {
+      sm: {min: "320px",max: '767px'},
+      md: {min:"768px", max: '1023px'},
+      lg: {min:"1024px"},
     },
     extend: {
-      screens: {
-        sm: "640px",
-        md: "768px",
-        lg: "1024px",
-        xl: "1280px",
-        "2xl": "1536px",
-      },
       colors: {
         "main-orange": "#DE004A",
         border: "hsl(var(--border))",

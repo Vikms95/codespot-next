@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { getFormattedDate } from '../utils/getFormattedDate';
 import { deleteOptions, getOptions, rootURL } from '../data/requestParams';
-import { ImageSrc, TPost, TUser } from '@/types';
+import { TPost, TUser } from '@/types';
 import { createFormData } from '@/utils/createFormData';
 
-const getPosts = async () => {
+async function getPosts(url: string) {
 	try {
-		const response = await fetch(rootURL + '/api/posts', getOptions);
+		const response = await fetch(rootURL + url, getOptions);
 
 		const data = await response.json();
 
@@ -14,7 +14,7 @@ const getPosts = async () => {
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
 const getUserPosts = async (
 	userid: string

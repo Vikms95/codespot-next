@@ -10,8 +10,7 @@ type Props = { children: JSX.Element[] };
 
 export function Navbar({ children }: Props) {
 	const [isMobileNavbar, setIsMobileNavbar] = useState(false);
-	const { width } = useWindowDimensions();
-	const isMobileView = width <= 640;
+	const { isMobileView } = useWindowDimensions();
 
 	useAuth();
 

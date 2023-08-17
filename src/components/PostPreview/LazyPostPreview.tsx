@@ -19,7 +19,7 @@ type Props = {
 export function LazyPostPreview(props: Props) {
 	const { isNearScreen, fromRef } = useNearScreen({ distance: '200px' });
 	return (
-		<StyledPostPreview ref={fromRef}>
+		<StyledPostPreview className='sm:col-span-4 md:col-span-4 lg:col-span-2' ref={fromRef}>
 			<PostPreview {...props}></PostPreview>
 		</StyledPostPreview>
 	);

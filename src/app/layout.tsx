@@ -1,9 +1,8 @@
 'use client';
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { ReactElement, ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { NavbarWithGuest, NavbarWithUser } from '../components/Navbar';
-import { AppLayout } from '../layouts';
 import { AuthContextProvider } from '@/context/AuthContext';
 import { PostsContextProvider } from '@/context/PostsContext';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
