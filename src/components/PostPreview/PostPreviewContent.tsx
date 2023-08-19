@@ -20,7 +20,7 @@ export function PostPreviewContent({
 
 	return (
 		<>
-			<article className='flex justify-between'>
+			<article className='flex justify-between overflow-hidden'>
 				<h3 className='m-0 mb-[0.8rem] text-sm text-[#8d8d8d] flex self-end '>
 					{username}
 				</h3>

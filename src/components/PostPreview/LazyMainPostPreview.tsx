@@ -20,7 +20,7 @@ export default function LazyMainPostPreview(props: Props) {
 	const { isNearScreen, fromRef } = useNearScreen({ distance: '200px' });
 	return (
 		// <section className='flex flex-col text-ellipsis sm:col-span-8 md:col-span-5 lg:col-span-5' ref={fromRef}>
-		<section className='flex flex-col text-ellipsis sm:col-span-8 md:col-span-5 ' ref={fromRef}>
+		<section className='flex flex-col basis-3/5 text-ellipsis sm:col-span-8 md:col-span-5 ' ref={fromRef}>
 			<MainPostPreview {...props}/>
 		</section>
 	);

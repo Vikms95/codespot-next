@@ -17,7 +17,7 @@ export function Navbar({ children }: Props) {
 	return (
 		<NavigationMenu.Root
 			data-testid='navigation-bar'
-			className='bg-white flex justify-start'
+			className='bg-white flex flex-1 justify-start sm:mx-auto w-10/12 my-5'
 		>
 			{isMobileView ? (
 				isMobileNavbar ? (
@@ -32,7 +32,7 @@ export function Navbar({ children }: Props) {
 					/>
 				)
 			) : (
-				<NavigationMenu.List className='list-none flex flex-row gap-x-7 mb-7'>
+				<NavigationMenu.List className='list-none flex flex-row gap-x-7 my-5'>
 					<Link href='/' testid='home-button' text='Home' />
 					{children}
 				</NavigationMenu.List>
