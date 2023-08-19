@@ -1,27 +1,22 @@
 'use client';
-import { getImage } from '@services/post';
-import { getCommentsCount } from '@services/comment';
-import defaultPostImage from '@assets/default-image.jpg';
-import { ImageItem } from '@assets/imageItem';
-import { FaComments } from 'react-icons/fa';
-import useSWR from 'swr';
+import { getImage } from '@services/post'
+import { getCommentsCount } from '@services/comment'
+import defaultPostImage from '@assets/default-image.jpg'
+import { ImageItem } from '@assets/imageItem'
+import { FaComments } from 'react-icons/fa'
+import useSWR from 'swr'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ImageSrc } from '@/types'
+import clsx from 'clsx'
 
-import {
-	BookText,
-	PostImage,
-	PostLink,
-	PostCommentsContainer,
-} from './_styles';
-
-import Image from 'next/image';
-import Link from 'next/link';
-import { ImageSrc } from '@/types';
 type Props = {
 	image: string;
 	id: string;
+	imageType: string;
 };
 
-export function PostPreviewImage({ image, id }: Props) {
+export function PostPreviewImage({ image, id, imageType }: Props) {
 	const { data: imageSrc, isLoading } = useSWR('/images/' + image, getImage);
 	const { data: commentsCount } = useSWR(`/api/${id}/comments-count`, () =>
 		getCommentsCount(id)
@@ -33,7 +28,7 @@ export function PostPreviewImage({ image, id }: Props) {
 		<>
 			{isLoading ? (
 				<ImageItem />
-			) : (
+			) : (   
 				<Link
 					className='group flex relative'
 					data-testid='post-link'
@@ -51,7 +46,7 @@ export function PostPreviewImage({ image, id }: Props) {
 					)}
 
 					<Image
-						className='w-full h-72 rounded-tl-sm transition-transform duration-500 group-hover:filter group-hover:brightness-80 group-hover:scale-[1.01]'
+						className={clsx('w-full h-34 opacity-90 group-hover:opacity-100 transition-opacity', imageType && 'sm:h-[360px] lg:h-[420px]')}
 						src={image ? (imageSrc as ImageSrc)?.url : defaultPostImage}
 						alt='post-preview'
 						width={640}

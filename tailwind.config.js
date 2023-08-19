@@ -13,9 +13,10 @@ module.exports = {
       padding: "2rem",
     },
     screens: {
-      sm: {min: "320px",max: '767px'},
-      md: {min:"768px", max: '1023px'},
-      lg: {min:"1024px"},
+      sm:  "320px",
+      md: "768px",
+      l: "900px",
+      lg: "1280px",
     },
     extend: {
       colors: {
