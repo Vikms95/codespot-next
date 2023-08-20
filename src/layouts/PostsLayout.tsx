@@ -13,7 +13,7 @@ export function PostsLayout({ children, title, section }: Props) {
 			<section
 				data-testid='posts-layout'
 				className={clsx(
-					'w-full h-full opacity-0 transition-opacity duration-500 ease-linear gap-8 grid grid-cols-8 sm:p-4 md:p-0 lg:mx-20',
+					'w-full h-full opacity-0 transition-opacity duration-500 ease-linear gap-8 grid grid-cols-8 sm:p-4 md:p-0',
 					isActive && 'opacity-100',
                     
 				)}

@@ -28,7 +28,7 @@ export default function Home({
 
     
     return (
-        <main className='min-h-screen sm:mx-0 md:mx-auto md:px-4 m:my-3 lg:my-5'>
+        <main className='min-h-screen sm:mx-0 md:mx-auto md:px-4 m:my-3 lg:my-5 lg:mx-20'>
             {posts.length > 0 && (
                 (() => {
                     const [first, second, ...rest] = posts;
