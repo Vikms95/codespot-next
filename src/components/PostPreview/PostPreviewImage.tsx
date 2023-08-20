@@ -13,7 +13,7 @@ import clsx from 'clsx'
 type Props = {
 	image: string;
 	id: string;
-	imageType: string;
+	imageType?: string;
 };
 
 export function PostPreviewImage({ image, id, imageType }: Props) {
@@ -46,7 +46,7 @@ export function PostPreviewImage({ image, id, imageType }: Props) {
 					)}
 
 					<Image
-						className={clsx('w-full h-34 opacity-90 group-hover:opacity-100 overflow-hidden transition-opacity object-cover', imageType && 'sm:h-[360px] lg:h-[420px]')}
+						className={clsx('w-full h-34 opacity-90 group-hover:opacity-100 overflow-hidden transition-opacity object-cover ', imageType ? 'sm:h-[360px] lg:h-[420px]': 'sm:h-[180px] md:h-48')}
 						src={image ? (imageSrc as ImageSrc)?.url : defaultPostImage}
 						alt='post-preview'
 						width={640}

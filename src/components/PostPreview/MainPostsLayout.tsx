@@ -12,7 +12,7 @@ export function MainPostLayout({posts, setIsModalActive, setLastClickedPostId}: 
     const { _id, user, text, title, image, timestamp } =  posts[0]
     const { _id: id2 } =  posts[1]
     return (
-        <section className="grid grid-cols-8 l:gap-x-0 lg:gap-x-5 lg:mx-20">
+        <section className="grid grid-cols-8 md:gap-x-0 l:gap-x-5 lg:mx-20">
             <MainPostPreview 
                 key={_id}
                 id={_id}
