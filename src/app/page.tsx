@@ -34,11 +34,14 @@ export default function Home({
                     const [first, second, ...rest] = posts;
                     return (
                         <>
-                        <MainPostLayout 
-                            posts={[first, second]} 
-                            setIsModalActive={setIsModalActive}
-                            setLastClickedPostId={setLastClickedPostId} 
-                        />
+                        {first && second && (
+                            <MainPostLayout 
+                                posts={[first, second]} 
+                                setIsModalActive={setIsModalActive}
+                                setLastClickedPostId={setLastClickedPostId} 
+                            />
+
+                        )}
                         
                         <PostsLayout section='home'>
                         	{rest.map(({ _id, user, text, title, image, timestamp }) => {

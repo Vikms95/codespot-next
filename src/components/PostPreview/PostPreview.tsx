@@ -46,13 +46,13 @@ export default function PostPreview({
 			</article>
 
 			{children && (
-				<PostBotRowContainer>
+				<div className='flex content-around pb-6'>
 					{React.cloneElement(children, {
 						id,
 						setIsModalActive,
 						setLastClickedPostId,
 					})}
-				</PostBotRowContainer>
+				</div>
 			)}
 		</>
 	);

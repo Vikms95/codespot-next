@@ -37,7 +37,7 @@ export default function MainPostPreview({
 				<PostPreviewImage imageType='main' image={image} id={id} />
 			</article>
 
-			<article className='flex flex-col  justify-between gap-x-4 p-6 h-full'>
+			<article className='flex flex-col justify-between gap-x-4 p-6 h-full'>
 				<PostPreviewContent
 					text={text}
 					title={title}

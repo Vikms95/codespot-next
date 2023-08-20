@@ -26,8 +26,8 @@
       "@hooks/*": ["./src/hooks/*"],
       "@context/*": ["./src/context/*"],
       "@assets/*": ["./src/assets/*"],
-      "@constants": ["./src/constants.ts"]
-      //   "@types": ["./src/types.d.ts"]
+      "@constants": ["./src/constants.ts"],
+        "@types": ["./src/types.d.ts"]
     },
     "plugins": [
       {

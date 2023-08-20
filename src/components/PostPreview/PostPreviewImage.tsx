@@ -46,7 +46,7 @@ export function PostPreviewImage({ image, id, imageType }: Props) {
 					)}
 
 					<Image
-						className={clsx('w-full opacity-90 group-hover:opacity-100 overflow-hidden transition-opacity object-cover ', imageType ? 'sm:min-h-[25.5rem] lg:min-h-[26.25rem]': 'sm:h-36 md:h-56')}
+						className={clsx('w-full opacity-90 group-hover:opacity-100 overflow-hidden transition-opacity object-cover ', imageType ? 'sm:h-[25.5rem] lg:h-[26.25rem]': 'sm:h-36 md:h-56')}
 						src={image ? (imageSrc as ImageSrc)?.url : defaultPostImage}
 						alt='post-preview'
 						width={640}
@@ -57,4 +57,3 @@ export function PostPreviewImage({ image, id, imageType }: Props) {
 		</>
 	);
 }
-// : 'sm:h-[200px] md:h-48'

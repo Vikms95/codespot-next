@@ -10,6 +10,8 @@ export function PostsLayout({ children, title, section }: Props) {
 
 
 	return (
+        <>
+            <h2 className=''>{title}</h2>
 			<section
 				data-testid='posts-layout'
 				className={clsx(
@@ -20,5 +22,7 @@ export function PostsLayout({ children, title, section }: Props) {
 			>
 				{children}
 			</section>
+            
+        </>
 	);
 }

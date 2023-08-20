@@ -27,7 +27,7 @@ export default function RootLayout({ children }: TChildren) {
 					<PostsContextProvider
 						value={{ posts, setPosts, lastClickedPost, setLastClickedPost }}
 					>
-						<section className='sm:mx-0  md:mx-auto lg:my-10 lg:mx-auto'>
+						<section className='sm:mx-0 md:mx-auto lg:my-10 lg:mx-auto'>
 							{user ? <NavbarWithUser /> : <NavbarWithGuest />}
 							<div className='main-content'>{children}</div>
 						</section>

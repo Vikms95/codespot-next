@@ -8,7 +8,7 @@ import { usePostsContext } from '@context/PostsContext';
 import { getUserPosts } from '@services/post';
 import { PostsLayout } from '../../layouts';
 import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '@components/PostPreview';
-import { TPost } from '@types';
+import { TPost } from '@types'
 
 export default function Dashboard() {
 	const { user } = useAuthContext();
@@ -32,7 +32,6 @@ export default function Dashboard() {
 			image: post.image,
 			timestamp: post.timestamp,
 			isPublic: post.public,
-			// setIsModalActive,
 			setLastClickedPost,
 		};
 	};
@@ -42,7 +41,7 @@ export default function Dashboard() {
 	const hasPrivatePost = () => posts?.some((post: TPost) => !post.public);
 
 	return (
-		<StyledDashboard>
+		<main className='min-h-screen sm:mx-0 md:mx-auto md:px-4 m:my-3 lg:my-5 lg:mx-20'>
 			{hasNoPost() ? (
 				<EmptyDashboard />
 			) : (
@@ -77,6 +76,6 @@ export default function Dashboard() {
 					)}
 				</>
 			)}
-		</StyledDashboard>
+		</main>
 	);
 }
