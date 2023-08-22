@@ -17,7 +17,7 @@ export function Navbar({ children }: Props) {
 	return (
 		<NavigationMenu.Root
 			data-testid='navigation-bar'
-			className='bg-white flex flex-1 justify-start sm:mx-auto w-10/12 my-5'
+			className='mx-auto flex w-10/12 flex-1 justify-start bg-white sm:my-6 lg:my-0'
 		>
 			{isMobileView ? (
 				isMobileNavbar ? (
@@ -28,11 +28,11 @@ export function Navbar({ children }: Props) {
 				) : (
 					<FaBars
 						onClick={() => setIsMobileNavbar(true)}
-						className='hover:cursor-pointer text-2xl'
+						className='text-2xl hover:cursor-pointer'
 					/>
 				)
 			) : (
-				<NavigationMenu.List className='list-none flex flex-row gap-x-7 my-5'>
+				<NavigationMenu.List className='my-5 flex list-none flex-row gap-x-7'>
 					<Link href='/' testid='home-button' text='Home' />
 					{children}
 				</NavigationMenu.List>
