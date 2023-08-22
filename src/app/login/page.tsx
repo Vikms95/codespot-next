@@ -7,6 +7,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
+	FormDescription,
 } from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import { useFadeIn } from '@hooks/useFadeIn';
@@ -22,6 +23,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/style/Spinner';
+import { Checkbox } from '@/components/ui/checkbox';
+import { CheckboxWithText } from '@/components/ui/checkbox-with-text';
 
 const formSchema = z.object({
 	username: z
@@ -78,8 +81,11 @@ export default function LoginForm() {
 		<Form data-testid='login-form' {...form}>
 			<form
 				onSubmit={form.handleSubmit(async () => trigger())}
-				className=' mx-auto my-auto flex max-w-lg flex-col space-y-10'
+				className='mx-auto my-16 flex w-full flex-col space-y-8 sm:max-w-xs md:max-w-sm'
 			>
+				<p className='flex justify-center text-2xl font-medium text-main-orange'>
+					Share your ideas with the world.
+				</p>
 				<FormField
 					control={form.control}
 					name='username'
@@ -107,9 +113,39 @@ export default function LoginForm() {
 						</FormItem>
 					)}
 				/>
-				<Button className='mx-auto my-auto px-4' type='submit'>
-					{isMutating ? <Spinner data-testid='spinner' /> : 'Login'}
-				</Button>
+
+				<div className='flex justify-between'>
+					<CheckboxWithText id='remember' text='Remember for 30 days' />
+					<p className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+						Forgot password
+					</p>
+				</div>
+
+				<div className='flex flex-col space-y-5'>
+					<Button className='mx-auto my-auto flex w-full' type='submit'>
+						{isMutating ? <Spinner data-testid='spinner' /> : 'Login'}
+					</Button>
+
+					<Button
+						className='mx-auto my-auto flex w-full bg-white text-black outline outline-1 outline-black'
+						type='submit'
+					>
+						{isMutating ? (
+							<Spinner data-testid='spinner' />
+						) : (
+							'Sign in with Google'
+						)}
+					</Button>
+				</div>
+				<div className='flex justify-center gap-x-2'>
+					<p className='text-main-grey'>Don't have an account?</p>
+					<a
+						className='transition-all hover:cursor-pointer hover:underline'
+						onClick={() => router.push('/register')}
+					>
+						Sign up for free
+					</a>
+				</div>
 			</form>
 		</Form>
 		// <UserFormLayout data-testid='login-form' isActive={isActive}>
