@@ -27,9 +27,11 @@ export default function RootLayout({ children }: TChildren) {
 					<PostsContextProvider
 						value={{ posts, setPosts, lastClickedPost, setLastClickedPost }}
 					>
-						<section className='sm:mx-0 md:mx-auto lg:my-10 lg:mx-auto'>
+						<section className='flex h-full flex-col sm:mx-0 md:mx-auto lg:mx-auto lg:my-10'>
 							{user ? <NavbarWithUser /> : <NavbarWithGuest />}
-							<div className='main-content'>{children}</div>
+							<div className='main-content flex h-full flex-col'>
+								{children}
+							</div>
 						</section>
 					</PostsContextProvider>
 				</AuthContextProvider>

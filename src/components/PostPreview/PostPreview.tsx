@@ -32,11 +32,11 @@ export default function PostPreview({
 }: Props) {
 	return (
 		<>
-			<article className='object-cover h-auto max-w-full'>
+			<article className='h-auto max-w-full object-cover'>
 				<PostPreviewImage image={image} id={id} />
 			</article>
 
-			<article className='flex flex-col justify-between gap-x-4 p-6 h-full'>
+			<article className='flex h-full flex-col justify-between gap-x-4 p-6'>
 				<PostPreviewContent
 					text={text}
 					title={title}

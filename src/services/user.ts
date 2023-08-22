@@ -3,14 +3,14 @@ import { userCreateOptions, rootURL } from '../data/requestParams';
 const createUser = async (
 	username: string,
 	password: string,
-	password2: string
+	password2: string,
 ) => {
 	if (!username || !password || !password2) return;
 
 	try {
 		const response = await fetch(
 			rootURL + '/api/user',
-			userCreateOptions('POST', { username, password, password2 })
+			userCreateOptions('POST', { username, password, password2 }),
 		);
 
 		const data = await response.json();
@@ -32,7 +32,7 @@ const loginUser = async (username: string, password: string) => {
 	try {
 		const response = await fetch(
 			rootURL + '/api/session',
-			userCreateOptions('POST', { username, password })
+			userCreateOptions('POST', { username, password }),
 		);
 
 		const data = await response.json();
