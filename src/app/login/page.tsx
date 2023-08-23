@@ -9,7 +9,7 @@ import { formatError } from '@/utils/formatError';
 import { Input } from '@components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFadeIn } from '@hooks/useFadeIn';
-import { loginUser } from '@services/user';
+import { createUser, loginUser } from '@services/user';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -27,27 +27,26 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@components/ui/form';
-import { loginSchema } from '@/data/formFields';
+import { loginSchema, registerSchema } from '@/data/formFields';
 import { FormImage } from './_styles';
 import Image from 'next/image';
 
 export default function LoginForm() {
 	const router = useRouter();
 	const isActive = useFadeIn();
-	const { setUser } = useAuthContext();
 
-	const loginForm = useForm<z.infer<typeof loginSchema>>({
-		resolver: zodResolver(loginSchema),
+	const registerForm = useForm<z.infer<typeof registerSchema>>({
+		resolver: zodResolver(registerSchema),
 		defaultValues: {
 			username: '',
 			password: '',
+			password2: '',
 		},
 	});
-	const { username, password } = loginForm.getValues();
+	const { username, password, password2 } = registerForm.getValues();
 
-	const { data, error, isMutating, trigger } = useSWRMutation(
-		'api/session',
-		() => loginUser(username, password),
+	const { data, error, isMutating, trigger } = useSWRMutation('/api/user', () =>
+		createUser(username, password, password2),
 	);
 
 	useEffect(() => {
@@ -75,9 +74,9 @@ export default function LoginForm() {
 
 	return (
 		<section className='flex'>
-			<Form data-testid='login-form' {...loginForm}>
+			<Form data-testid='login-form' {...registerForm}>
 				<form
-					onSubmit={loginForm.handleSubmit(async () => trigger())}
+					onSubmit={registerForm.handleSubmit(async () => trigger())}
 					className={clsx(
 						'mx-auto my-16 flex w-full flex-col space-y-8  transition-opacity duration-150 sm:max-w-xs md:max-w-sm',
 						// isActive && 'opacity-100',
@@ -88,7 +87,7 @@ export default function LoginForm() {
 					</p>
 
 					<FormField
-						control={loginForm.control}
+						control={registerForm.control}
 						name='username'
 						render={({ field }) => (
 							<FormItem>
@@ -102,7 +101,7 @@ export default function LoginForm() {
 					/>
 
 					<FormField
-						control={loginForm.control}
+						control={registerForm.control}
 						name='password'
 						render={({ field }) => (
 							<FormItem>
