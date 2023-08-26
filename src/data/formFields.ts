@@ -25,16 +25,16 @@ export const registerSchema = z
 	})
 	.superRefine(data => data.password !== data.password2);
 
-const postFields = {
-	title: '',
-	text: '',
-	isPublic: false,
-	image: '',
-	timestamp: '',
-};
+export const postSchema = z.object({
+	title: z
+		.string()
+		.min(5, { message: 'Post should have a title with 5 characters or more.' }),
+	text: z
+		.string()
+		.min(30, { message: 'Post should be 30 characters or more.' }),
+	isPublic: z.boolean(),
+	image: z.string().min(0),
+	timestamp: z.string().min(1),
+});
 
-const commentFields = {
-	text: '',
-};
-
-export { postFields, commentFields };
+export const commentSchema = z.object({ text: z.string() });

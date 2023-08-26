@@ -50,10 +50,7 @@ export default function RegisterForm() {
 		<section className='flex'>
 			<Form data-testid='register-form' {...registerForm}>
 				<form
-					onSubmit={registerForm.handleSubmit(() => {
-						console.log('trigger');
-						trigger();
-					})}
+					onSubmit={registerForm.handleSubmit(() => trigger())}
 					className={clsx(
 						'mx-auto my-16 flex w-full flex-col space-y-8  transition-opacity duration-150 sm:max-w-xs md:max-w-sm',
 						// isActive && 'opacity-100',
