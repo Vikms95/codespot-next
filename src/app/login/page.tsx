@@ -1,11 +1,18 @@
 'use client';
 
-import loginImage from '@assets/login-image.webp';
 import { Button } from '@/components/ui/button';
 import { CheckboxWithText } from '@/components/ui/checkbox-with-text';
-import { useAuthContext } from '@/context/AuthContext';
+import { loginSchema, registerSchema } from '@/data/formFields';
 import { Spinner } from '@/style/Spinner';
 import { formatError } from '@/utils/formatError';
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFadeIn } from '@hooks/useFadeIn';
@@ -19,34 +26,25 @@ import useSWRMutation from 'swr/mutation';
 import * as z from 'zod';
 import { getFromStorage } from '../../utils/getFromStorage';
 import { setToStorage } from '../../utils/setToStorage';
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '@components/ui/form';
-import { loginSchema, registerSchema } from '@/data/formFields';
-import { FormImage } from './_styles';
-import Image from 'next/image';
+import { useAuthContext } from '@/context/AuthContext';
 
 export default function LoginForm() {
 	const router = useRouter();
 	const isActive = useFadeIn();
+	const { setUser } = useAuthContext();
 
-	const registerForm = useForm<z.infer<typeof registerSchema>>({
-		resolver: zodResolver(registerSchema),
+	const loginForm = useForm<z.infer<typeof loginSchema>>({
+		resolver: zodResolver(loginSchema),
 		defaultValues: {
 			username: '',
 			password: '',
-			password2: '',
 		},
 	});
-	const { username, password, password2 } = registerForm.getValues();
+	const { username, password } = loginForm.getValues();
 
-	const { data, error, isMutating, trigger } = useSWRMutation('/api/user', () =>
-		createUser(username, password, password2),
+	const { data, error, isMutating, trigger } = useSWRMutation(
+		'api/session',
+		() => loginUser(username, password),
 	);
 
 	useEffect(() => {
@@ -74,9 +72,9 @@ export default function LoginForm() {
 
 	return (
 		<section className='flex'>
-			<Form data-testid='login-form' {...registerForm}>
+			<Form data-testid='login-form' {...loginForm}>
 				<form
-					onSubmit={registerForm.handleSubmit(async () => trigger())}
+					onSubmit={loginForm.handleSubmit(async () => trigger())}
 					className={clsx(
 						'mx-auto my-16 flex w-full flex-col space-y-8  transition-opacity duration-150 sm:max-w-xs md:max-w-sm',
 						// isActive && 'opacity-100',
@@ -87,7 +85,7 @@ export default function LoginForm() {
 					</p>
 
 					<FormField
-						control={registerForm.control}
+						control={loginForm.control}
 						name='username'
 						render={({ field }) => (
 							<FormItem>
@@ -101,7 +99,7 @@ export default function LoginForm() {
 					/>
 
 					<FormField
-						control={registerForm.control}
+						control={loginForm.control}
 						name='password'
 						render={({ field }) => (
 							<FormItem>

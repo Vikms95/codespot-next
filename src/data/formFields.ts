@@ -6,7 +6,7 @@ export const loginSchema = z.object({
 		.min(1, { message: 'Username must be at least 1 character.' }),
 	password: z
 		.string()
-		.min(4, { message: 'Password must be at least 4 characters.' }),
+		.min(4, { message: 'Password must be at least 5 characters.' }),
 });
 
 // https://github.com/colinhacks/zod/issues/2284
@@ -18,15 +18,12 @@ export const registerSchema = z
 			.min(1, { message: 'Username must be at least 1 character.' }),
 		password: z
 			.string()
-			.min(4, { message: 'Password must be at least 4 characters.' }),
+			.min(4, { message: 'Password must be at least 5 characters.' }),
 		password2: z
 			.string()
-			.min(4, { message: 'Password must be at least 4 characters.' }),
+			.min(4, { message: 'Password must be at least 5 characters.' }),
 	})
-	.refine(data => data.password !== data.password2, {
-		message: "Passwords don't match",
-		path: ['confirm'],
-	});
+	.superRefine(data => data.password !== data.password2);
 
 const postFields = {
 	title: '',
