@@ -38,3 +38,26 @@ export const postSchema = z.object({
 });
 
 export const commentSchema = z.object({ text: z.string() });
+
+export const loginFields = {
+	username: '',
+	password: '',
+};
+
+export const registerFields = {
+	username: '',
+	password: '',
+	password2: '',
+};
+
+export const postFields = {
+	title: '',
+	text: '',
+	isPublic: false,
+	image: '',
+	timestamp: '',
+};
+
+export const commentFields = {
+	text: '',
+};

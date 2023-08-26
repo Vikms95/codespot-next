@@ -3,7 +3,7 @@ import { useRef, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuthContext } from '@context/AuthContext';
 import { usePostsContext } from '@context/PostsContext';
-import { postFields } from '../../data/formFields';
+import { postFields, postSchema } from '../../data/formFields';
 import { postVal } from '../../data/validationValues';
 import { useFadeIn } from '@hooks/useFadeIn';
 import { usePostForm } from '@hooks/usePostForm';
@@ -15,8 +15,6 @@ import { Spinner } from '../../style/Spinner';
 import { parseEditorData } from '../../utils/parseEditorData';
 import useSWRMutation from 'swr/mutation';
 import {
-	PostFormContainer,
-	StyledPostForm,
 	TitleInput,
 	FormBottomRow,
 	StyledFaCheck,
@@ -30,6 +28,10 @@ import {
 	ErrorMessage,
 	StyledEditor,
 } from './_styles';
+import { Form } from '@components/ui/form';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function PostForm() {
 	const isActive = useFadeIn();
@@ -52,12 +54,17 @@ export default function PostForm() {
 
 	const { title, text, isPublic, image } = formData;
 
+	const postForm = useForm<z.infer<typeof postSchema>>({
+		resolver: zodResolver(postSchema),
+		defaultValues: postFields,
+	});
+
 	const {
 		data: createdPost,
 		isMutating: isCreateLoading,
 		trigger: triggerCreate,
 	} = useSWRMutation('/api/post', () =>
-		createPost(user, title, text, isPublic, image)
+		createPost(user, title, text, isPublic, image),
 	);
 
 	const {
@@ -65,7 +72,7 @@ export default function PostForm() {
 		isMutating: isUpdateLoading,
 		trigger: triggerUpdate,
 	} = useSWRMutation(`/api/post/${postid}`, () =>
-		updatePost(user, title, text, isPublic, image, postid, formData)
+		updatePost(user, title, text, isPublic, image, postid, formData),
 	);
 
 	useEffect(() => {
@@ -79,8 +86,7 @@ export default function PostForm() {
 		return router.push('/dashboard');
 	}, [updatedPost]);
 
-	function handleSubmit(e) {
-		e.preventDefault();
+	function handleSubmit() {
 		if (postid) {
 			triggerUpdate();
 		} else {
@@ -88,8 +94,12 @@ export default function PostForm() {
 		}
 	}
 	return (
-		<PostFormContainer isActive={isActive}>
-			<StyledPostForm onSubmit={handleSubmit} encType='multipart/form-data'>
+		<section
+			className='ml-24  flex content-center justify-start'
+			// isActive={isActive}
+		>
+			{/* How to do this with RHF? */}
+			<Form {...postForm} encType='multipart/form-data'>
 				<Label htmlFor='title'>Title </Label>
 				<TitleInput
 					type='text'
@@ -164,7 +174,7 @@ export default function PostForm() {
 						</FormButton>
 					</BottomRight>
 				</FormBottomRow>
-			</StyledPostForm>
-		</PostFormContainer>
+			</Form>
+		</section>
 	);
 }

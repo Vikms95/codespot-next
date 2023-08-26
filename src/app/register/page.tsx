@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { registerSchema } from '@/data/formFields';
+import { registerFields, registerSchema } from '@/data/formFields';
 import { Spinner } from '@/style/Spinner';
 import { formatError } from '@/utils/formatError';
 import {
@@ -29,11 +29,7 @@ export default function RegisterForm() {
 
 	const registerForm = useForm<z.infer<typeof registerSchema>>({
 		resolver: zodResolver(registerSchema),
-		defaultValues: {
-			username: '',
-			password: '',
-			password2: '',
-		},
+		defaultValues: registerFields,
 	});
 	const { username, password, password2 } = registerForm.getValues();
 

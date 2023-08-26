@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { CheckboxWithText } from '@/components/ui/checkbox-with-text';
-import { loginSchema, registerSchema } from '@/data/formFields';
+import { loginFields, loginSchema, registerSchema } from '@/data/formFields';
 import { Spinner } from '@/style/Spinner';
 import { formatError } from '@/utils/formatError';
 import {
@@ -35,10 +35,7 @@ export default function LoginForm() {
 
 	const loginForm = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
-		defaultValues: {
-			username: '',
-			password: '',
-		},
+		defaultValues: loginFields,
 	});
 	const { username, password } = loginForm.getValues();
 
