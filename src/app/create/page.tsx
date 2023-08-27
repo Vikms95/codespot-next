@@ -118,10 +118,10 @@ export default function PostForm() {
 					<FormField
 						control={postForm.control}
 						name='text'
-						render={field => (
+						render={control => (
 							<FormItem>
 								<FormControl>
-									<RichTextEditor control={postForm.control} field={field} />
+									<RichTextEditor control={control} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>

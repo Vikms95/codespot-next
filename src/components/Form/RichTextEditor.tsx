@@ -6,18 +6,20 @@ import { useRef } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 
 type Props = {
-	field: ControllerRenderProps<
-		{
-			image: string;
-			text: string;
-			title: string;
-			isPublic: boolean;
-		},
-		'text'
-	>;
+	control: {
+		field: ControllerRenderProps<
+			{
+				image: string;
+				text: string;
+				title: string;
+				isPublic: boolean;
+			},
+			'text'
+		>;
+	};
 };
 
-export function RichTextEditor({ field }: Props) {
+export function RichTextEditor({ control }: Props) {
 	const editorRef = useRef<Editor>(null!);
 	const { windowDimensions } = useWindowDimensions();
 
@@ -36,9 +38,9 @@ export function RichTextEditor({ field }: Props) {
 			init={initObject}
 			apiKey={EDITOR_API_KEY}
 			onInit={(_: Event, editor: any) => (editorRef.current = editor)}
-			{...field}
+			{...control}
 			onEditorChange={(content, editor) => {
-				field.field.onChange(parseEditorData(content, editor));
+				control.field.onChange(parseEditorData(content, editor));
 			}}
 		/>
 	);
