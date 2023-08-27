@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { CheckboxWithText } from '@/components/ui/checkbox-with-text';
-import { loginFields, loginSchema, registerSchema } from '@/data/formFields';
+import { loginFields, loginSchema } from '@/data/formFields';
 import { Spinner } from '@/style/Spinner';
 import { formatError } from '@/utils/formatError';
 import {
@@ -16,7 +16,7 @@ import {
 import { Input } from '@components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFadeIn } from '@hooks/useFadeIn';
-import { createUser, loginUser } from '@services/user';
+import { loginUser } from '@services/user';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

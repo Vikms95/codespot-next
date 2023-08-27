@@ -1,5 +1,10 @@
 'use client';
+import { Button } from '@/components/ui/button';
+import { FormLabel } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import { EDITOR_API_KEY } from '@/constants';
+import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import {
 	Form,
 	FormControl,
@@ -12,41 +17,26 @@ import { usePostsContext } from '@context/PostsContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFadeIn } from '@hooks/useFadeIn';
 import { createPost, updatePost } from '@services/post';
+import { Editor } from '@tinymce/tinymce-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { FaCheck } from 'react-icons/fa';
 import useSWRMutation from 'swr/mutation';
 import { z } from 'zod';
 import { postFields, postSchema } from '../../data/formFields';
-import { Label } from '../../style/Label';
 import { Spinner } from '../../style/Spinner';
 import { parseEditorData } from '../../utils/parseEditorData';
-import {
-	CheckBox,
-	CheckBoxLabel,
-	ErrorMessage,
-	FormButton,
-	StyledEditor,
-	StyledFaCheck,
-	TitleInput,
-} from './_styles';
-import { Input } from '@/components/ui/input';
-import { FormLabel } from '@/components/ui/form';
-import { Switch } from '@/components/ui/switch';
-import { Editor } from '@tinymce/tinymce-react';
-import { FaCheck } from 'react-icons/fa';
-import { Button } from '@/components/ui/button';
-import { useWindowDimensions } from '@/hooks/useWindowDimensions';
+import { RichTextEditor } from '@/components/Form/RichTextEditor';
 
 export default function PostForm() {
 	const isActive = useFadeIn();
 	const router = useRouter();
 	const { postid } = useParams();
-	const editorRef = useRef(null);
+
 	const { user } = useAuthContext();
-	const { posts, setPosts } = usePostsContext();
+	const { setPosts } = usePostsContext();
 	const imageInputRef = useRef<HTMLInputElement>(null!);
-	const { windowDimensions } = useWindowDimensions();
 
 	const postForm = useForm<z.infer<typeof postSchema>>({
 		resolver: zodResolver(postSchema),
@@ -128,27 +118,10 @@ export default function PostForm() {
 					<FormField
 						control={postForm.control}
 						name='text'
-						render={({ field }) => (
+						render={() => (
 							<FormItem>
 								<FormControl>
-									<Editor
-										onInit={(_: Event, editor: any) =>
-											(editorRef.current = editor)
-										}
-										init={{
-											height: windowDimensions.height / 2,
-											width: windowDimensions.width / 1.25,
-											elementpath: false,
-											plugins: 'code',
-											menubar: true,
-										}}
-										// name='html'
-										apiKey={EDITOR_API_KEY}
-										{...field}
-										onEditorChange={(content, editor) => {
-											field.onChange(parseEditorData(content, editor));
-										}}
-									/>
+									<RichTextEditor control={postForm.control} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
