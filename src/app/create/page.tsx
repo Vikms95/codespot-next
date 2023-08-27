@@ -157,14 +157,14 @@ export default function PostForm() {
 
 					<br />
 
-					<article className='flex flex-wrap justify-between'>
+					<article className='flex sm:flex-wrap sm:justify-center md:justify-between'>
 						<div className='flex flex-row justify-center'>
 							<>
 								<FormField
 									control={postForm.control}
 									name='image'
 									render={({ field }) => (
-										<FormItem>
+										<FormItem className='pt-1.5'>
 											<FormLabel
 												onClick={() => imageInputRef.current.click()}
 												className='cursor-pointer text-main-orange'
@@ -190,12 +190,12 @@ export default function PostForm() {
 
 						<br />
 
-						<div className='flex content-start justify-end gap-x-5'>
+						<div className='flex gap-x-5 sm:flex-wrap sm:justify-center sm:gap-y-5 sm:text-xs md:justify-between'>
 							<FormField
 								control={postForm.control}
 								name='isPublic'
 								render={({ field }) => (
-									<FormItem className='flex gap-x-5 rounded-lg '>
+									<FormItem className='flex gap-x-2 rounded-lg '>
 										<FormLabel className='cursor-pointer pt-3'>
 											Make this post public
 										</FormLabel>
