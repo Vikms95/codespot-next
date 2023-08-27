@@ -42,16 +42,17 @@ export default function PostForm() {
 		data: createdPost,
 		isMutating: isCreateLoading,
 		trigger: triggerCreate,
-	} = useSWRMutation('/api/post', () =>
-		createPost(user, title, text, isPublic, image),
+	} = useSWRMutation('/api/post', url =>
+		createPost(url, user, title, text, isPublic, image),
 	);
 
 	const {
 		data: updatedPost,
 		isMutating: isUpdateLoading,
 		trigger: triggerUpdate,
-	} = useSWRMutation(`/api/post/${postid}`, () =>
+	} = useSWRMutation(`/api/post/${postid}`, url =>
 		updatePost(
+			url,
 			user,
 			title,
 			text,

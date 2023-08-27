@@ -41,7 +41,7 @@ export default function LoginForm() {
 
 	const { data, error, isMutating, trigger } = useSWRMutation(
 		'api/session',
-		() => loginUser(username, password),
+		url => loginUser(url, username, password),
 	);
 
 	useEffect(() => {

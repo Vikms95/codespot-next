@@ -4,7 +4,7 @@ import { deleteOptions, getOptions, rootURL } from '../data/requestParams';
 import { TPost, TUser } from '@/types';
 import { createFormData } from '@/utils/createFormData';
 
-async function getPosts(url: string) {
+export async function getPosts(url: string) {
 	try {
 		const response = await fetch(rootURL + url, getOptions);
 
@@ -16,13 +16,13 @@ async function getPosts(url: string) {
 	}
 }
 
-const getUserPosts = async (
-	userid: string,
-): Promise<TPost[] | Error | undefined> => {
-	if (!userid) return;
+export async function getUserPosts(
+	url: string,
+): Promise<TPost[] | Error | undefined> {
+	if (!url) return;
 
 	try {
-		const response = await fetch(rootURL + `/api/${userid}/posts`, getOptions);
+		const response = await fetch(rootURL + url, getOptions);
 
 		const data = await response.json();
 
@@ -30,9 +30,9 @@ const getUserPosts = async (
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
-const getImage = async (url: string) => {
+export async function getImage(url: string) {
 	try {
 		const data = await fetch(rootURL + url);
 
@@ -40,15 +40,16 @@ const getImage = async (url: string) => {
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
-const createPost = async (
+export async function createPost(
+	url: string,
 	user: TUser,
 	title: string,
 	text: string,
 	isPublic: boolean,
 	image: string,
-) => {
+) {
 	const formDataRequest = createFormData({
 		title,
 		text,
@@ -61,18 +62,15 @@ const createPost = async (
 	formDataRequest.append('timestamp', timestamp);
 
 	try {
-		const { data } = await axios.post(
-			rootURL + '/api/post',
-			formDataRequest,
-			{},
-		);
+		const { data } = await axios.post(rootURL + url, formDataRequest, {});
 		return data;
 	} catch (err: any) {
 		throw new Error(err);
 	}
-};
+}
 
-const updatePost = async (
+export async function updatePost(
+	url: string,
 	user: TUser,
 	title: string,
 	text: string,
@@ -80,7 +78,7 @@ const updatePost = async (
 	image: string,
 	postToUpdate: string,
 	formData: Record<string, any>,
-) => {
+) {
 	const formDataRequest = createFormData({
 		title,
 		text,
@@ -93,7 +91,7 @@ const updatePost = async (
 
 	try {
 		const data = await axios.put(
-			rootURL + '/api/posts/' + postToUpdate,
+			rootURL + url + postToUpdate,
 			formDataRequest,
 			{},
 		);
@@ -103,9 +101,11 @@ const updatePost = async (
 		console.warn('data', err);
 		return new Error(err);
 	}
-};
+}
 
-const deletePost = async (postid: string) => {
+// @Vikms95 TODO Use SWR here
+
+export async function deletePost(postid: string) {
 	if (!postid) return;
 
 	try {
@@ -119,6 +119,4 @@ const deletePost = async (postid: string) => {
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
-
-export { getPosts, getUserPosts, createPost, deletePost, getImage, updatePost };
+}

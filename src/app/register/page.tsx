@@ -33,8 +33,9 @@ export default function RegisterForm() {
 	});
 	const { username, password, password2 } = registerForm.getValues();
 
-	const { data, error, isMutating, trigger } = useSWRMutation('/api/user', () =>
-		createUser(username, password, password2),
+	const { data, error, isMutating, trigger } = useSWRMutation(
+		'/api/user',
+		url => createUser(url, username, password, password2),
 	);
 
 	useEffect(() => {

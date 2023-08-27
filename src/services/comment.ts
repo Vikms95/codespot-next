@@ -1,19 +1,19 @@
 import { TComment } from '@/types';
 import {
-	userCreateOptions,
 	deleteOptions,
 	getOptions,
 	rootURL,
+	userCreateOptions,
 } from '../data/requestParams';
 import { findByID } from '../utils/findbyID';
 
-const getCommentsCount = async (commentID: string) => {
+export async function getCommentsCount(commentID: string) {
 	if (!commentID) return;
 
 	try {
 		const response = await fetch(
 			rootURL + `/api/${commentID}/comments-count`,
-			getOptions
+			getOptions,
 		);
 
 		const data = await response.json();
@@ -21,16 +21,16 @@ const getCommentsCount = async (commentID: string) => {
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
 //
 
-const getComments = async (postID: string) => {
+export async function getComments(postID: string) {
 	if (!postID) return;
 	try {
 		const response = await fetch(
 			rootURL + `/api/${postID}/comments`,
-			getOptions
+			getOptions,
 		);
 
 		const data = await response.json();
@@ -39,14 +39,14 @@ const getComments = async (postID: string) => {
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
-const createComment = async (
+export async function createComment(
 	text: string,
 	postid: string,
 	userid: string,
-	parentid: string
-) => {
+	parentid: string,
+) {
 	if (!text || !postid || !userid) return;
 	// Change to getCurrentRelativeName
 	const timestamp = new Date();
@@ -58,7 +58,7 @@ const createComment = async (
 	try {
 		const response = await fetch(
 			rootURL + '/api/comment',
-			userCreateOptions('POST', { text, postid, userid, timestamp, parent })
+			userCreateOptions('POST', { text, postid, userid, timestamp, parent }),
 		);
 
 		const { comment, username } = await response.json();
@@ -72,16 +72,16 @@ const createComment = async (
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
-const updateComment = async (
+export async function updateComment(
 	text: string,
 	postid: string,
 	userid: string,
 	commentid: string,
 	comments: string,
-	isDeletedWithChildren?: boolean
-) => {
+	isDeletedWithChildren?: boolean,
+) {
 	const commentToCheck = findByID(comments, commentid)!;
 
 	if (
@@ -108,7 +108,7 @@ const updateComment = async (
 				timestamp,
 				parent,
 				isDeletedWithChildren,
-			})
+			}),
 		);
 
 		const { comment, username } = await response.json();
@@ -119,15 +119,15 @@ const updateComment = async (
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
-const flagComment = async (comment: TComment) => {
+export async function flagComment(comment: TComment) {
 	if (!comment) return;
 
 	try {
 		const response = await fetch(
 			rootURL + '/api/comments/' + comment._id,
-			userCreateOptions('PUT', comment)
+			userCreateOptions('PUT', comment),
 		);
 		const data = await response.json();
 
@@ -135,9 +135,9 @@ const flagComment = async (comment: TComment) => {
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
-const deleteComment = async (commentid: string) => {
+export async function deleteComment(commentid: string) {
 	if (!commentid) return;
 
 	try {
@@ -147,13 +147,4 @@ const deleteComment = async (commentid: string) => {
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
-
-export {
-	createComment,
-	deleteComment,
-	flagComment,
-	getComments,
-	getCommentsCount,
-	updateComment,
-};
+}

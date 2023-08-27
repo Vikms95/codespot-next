@@ -14,7 +14,7 @@ export function useAuth() {
 		data,
 		isLoading: loading,
 		error,
-	} = useSWR('/api/session', () => verifyUser());
+	} = useSWR('/api/session', verifyUser);
 
 	useEffect(() => setUser(data), [data]);
 

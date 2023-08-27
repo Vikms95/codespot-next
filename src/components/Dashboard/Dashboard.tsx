@@ -21,7 +21,7 @@ export function Dashboard({
 }: Props) {
 	const { user } = useAuthContext();
 	const { posts, setPosts } = usePostsContext();
-	const { data } = useSWR(`/api/${user}/posts`, () => getUserPosts(user));
+	const { data } = useSWR(`/api/${user}/posts`, getUserPosts);
 
 	const getPreviewProps = (post: TPost) => {
 		return {
