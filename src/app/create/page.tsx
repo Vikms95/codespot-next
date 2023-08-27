@@ -1,37 +1,38 @@
 'use client';
-import { useRef, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { EDITOR_API_KEY } from '@/constants';
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+} from '@components/ui/form';
 import { useAuthContext } from '@context/AuthContext';
 import { usePostsContext } from '@context/PostsContext';
-import { postFields, postSchema } from '../../data/formFields';
-import { postVal } from '../../data/validationValues';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useFadeIn } from '@hooks/useFadeIn';
-import { usePostForm } from '@hooks/usePostForm';
-import { usePostToUpdate } from '@hooks/usePostToUpdate';
-import { useValidation } from '@hooks/useValidation';
 import { createPost, updatePost } from '@services/post';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import useSWRMutation from 'swr/mutation';
+import { z } from 'zod';
+import { postFields, postSchema } from '../../data/formFields';
 import { Label } from '../../style/Label';
 import { Spinner } from '../../style/Spinner';
 import { parseEditorData } from '../../utils/parseEditorData';
-import useSWRMutation from 'swr/mutation';
 import {
-	TitleInput,
-	FormBottomRow,
-	StyledFaCheck,
-	InputContainer,
-	BottomRight,
-	CheckBoxContainer,
-	CheckBoxTitle,
-	CheckBoxLabel,
 	CheckBox,
-	FormButton,
+	CheckBoxLabel,
 	ErrorMessage,
+	FormButton,
 	StyledEditor,
+	StyledFaCheck,
+	TitleInput,
 } from './_styles';
-import { Form } from '@components/ui/form';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { FormLabel } from '@radix-ui/react-form';
+import { Input } from '@/components/ui/input';
+import { Editor } from '@tinymce/tinymce-react';
 
 export default function PostForm() {
 	const isActive = useFadeIn();
@@ -40,19 +41,6 @@ export default function PostForm() {
 	const editorRef = useRef(null);
 	const { user } = useAuthContext();
 	const { posts, setPosts } = usePostsContext();
-
-	const {
-		formData,
-		setFormData,
-		handleChange,
-		handleImageChange,
-		handleEditorChange,
-		handlePrivacyChange,
-	} = usePostForm(editorRef, postFields);
-	usePostToUpdate(postid, posts, setFormData);
-	const { isFormValid } = useValidation(postVal, formData);
-
-	const { title, text, isPublic, image } = formData;
 
 	const postForm = useForm<z.infer<typeof postSchema>>({
 		resolver: zodResolver(postSchema),
@@ -72,7 +60,15 @@ export default function PostForm() {
 		isMutating: isUpdateLoading,
 		trigger: triggerUpdate,
 	} = useSWRMutation(`/api/post/${postid}`, () =>
-		updatePost(user, title, text, isPublic, image, postid, formData),
+		updatePost(
+			user,
+			title,
+			text,
+			isPublic,
+			image,
+			postid,
+			postForm.getValues(),
+		),
 	);
 
 	useEffect(() => {
@@ -93,87 +89,117 @@ export default function PostForm() {
 			triggerCreate();
 		}
 	}
+
+	const { text, title, isPublic, image } = postForm.getValues();
+
 	return (
 		<section
 			className='ml-24  flex content-center justify-start'
 			// isActive={isActive}
 		>
-			{/* How to do this with RHF? */}
-			<Form {...postForm} encType='multipart/form-data'>
-				<Label htmlFor='title'>Title </Label>
-				<TitleInput
-					type='text'
-					name='title'
-					onChange={handleChange}
-					placeholder='Post title ...'
-					value={title}
-					maxLength='35'
-				/>
-				<br />
+			<Form data-testid='post-form' encType='multipart/form-data' {...postForm}>
+				<form onSubmit={postForm.handleSubmit(async () => handleSubmit())}>
+					<FormField
+						control={postForm.control}
+						name='title'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Title</FormLabel>
+								<FormControl>
+									<Input
+										autoComplete='on'
+										placeholder='This is my opinion...'
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-				<Label htmlFor='text'>Post </Label>
-				<StyledEditor
-					onInit={(_e: Event, editor: any) => (editorRef.current = editor)}
-					init={{
-						height: 600,
-						width: 1200,
-						elementpath: false,
-						plugins: 'code',
-						menubar: true,
-					}}
-					apiKey='k1kgs8qmzd0isvug3s4btubgrps7yutyhiy7jbsi038go8sq'
-					name='html'
-					value={formData.text}
-					onEditorChange={(content, editor) => {
-						handleEditorChange(parseEditorData(content, editor));
-					}}
-				/>
+					<br />
 
-				<br />
-				<FormBottomRow>
-					<InputContainer>
-						<Label htmlFor='image'>Attach an image</Label>
-						<input
-							style={{ display: 'none' }}
-							type='file'
-							name='image'
-							id='image'
-							onChange={handleImageChange}
-						/>
-						{image && <StyledFaCheck />}
-					</InputContainer>
+					<FormField
+						control={postForm.control}
+						name='text'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Post</FormLabel>
+								<FormControl>
+									<Editor
+										onInit={(_e: Event, editor: any) =>
+											(editorRef.current = editor)
+										}
+										init={{
+											height: 600,
+											width: 1200,
+											elementpath: false,
+											plugins: 'code',
+											menubar: true,
+										}}
+										apiKey={EDITOR_API_KEY}
+										name='html'
+										value={text}
+										onEditorChange={(content, editor) => {
+											handleEditorChange(parseEditorData(content, editor));
+										}}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
 					<br />
-					<ErrorMessage>
-						Image size should not exceed 100 megabytes{' '}
-					</ErrorMessage>
-					<br />
-					<BottomRight>
-						<CheckBoxTitle>Make this post public</CheckBoxTitle>
-						<CheckBoxContainer>
-							<CheckBox
-								type='checkbox'
-								name='privacy'
-								onChange={handlePrivacyChange}
-								checked={isPublic}
+
+					<article className='flex items-center justify-between'>
+						<div className='flex flex-row gap-1'>
+							<Label htmlFor='image'>Attach an image</Label>
+							<input
+								style={{ display: 'none' }}
+								type='file'
+								name='image'
+								id='image'
+								onChange={handleImageChange}
 							/>
-							<CheckBoxLabel htmlFor='privacy'></CheckBoxLabel>
-						</CheckBoxContainer>
+							{image && <StyledFaCheck />}
+						</div>
 						<br />
+						<ErrorMessage>
+							Image size should not exceed 100 megabytes{' '}
+						</ErrorMessage>
+						<br />
+						<div className='flex justify-end'>
+							<div className='mr-1 flex items-center'>
+								Make this post public
+							</div>
+							<div className='relative mt-[0.2rem] self-start'>
+								{/* Check how to do this with the class group */}
+								<CheckBox
+									type='checkbox'
+									name='privacy'
+									onChange={handlePrivacyChange}
+									checked={isPublic}
+								/>
+								<CheckBoxLabel htmlFor='privacy'></CheckBoxLabel>
+							</div>
+							<br />
 
-						<FormButton
-							type='submit'
-							disabled={isFormValid() || isCreateLoading || isUpdateLoading}
-						>
-							{isCreateLoading || isUpdateLoading ? (
-								<Spinner />
-							) : postid ? (
-								'Update post'
-							) : (
-								'Submit post'
-							)}
-						</FormButton>
-					</BottomRight>
-				</FormBottomRow>
+							<FormButton
+								type='submit'
+								disabled={isFormValid() || isCreateLoading || isUpdateLoading}
+							>
+								{isCreateLoading || isUpdateLoading ? (
+									<Spinner />
+								) : postid ? (
+									'Update post'
+								) : (
+									'Submit post'
+								)}
+							</FormButton>
+						</div>
+					</article>
+				</form>
 			</Form>
 		</section>
 	);

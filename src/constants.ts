@@ -16,3 +16,6 @@ export const MONTH_NAMES = [
 	'November',
 	'December',
 ];
+
+export const EDITOR_API_KEY =
+	'k1kgs8qmzd0isvug3s4btubgrps7yutyhiy7jbsi038go8sq';

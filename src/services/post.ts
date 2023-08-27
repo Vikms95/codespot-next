@@ -17,7 +17,7 @@ async function getPosts(url: string) {
 }
 
 const getUserPosts = async (
-	userid: string
+	userid: string,
 ): Promise<TPost[] | Error | undefined> => {
 	if (!userid) return;
 
@@ -43,11 +43,11 @@ const getImage = async (url: string) => {
 };
 
 const createPost = async (
-	user: string,
+	user: TUser,
 	title: string,
 	text: string,
 	isPublic: boolean,
-	image: string
+	image: string,
 ) => {
 	const formDataRequest = createFormData({
 		title,
@@ -63,7 +63,7 @@ const createPost = async (
 		const { data } = await axios.post(
 			rootURL + '/api/post',
 			formDataRequest,
-			{}
+			{},
 		);
 		return data;
 	} catch (err: any) {
@@ -78,7 +78,7 @@ const updatePost = async (
 	isPublic: boolean,
 	image: string,
 	postToUpdate: string,
-	formData: Record<string, any>
+	formData: Record<string, any>,
 ) => {
 	const formDataRequest = createFormData({
 		title,
@@ -94,7 +94,7 @@ const updatePost = async (
 		const data = await axios.put(
 			rootURL + '/api/posts/' + postToUpdate,
 			formDataRequest,
-			{}
+			{},
 		);
 
 		return data;
@@ -110,7 +110,7 @@ const deletePost = async (postid: string) => {
 	try {
 		const response = await fetch(
 			rootURL + '/api/posts/' + postid,
-			deleteOptions
+			deleteOptions,
 		);
 		const data = await response.json();
 
