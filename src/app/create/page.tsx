@@ -30,9 +30,10 @@ import {
 	StyledFaCheck,
 	TitleInput,
 } from './_styles';
-import { FormLabel } from '@radix-ui/react-form';
 import { Input } from '@/components/ui/input';
+import { FormLabel } from '@/components/ui/form';
 import { Editor } from '@tinymce/tinymce-react';
+import { FaCheck } from 'react-icons/fa';
 
 export default function PostForm() {
 	const isActive = useFadeIn();
@@ -41,6 +42,7 @@ export default function PostForm() {
 	const editorRef = useRef(null);
 	const { user } = useAuthContext();
 	const { posts, setPosts } = usePostsContext();
+	const imageInputRef = useRef<HTMLInputElement>(null);
 
 	const postForm = useForm<z.infer<typeof postSchema>>({
 		resolver: zodResolver(postSchema),
@@ -94,7 +96,7 @@ export default function PostForm() {
 
 	return (
 		<section
-			className='ml-24  flex content-center justify-start'
+			className='mx-auto flex w-10/12 flex-1 justify-start bg-white sm:my-6 lg:my-4'
 			// isActive={isActive}
 		>
 			<Form data-testid='post-form' encType='multipart/form-data' {...postForm}>
@@ -104,11 +106,10 @@ export default function PostForm() {
 						name='title'
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Title</FormLabel>
 								<FormControl>
 									<Input
 										autoComplete='on'
-										placeholder='This is my opinion...'
+										placeholder='Post title'
 										{...field}
 									/>
 								</FormControl>
@@ -124,10 +125,9 @@ export default function PostForm() {
 						name='text'
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Post</FormLabel>
 								<FormControl>
 									<Editor
-										onInit={(_e: Event, editor: any) =>
+										onInit={(_: Event, editor: any) =>
 											(editorRef.current = editor)
 										}
 										init={{
@@ -138,10 +138,10 @@ export default function PostForm() {
 											menubar: true,
 										}}
 										apiKey={EDITOR_API_KEY}
-										name='html'
-										value={text}
+										// name='html'
+										{...field}
 										onEditorChange={(content, editor) => {
-											handleEditorChange(parseEditorData(content, editor));
+											field.onChange(parseEditorData(content, editor));
 										}}
 									/>
 								</FormControl>
@@ -153,18 +153,38 @@ export default function PostForm() {
 					<br />
 
 					<article className='flex items-center justify-between'>
-						<div className='flex flex-row gap-1'>
-							<Label htmlFor='image'>Attach an image</Label>
-							<input
-								style={{ display: 'none' }}
-								type='file'
-								name='image'
-								id='image'
-								onChange={handleImageChange}
-							/>
-							{image && <StyledFaCheck />}
+						<div className='flex flex-row justify-center gap-x-3 gap-y-2'>
+							<>
+								<FormField
+									control={postForm.control}
+									name='image'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel
+												onClick={() => imageInputRef.current.click()}
+												className='cursor-pointer text-main-orange'
+											>
+												Attach an image
+											</FormLabel>
+											<FormControl>
+												<Input
+													className='invisible w-10'
+													type='file'
+													id='image'
+													{...field}
+													ref={imageInputRef}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								{image && <FaCheck className='mt-1 text-green-500' />}
+							</>
 						</div>
+
 						<br />
+
 						<ErrorMessage>
 							Image size should not exceed 100 megabytes{' '}
 						</ErrorMessage>
@@ -178,7 +198,7 @@ export default function PostForm() {
 								<CheckBox
 									type='checkbox'
 									name='privacy'
-									onChange={handlePrivacyChange}
+									// onChange={handlePrivacyChange}
 									checked={isPublic}
 								/>
 								<CheckBoxLabel htmlFor='privacy'></CheckBoxLabel>
@@ -187,7 +207,7 @@ export default function PostForm() {
 
 							<FormButton
 								type='submit'
-								disabled={isFormValid() || isCreateLoading || isUpdateLoading}
+								// disabled={isFormValid() || isCreateLoading || isUpdateLoading}
 							>
 								{isCreateLoading || isUpdateLoading ? (
 									<Spinner />
