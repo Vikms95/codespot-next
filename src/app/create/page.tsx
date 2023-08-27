@@ -32,8 +32,11 @@ import {
 } from './_styles';
 import { Input } from '@/components/ui/input';
 import { FormLabel } from '@/components/ui/form';
+import { Switch } from '@/components/ui/switch';
 import { Editor } from '@tinymce/tinymce-react';
 import { FaCheck } from 'react-icons/fa';
+import { Button } from '@/components/ui/button';
+import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 
 export default function PostForm() {
 	const isActive = useFadeIn();
@@ -42,7 +45,8 @@ export default function PostForm() {
 	const editorRef = useRef(null);
 	const { user } = useAuthContext();
 	const { posts, setPosts } = usePostsContext();
-	const imageInputRef = useRef<HTMLInputElement>(null);
+	const imageInputRef = useRef<HTMLInputElement>(null!);
+	const { windowDimensions } = useWindowDimensions();
 
 	const postForm = useForm<z.infer<typeof postSchema>>({
 		resolver: zodResolver(postSchema),
@@ -96,7 +100,7 @@ export default function PostForm() {
 
 	return (
 		<section
-			className='mx-auto flex w-10/12 flex-1 justify-start bg-white sm:my-6 lg:my-4'
+			className='flex w-10/12 items-center justify-center bg-white sm:mx-auto sm:my-5 lg:my-8'
 			// isActive={isActive}
 		>
 			<Form data-testid='post-form' encType='multipart/form-data' {...postForm}>
@@ -108,6 +112,7 @@ export default function PostForm() {
 							<FormItem>
 								<FormControl>
 									<Input
+										className='sm:w-64 md:w-full'
 										autoComplete='on'
 										placeholder='Post title'
 										{...field}
@@ -131,14 +136,14 @@ export default function PostForm() {
 											(editorRef.current = editor)
 										}
 										init={{
-											height: 600,
-											width: 1200,
+											height: windowDimensions.height / 2,
+											width: windowDimensions.width / 1.25,
 											elementpath: false,
 											plugins: 'code',
 											menubar: true,
 										}}
-										apiKey={EDITOR_API_KEY}
 										// name='html'
+										apiKey={EDITOR_API_KEY}
 										{...field}
 										onEditorChange={(content, editor) => {
 											field.onChange(parseEditorData(content, editor));
@@ -152,8 +157,8 @@ export default function PostForm() {
 
 					<br />
 
-					<article className='flex items-center justify-between'>
-						<div className='flex flex-row justify-center gap-x-3 gap-y-2'>
+					<article className='flex flex-wrap justify-between'>
+						<div className='flex flex-row justify-center'>
 							<>
 								<FormField
 									control={postForm.control}
@@ -166,9 +171,9 @@ export default function PostForm() {
 											>
 												Attach an image
 											</FormLabel>
-											<FormControl>
+											<FormControl className='h-0'>
 												<Input
-													className='invisible w-10'
+													className='invisible h-0 w-0'
 													type='file'
 													id='image'
 													{...field}
@@ -185,29 +190,31 @@ export default function PostForm() {
 
 						<br />
 
-						<ErrorMessage>
-							Image size should not exceed 100 megabytes{' '}
-						</ErrorMessage>
-						<br />
-						<div className='flex justify-end'>
-							<div className='mr-1 flex items-center'>
-								Make this post public
-							</div>
-							<div className='relative mt-[0.2rem] self-start'>
-								{/* Check how to do this with the class group */}
-								<CheckBox
-									type='checkbox'
-									name='privacy'
-									// onChange={handlePrivacyChange}
-									checked={isPublic}
-								/>
-								<CheckBoxLabel htmlFor='privacy'></CheckBoxLabel>
-							</div>
+						<div className='flex content-start justify-end gap-x-5'>
+							<FormField
+								control={postForm.control}
+								name='isPublic'
+								render={({ field }) => (
+									<FormItem className='flex gap-x-5 rounded-lg '>
+										<FormLabel className='cursor-pointer pt-3'>
+											Make this post public
+										</FormLabel>
+										<FormControl>
+											<Switch
+												className='bg-main-orange'
+												checked={field.value}
+												onCheckedChange={field.onChange}
+												aria-readonly
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
 							<br />
 
-							<FormButton
+							<Button
 								type='submit'
-								// disabled={isFormValid() || isCreateLoading || isUpdateLoading}
+								disabled={isCreateLoading || isUpdateLoading}
 							>
 								{isCreateLoading || isUpdateLoading ? (
 									<Spinner />
@@ -216,7 +223,7 @@ export default function PostForm() {
 								) : (
 									'Submit post'
 								)}
-							</FormButton>
+							</Button>
 						</div>
 					</article>
 				</form>
