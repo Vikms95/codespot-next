@@ -1,10 +1,9 @@
 'use client';
+import { RichTextEditor } from '@/components/Form/RichTextEditor';
 import { Button } from '@/components/ui/button';
 import { FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
-import { EDITOR_API_KEY } from '@/constants';
-import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import {
 	Form,
 	FormControl,
@@ -17,7 +16,6 @@ import { usePostsContext } from '@context/PostsContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFadeIn } from '@hooks/useFadeIn';
 import { createPost, updatePost } from '@services/post';
-import { Editor } from '@tinymce/tinymce-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
@@ -26,8 +24,6 @@ import useSWRMutation from 'swr/mutation';
 import { z } from 'zod';
 import { postFields, postSchema } from '../../data/formFields';
 import { Spinner } from '../../style/Spinner';
-import { parseEditorData } from '../../utils/parseEditorData';
-import { RichTextEditor } from '@/components/Form/RichTextEditor';
 
 export default function PostForm() {
 	const isActive = useFadeIn();
@@ -93,7 +89,12 @@ export default function PostForm() {
 			className='flex w-10/12 items-center justify-center bg-white sm:mx-auto sm:my-5 lg:my-8'
 			// isActive={isActive}
 		>
-			<Form data-testid='post-form' encType='multipart/form-data' {...postForm}>
+			<Form
+				data-testid='post-form'
+				// @ts-expect-error
+				encType='multipart/form-data'
+				{...postForm}
+			>
 				<form onSubmit={postForm.handleSubmit(async () => handleSubmit())}>
 					<FormField
 						control={postForm.control}
@@ -190,7 +191,7 @@ export default function PostForm() {
 								disabled={isCreateLoading || isUpdateLoading}
 							>
 								{isCreateLoading || isUpdateLoading ? (
-									<Spinner />
+									<div className='spinner' />
 								) : postid ? (
 									'Update post'
 								) : (

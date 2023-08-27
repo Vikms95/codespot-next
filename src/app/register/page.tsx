@@ -108,7 +108,11 @@ export default function RegisterForm() {
 						</FormMessage>
 
 						<Button className='mx-auto my-auto flex w-full' type='submit'>
-							{isMutating ? <Spinner data-testid='spinner' /> : 'Register'}
+							{isMutating ? (
+								<div data-testid='spinner' className='spinner' />
+							) : (
+								'Register'
+							)}
 						</Button>
 					</div>
 					<div className='flex justify-center gap-x-2'>

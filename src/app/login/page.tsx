@@ -127,7 +127,11 @@ export default function LoginForm() {
 						</FormMessage>
 
 						<Button className='mx-auto my-auto flex w-full' type='submit'>
-							{isMutating ? <Spinner data-testid='spinner' /> : 'Login'}
+							{isMutating ? (
+								<div data-testid='spinner' className='spinner' />
+							) : (
+								'Login'
+							)}
 						</Button>
 
 						<Button
@@ -135,7 +139,7 @@ export default function LoginForm() {
 							type='submit'
 						>
 							{isMutating ? (
-								<Spinner data-testid='spinner' />
+								<div data-testid='spinner' className='spinner' />
 							) : (
 								<div className='flex content-center justify-center gap-x-5'>
 									<FaGoogle className='text-xl hover:cursor-pointer' />

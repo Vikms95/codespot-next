@@ -67,7 +67,7 @@ export function CommentForm({
 		trigger: triggerCreate,
 		isMutating: isLoadingCreate,
 	} = useSWRMutation('/api/comment', () =>
-		createComment(text, postid, userid, commentid)
+		createComment(text, postid, userid, commentid),
 	);
 
 	useEffect(() => {
@@ -86,7 +86,7 @@ export function CommentForm({
 		trigger: triggerUpdate,
 		isMutating: isLoadingUpdate,
 	} = useSWRMutation(`/api/${postid}/comments/${commentid}`, () =>
-		updateComment(text, postid, userid, commentid, comments)
+		updateComment(text, postid, userid, commentid, comments),
 	);
 
 	useEffect(() => {
@@ -94,8 +94,8 @@ export function CommentForm({
 
 		setComments(prevComments =>
 			prevComments.map(prevComment =>
-				prevComment._id === commentid ? commentUpdated : prevComment
-			)
+				prevComment._id === commentid ? commentUpdated : prevComment,
+			),
 		);
 
 		setFormData(commentFields);
@@ -133,7 +133,7 @@ export function CommentForm({
 					disabled={isFormValid() || isLoadingCreate || isLoadingUpdate}
 				>
 					{isLoadingCreate || isLoadingUpdate ? (
-						<Spinner />
+						<div data-testid='spinner' className='spinner' />
 					) : (
 						checkFormFunctionality(type)
 					)}
