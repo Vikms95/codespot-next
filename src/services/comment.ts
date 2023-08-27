@@ -1,4 +1,4 @@
-import { TComment } from '@/types';
+import { TComment, TUser } from '@/types';
 import {
 	deleteOptions,
 	getOptions,
@@ -7,6 +7,7 @@ import {
 } from '../data/requestParams';
 import { findByID } from '../utils/findbyID';
 
+// @Vikms95 Bad design, refactor this
 export async function getCommentsCount(commentID: string) {
 	if (!commentID) return;
 
@@ -23,15 +24,9 @@ export async function getCommentsCount(commentID: string) {
 	}
 }
 
-//
-
-export async function getComments(postID: string) {
-	if (!postID) return;
+export async function getComments(url: string) {
 	try {
-		const response = await fetch(
-			rootURL + `/api/${postID}/comments`,
-			getOptions,
-		);
+		const response = await fetch(rootURL + url, getOptions);
 
 		const data = await response.json();
 
@@ -42,12 +37,13 @@ export async function getComments(postID: string) {
 }
 
 export async function createComment(
+	url: string,
 	text: string,
 	postid: string,
-	userid: string,
+	userid: TUser['_id'],
 	parentid: string,
 ) {
-	if (!text || !postid || !userid) return;
+	if (!text || !postid || !userid || !parentid) return;
 	// Change to getCurrentRelativeName
 	const timestamp = new Date();
 
@@ -57,7 +53,7 @@ export async function createComment(
 
 	try {
 		const response = await fetch(
-			rootURL + '/api/comment',
+			rootURL + url,
 			userCreateOptions('POST', { text, postid, userid, timestamp, parent }),
 		);
 
@@ -79,7 +75,7 @@ export async function updateComment(
 	postid: string,
 	userid: string,
 	commentid: string,
-	comments: string,
+	comments: TComment[],
 	isDeletedWithChildren?: boolean,
 ) {
 	const commentToCheck = findByID(comments, commentid)!;

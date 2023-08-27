@@ -24,9 +24,7 @@ export default function PostWrapper() {
 			},
 		},
 	]);
-	const { data } = useSWR(`/api/${postid}/comments`, () =>
-		getComments(postid!)
-	);
+	const { data } = useSWR(`/api/${postid}/comments`, getComments);
 
 	useEffect(() => setComments(data), [data]);
 
