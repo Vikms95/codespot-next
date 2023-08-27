@@ -56,6 +56,7 @@ const createPost = async (
 		user,
 		image,
 	});
+
 	const timestamp = getFormattedDate();
 	formDataRequest.append('timestamp', timestamp);
 

@@ -34,7 +34,6 @@ export const postSchema = z.object({
 		.min(30, { message: 'Post should be 30 characters or more.' }),
 	isPublic: z.boolean(),
 	image: z.string().min(0),
-	timestamp: z.string().min(1),
 });
 
 export const commentSchema = z.object({ text: z.string() });
@@ -55,7 +54,6 @@ export const postFields = {
 	text: '',
 	isPublic: false,
 	image: '',
-	timestamp: '',
 };
 
 export const commentFields = {

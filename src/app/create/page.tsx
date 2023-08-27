@@ -23,7 +23,6 @@ import { FaCheck } from 'react-icons/fa';
 import useSWRMutation from 'swr/mutation';
 import { z } from 'zod';
 import { postFields, postSchema } from '../../data/formFields';
-import { Spinner } from '../../style/Spinner';
 
 export default function PostForm() {
 	const isActive = useFadeIn();
@@ -119,10 +118,10 @@ export default function PostForm() {
 					<FormField
 						control={postForm.control}
 						name='text'
-						render={() => (
+						render={field => (
 							<FormItem>
 								<FormControl>
-									<RichTextEditor control={postForm.control} />
+									<RichTextEditor control={postForm.control} field={field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -187,6 +186,9 @@ export default function PostForm() {
 							<br />
 
 							<Button
+								onClick={() =>
+									console.warn('FILTER', postForm.control._formValues)
+								}
 								type='submit'
 								disabled={isCreateLoading || isUpdateLoading}
 							>

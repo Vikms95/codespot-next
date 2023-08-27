@@ -1,6 +1,9 @@
-export const parseEditorData = (content: any, editor: any) => {
-	const { targetElm } = editor;
-	const { name } = targetElm;
+export const parseEditorData = (
+	content: string,
+	editor: { targetElm: { name: string } },
+) => {
+	const name = editor.targetElm.name;
+	console.warn('FILTER', editor.targetElm);
 
 	return {
 		target: {

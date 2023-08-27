@@ -1,31 +1,25 @@
 import { EDITOR_API_KEY } from '@/constants';
-import { postFields } from '@/data/formFields';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import { parseEditorData } from '@/utils/parseEditorData';
 import { Editor } from '@tinymce/tinymce-react';
-import { Ref, useRef } from 'react';
-import { useController, Control } from 'react-hook-form';
+import { useRef } from 'react';
+import { ControllerRenderProps } from 'react-hook-form';
 
 type Props = {
-	control: Control<typeof postFields>;
+	field: ControllerRenderProps<
+		{
+			image: string;
+			text: string;
+			title: string;
+			isPublic: boolean;
+		},
+		'text'
+	>;
 };
 
-export function RichTextEditor({ control }: Props) {
+export function RichTextEditor({ field }: Props) {
 	const editorRef = useRef<Editor>(null!);
 	const { windowDimensions } = useWindowDimensions();
-	const { field } = useController({
-		name: 'text',
-		control,
-		defaultValue: '',
-		rules: {
-			minLength: 35,
-			validate: value => {
-				console.warn('FILTER', value);
-
-				return true;
-			},
-		},
-	});
 
 	const initObject = {
 		menubar: true,
@@ -37,14 +31,14 @@ export function RichTextEditor({ control }: Props) {
 
 	return (
 		<Editor
+			name='html'
 			// @ts-expect-error
 			init={initObject}
-			name='html'
 			apiKey={EDITOR_API_KEY}
 			onInit={(_: Event, editor: any) => (editorRef.current = editor)}
+			{...field}
 			onEditorChange={(content, editor) => {
-				field.onChange(parseEditorData(content, editor));
-				console.warn('FILTER', field.ref);
+				field.field.onChange(parseEditorData(content, editor));
 			}}
 		/>
 	);
