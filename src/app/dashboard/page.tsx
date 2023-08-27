@@ -8,18 +8,16 @@ import { usePostsContext } from '@context/PostsContext';
 import { getUserPosts } from '@services/post';
 import { PostsLayout } from '../../layouts';
 import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '@components/PostPreview';
-import { TPost } from '@types'
+import { TPost } from '@types';
 
 export default function Dashboard() {
 	const { user } = useAuthContext();
 	const { posts, setPosts, setLastClickedPost } = usePostsContext();
-	const { data, error } = useSWR(`/api/${user}/posts`, () =>
-		getUserPosts(user)
-	);
+	const { data, error } = useSWR(`/api/${user}/posts`, getUserPosts);
 
 	useEffect(() => {
-		if (error) return;
-		setPosts((data as TPost[])?.reverse());
+		if (error || !data) return;
+		setPosts((data as TPost[]).reverse());
 	}, [data]);
 
 	const getPreviewProps = (post: TPost) => {
@@ -41,7 +39,7 @@ export default function Dashboard() {
 	const hasPrivatePost = () => posts?.some((post: TPost) => !post.public);
 
 	return (
-		<main className='min-h-screen sm:mx-0 md:mx-auto md:px-4 m:my-3 lg:my-5 lg:mx-20'>
+		<main className='m:my-3 min-h-screen sm:mx-0 md:mx-auto md:px-4 lg:mx-20 lg:my-5'>
 			{hasNoPost() ? (
 				<EmptyDashboard />
 			) : (
@@ -56,7 +54,7 @@ export default function Dashboard() {
 											{...getPreviewProps!(post)}
 											key={post._id}
 										/>
-									)
+									),
 							)}
 						</PostsLayout>
 					)}
@@ -70,7 +68,7 @@ export default function Dashboard() {
 											{...getPreviewProps!(post)}
 											key={post._id}
 										/>
-									)
+									),
 							)}
 						</PostsLayout>
 					)}

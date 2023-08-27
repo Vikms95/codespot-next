@@ -83,6 +83,7 @@ export default function PostForm() {
 	}
 
 	const { text, title, isPublic, image } = postForm.getValues();
+	console.warn('FILTER', postForm.formState.isValid);
 
 	return (
 		<section
@@ -187,11 +188,12 @@ export default function PostForm() {
 							<br />
 
 							<Button
-								onClick={() =>
-									console.warn('FILTER', postForm.control._formValues)
-								}
 								type='submit'
-								disabled={isCreateLoading || isUpdateLoading}
+								disabled={
+									!postForm.formState.isValid ||
+									isCreateLoading ||
+									isUpdateLoading
+								}
 							>
 								{isCreateLoading || isUpdateLoading ? (
 									<div className='spinner' />

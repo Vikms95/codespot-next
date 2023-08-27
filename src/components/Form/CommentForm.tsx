@@ -85,8 +85,8 @@ export function CommentForm({
 		data: commentUpdated,
 		trigger: triggerUpdate,
 		isMutating: isLoadingUpdate,
-	} = useSWRMutation(`/api/${postid}/comments/${commentid}`, () =>
-		updateComment(text, postid, user._id, commentid!, comments),
+	} = useSWRMutation(`/api/${postid}/comments/${commentid}`, (url: string) =>
+		updateComment(url, text, postid, user._id, commentid!, comments),
 	);
 
 	useEffect(() => {

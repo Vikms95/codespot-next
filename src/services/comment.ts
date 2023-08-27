@@ -71,6 +71,7 @@ export async function createComment(
 }
 
 export async function updateComment(
+	url: string,
 	text: string,
 	postid: string,
 	userid: string,
@@ -96,7 +97,7 @@ export async function updateComment(
 
 	try {
 		const response = await fetch(
-			rootURL + `/api/${postid}/comments/${commentid}`,
+			rootURL + url,
 			userCreateOptions('PUT', {
 				text,
 				postid,

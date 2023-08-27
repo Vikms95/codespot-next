@@ -7,6 +7,7 @@ import { AuthContextProvider } from '@/context/AuthContext';
 import { PostsContextProvider } from '@/context/PostsContext';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { TChildren } from '@/types';
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
