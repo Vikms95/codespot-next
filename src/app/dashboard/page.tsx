@@ -9,11 +9,13 @@ import { getUserPosts } from '@services/post';
 import { PostsLayout } from '../../layouts';
 import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '@components/PostPreview';
 import { TPost } from '@types';
+import { DYNAMIC_ENDPOINTS, ENDPOINTS } from '@/constants';
 
 export default function Dashboard() {
 	const { user } = useAuthContext();
+
 	const { posts, setPosts, setLastClickedPost } = usePostsContext();
-	const { data, error } = useSWR(`/api/${user}/posts`, getUserPosts);
+	const { data, error } = useSWR(ENDPOINTS.USER_POSTS(user._id), getUserPosts);
 
 	useEffect(() => {
 		if (error || !data) return;

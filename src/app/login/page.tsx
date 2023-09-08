@@ -27,6 +27,7 @@ import * as z from 'zod';
 import { getFromStorage } from '../../utils/getFromStorage';
 import { setToStorage } from '../../utils/setToStorage';
 import { useAuthContext } from '@/context/AuthContext';
+import { ENDPOINTS } from '@/constants';
 
 export default function LoginForm() {
 	const router = useRouter();
@@ -40,7 +41,7 @@ export default function LoginForm() {
 	const { username, password } = loginForm.getValues();
 
 	const { data, error, isMutating, trigger } = useSWRMutation(
-		'/api/session',
+		ENDPOINTS.USER,
 		url => loginUser(url, username, password),
 	);
 

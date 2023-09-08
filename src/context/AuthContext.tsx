@@ -2,13 +2,13 @@ import { TSetter, TUser } from '@/types';
 import { createContext, useContext, JSX } from 'react';
 
 type Context = {
-	user: TUser;
-	setUser: TSetter<string>;
+	user: TUser['_id'];
+	setUser: TSetter<TUser['_id']>;
 };
 
 type Provider = { value: Context; children: JSX.Element[] | JSX.Element };
 
-const context: Context = { user: { _id: '', username: '' }, setUser: () => {} };
+const context: Context = { user: '', setUser: () => {} };
 const AuthContext = createContext(context);
 
 const AuthContextProvider = ({ value, children }: Provider) => (
