@@ -6,7 +6,8 @@ import { PostsLayout } from '@/layouts';
 import { usePostsContext } from '@/context/PostsContext';
 import { getPosts } from '@/services/post';
 import useSWR from 'swr';
-import { MainPostLayout } from '@/components/PostPreview/MainPostsLayout'
+import { MainPostLayout } from '@/components/PostPreview/MainPostsLayout';
+import { ENDPOINTS } from '@/constants';
 
 type Props = {
 	setLastClickedPostId: TSetter<string>;
@@ -18,53 +19,53 @@ export default function Home({
 	setIsModalActive,
 }: Props) {
 	const { posts, setPosts } = usePostsContext();
-	const { data: fetchedPosts } = useSWR('/api/posts', getPosts);
+	const { data: fetchedPosts } = useSWR(ENDPOINTS.POSTS, getPosts);
 
 	useEffect(() => {
-		if (fetchedPosts) {
-			setPosts(fetchedPosts.filter((post: TPost) => post.public).reverse());
-		}
+		if (!fetchedPosts) return;
+
+		const publicPosts = fetchedPosts
+			.filter((post: TPost) => post.public)
+			.reverse();
+
+		setPosts(publicPosts);
 	}, [fetchedPosts]);
 
-    
-    return (
-        <main className='min-h-screen sm:mx-0 md:mx-auto md:px-4 m:my-3 lg:my-5 lg:mx-20'>
-            {posts.length > 0 && (
-                (() => {
-                    const [first, second, ...rest] = posts;
-                    return (
-                        <>
-                        {first && second && (
-                            <MainPostLayout 
-                                posts={[first, second]} 
-                                setIsModalActive={setIsModalActive}
-                                setLastClickedPostId={setLastClickedPostId} 
-                            />
+	return (
+		<main className='m:my-3 min-h-screen sm:mx-0 md:mx-auto md:px-4 lg:mx-20 lg:my-5'>
+			{posts.length > 0 &&
+				(() => {
+					const [first, second, ...rest] = posts;
+					return (
+						<>
+							{first && second && (
+								<MainPostLayout
+									posts={[first, second]}
+									setIsModalActive={setIsModalActive}
+									setLastClickedPostId={setLastClickedPostId}
+								/>
+							)}
 
-                        )}
-                        
-                        <PostsLayout section='home'>
-                        	{rest.map(({ _id, user, text, title, image, timestamp }) => {
-                                   return ( 
-                                   <PostPreview
-                        				key={_id}
-                        				id={_id}
-                        				user={user}
-                        				text={text}
-                        				title={title}
-                        				image={image}
-                        				timestamp={timestamp}
-                        				setIsModalActive={setIsModalActive}
-                        				setLastClickedPostId={setLastClickedPostId}
-                        			/>
-                                    )
-                                })}
-                        </PostsLayout>
-                        </>
-                    );
-                })()
-            )}
-        </main>
-    );
-    
+							<PostsLayout section='home'>
+								{rest.map(({ _id, user, text, title, image, timestamp }) => {
+									return (
+										<PostPreview
+											key={_id}
+											id={_id}
+											user={user}
+											text={text}
+											title={title}
+											image={image}
+											timestamp={timestamp}
+											setIsModalActive={setIsModalActive}
+											setLastClickedPostId={setLastClickedPostId}
+										/>
+									);
+								})}
+							</PostsLayout>
+						</>
+					);
+				})()}
+		</main>
+	);
 }

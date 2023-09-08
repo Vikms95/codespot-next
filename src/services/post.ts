@@ -6,7 +6,7 @@ import { createFormData } from '@/utils/createFormData';
 
 export async function getPosts(url: string) {
 	try {
-		const response = await fetch(rootURL + url, getOptions);
+		const response = await fetch(url, getOptions);
 
 		const data = await response.json();
 
@@ -16,19 +16,21 @@ export async function getPosts(url: string) {
 	}
 }
 
-export async function getUserPosts(
-	url: string,
-): Promise<TPost[] | Error | undefined> {
-	if (!url) return;
+export async function getUserPosts(url: string): Promise<TPost[]> {
+	if (!url) throw new Error('Invalid URL');
 
 	try {
-		const response = await fetch(rootURL + url, getOptions);
+		const response = await fetch(url, getOptions);
 
-		const data = await response.json();
+		if (!response.ok) {
+			const errorData = await response.json();
+			throw new Error(errorData.message || 'Failed to fetch posts');
+		}
 
+		const data: TPost[] = await response.json();
 		return data;
 	} catch (err: any) {
-		return new Error(err);
+		throw new Error(err.message || 'Unknown error occurred');
 	}
 }
 

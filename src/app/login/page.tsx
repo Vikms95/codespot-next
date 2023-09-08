@@ -41,7 +41,7 @@ export default function LoginForm() {
 	const { username, password } = loginForm.getValues();
 
 	const { data, error, isMutating, trigger } = useSWRMutation(
-		ENDPOINTS.USER,
+		ENDPOINTS.SESSION,
 		url => loginUser(url, username, password),
 	);
 

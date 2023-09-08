@@ -1,25 +1,29 @@
 'use client';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import useSWR from 'swr';
-import { StyledDashboard } from './_styles';
+import { ENDPOINTS } from '@/constants';
 import { EmptyDashboard } from '@components/Dashboard/EmptyDashboard';
+import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '@components/PostPreview';
 import { useAuthContext } from '@context/AuthContext';
 import { usePostsContext } from '@context/PostsContext';
 import { getUserPosts } from '@services/post';
-import { PostsLayout } from '../../layouts';
-import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '@components/PostPreview';
 import { TPost } from '@types';
-import { DYNAMIC_ENDPOINTS, ENDPOINTS } from '@/constants';
+import { useEffect } from 'react';
+import useSWR from 'swr';
+import { PostsLayout } from '../../layouts';
 
 export default function Dashboard() {
 	const { user } = useAuthContext();
 
 	const { posts, setPosts, setLastClickedPost } = usePostsContext();
-	const { data, error } = useSWR(ENDPOINTS.USER_POSTS(user._id), getUserPosts);
+
+	const { data, error } = useSWR(
+		() => ENDPOINTS.USER_POSTS(user),
+		getUserPosts,
+	);
 
 	useEffect(() => {
-		if (error || !data) return;
-		setPosts((data as TPost[]).reverse());
+		if (error || !data?.length) return;
+		// I want the last post to be the first to show up
+		setPosts(data.reverse());
 	}, [data]);
 
 	const getPreviewProps = (post: TPost) => {
