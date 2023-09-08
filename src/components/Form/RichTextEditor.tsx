@@ -34,9 +34,9 @@ export function RichTextEditor({ control }: Props) {
 	return (
 		<Editor
 			name='html'
-			// @ts-expect-error
 			init={initObject}
 			apiKey={EDITOR_API_KEY}
+			// @ts-expect-error
 			onInit={(_: Event, editor: any) => (editorRef.current = editor)}
 			{...control}
 			onEditorChange={(content, editor) => {

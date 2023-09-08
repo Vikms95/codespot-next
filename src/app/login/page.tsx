@@ -40,7 +40,7 @@ export default function LoginForm() {
 	const { username, password } = loginForm.getValues();
 
 	const { data, error, isMutating, trigger } = useSWRMutation(
-		'api/session',
+		'/api/session',
 		url => loginUser(url, username, password),
 	);
 

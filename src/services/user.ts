@@ -30,6 +30,8 @@ const createUser = async (
 const loginUser = async (url: string, username: string, password: string) => {
 	if (!username || !password) return;
 
+	console.log('Filter: ', { url, username, password });
+
 	try {
 		const response = await fetch(
 			rootURL + url,
