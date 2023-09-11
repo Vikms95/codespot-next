@@ -10,7 +10,7 @@ export function PostHero({ image, title, post }: Props) {
 
 	return (
 		<>
-			<Title>{title && title}</Title>
+			<h2 className='max-w-prose text-4xl sm:text-xl'>{title}</h2>
 
 			{imageSrc && (
 				<Image

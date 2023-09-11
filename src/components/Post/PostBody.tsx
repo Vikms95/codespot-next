@@ -28,7 +28,7 @@ export function PostBody({ children }: PropsWithChildren) {
 	return (
 		<section className='sm:p-4 md:p-0'>
 			<PostHero image={image} post={post} title={title} />
-			<Text ref={textRef}></Text>
+			<p className='text-lg sm:text-xs' ref={textRef}></p>
 
 			{children}
 
