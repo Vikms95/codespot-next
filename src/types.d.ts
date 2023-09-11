@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BASE_ENDPOINT } from './constants';
+import { BASE_API_ENDPOINT } from './constants';
 
 export type TPost = {
 	_id: string;
@@ -48,6 +48,6 @@ export type ImageSrc = {
 
 export type SetState<T> = Dispatch<React.SetStateAction<T>>;
 
-type BaseEndpointType = typeof BASE_ENDPOINT;
+type BaseEndpointType = typeof BASE_API_ENDPOINT;
 type UrlPart<T extends string> = T[];
 type Url<T extends string> = `${BaseEndpointType}${T}`;

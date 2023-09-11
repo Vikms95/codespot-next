@@ -36,7 +36,7 @@ export async function getUserPosts(url: string): Promise<TPost[]> {
 
 export async function getImage(url: string) {
 	try {
-		const data = await fetch(rootURL + url);
+		const data = await fetch(url);
 
 		return data as Response;
 	} catch (err: any) {
