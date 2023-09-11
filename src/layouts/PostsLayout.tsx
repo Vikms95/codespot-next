@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { useFadeIn } from '../hooks/useFadeIn';
 import { TChildren } from '@/types';
 import clsx from 'clsx';
 
-type Props = { title: string; section: string } & TChildren;
+type Props = { title: string } & PropsWithChildren;
 
-export function PostsLayout({ children, title, section }: Props) {
+export function PostsLayout({ children, title }: Props) {
 	const isActive = useFadeIn();
 
 	return (
 		<>
-			<h2 className=''>{title}</h2>
+			{title && (
+				<h2 className='mb-5 text-xl font-semibold text-main-orange'>{title}</h2>
+			)}
 			<section
 				data-testid='posts-layout'
 				className={clsx(

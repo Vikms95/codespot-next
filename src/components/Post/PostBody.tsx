@@ -32,9 +32,9 @@ export function PostBody({ children }: PropsWithChildren) {
 
 			{children}
 
-			<CommentsTitle>
+			<h1 className='self-start pb-4 pl-4 pt-8'>
 				{comments?.length > 0 ? 'Comments' : 'There are no comments...'}
-			</CommentsTitle>
+			</h1>
 		</section>
 	);
 }

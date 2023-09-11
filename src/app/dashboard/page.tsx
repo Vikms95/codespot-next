@@ -49,23 +49,25 @@ export default function Dashboard() {
 			{hasNoPost() ? (
 				<EmptyDashboard />
 			) : (
-				<>
+				<section className='flex flex-col'>
 					{hasPublicPost() && (
-						<PostsLayout title='Published posts' section='dashboard'>
-							{posts?.map(
-								post =>
-									post.public && (
-										<PostPreviewWithButtons
-											data-testid='post-preview'
-											{...getPreviewProps!(post)}
-											key={post._id}
-										/>
-									),
-							)}
-						</PostsLayout>
+						<>
+							<PostsLayout title='Published posts'>
+								{posts?.map(
+									post =>
+										post.public && (
+											<PostPreviewWithButtons
+												data-testid='post-preview'
+												{...getPreviewProps!(post)}
+												key={post._id}
+											/>
+										),
+								)}
+							</PostsLayout>
+						</>
 					)}
 					{hasPrivatePost() && (
-						<PostsLayout title='Unpublished posts' section='dashboard'>
+						<PostsLayout title='Unpublished posts'>
 							{posts?.map(
 								post =>
 									!post.public && (
@@ -78,7 +80,7 @@ export default function Dashboard() {
 							)}
 						</PostsLayout>
 					)}
-				</>
+				</section>
 			)}
 		</main>
 	);
