@@ -19,7 +19,7 @@ export default function Home({
 	setIsModalActive,
 }: Props) {
 	const { posts, setPosts } = usePostsContext();
-	const { data: fetchedPosts } = useSWR(ENDPOINTS.POSTS, getPosts);
+	const { data: fetchedPosts } = useSWR(ENDPOINTS.GET_POSTS, getPosts);
 
 	useEffect(() => {
 		if (!fetchedPosts) return;
@@ -48,6 +48,7 @@ export default function Home({
 
 							<PostsLayout section='home'>
 								{rest.map(({ _id, user, text, title, image, timestamp }) => {
+									if (!_id || !user.username) return null;
 									return (
 										<PostPreview
 											key={_id}

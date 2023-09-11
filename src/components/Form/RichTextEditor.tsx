@@ -1,4 +1,5 @@
 import { EDITOR_API_KEY } from '@/constants';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 import { parseEditorData } from '@/utils/parseEditorData';
 import { Editor } from '@tinymce/tinymce-react';
@@ -6,6 +7,7 @@ import { useRef } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 
 type Props = {
+	text?: string;
 	control: {
 		field: ControllerRenderProps<
 			{
@@ -19,7 +21,7 @@ type Props = {
 	};
 };
 
-export function RichTextEditor({ control }: Props) {
+export function RichTextEditor({ control, text }: Props) {
 	const editorRef = useRef<Editor>(null!);
 	const { windowDimensions } = useWindowDimensions();
 
@@ -34,6 +36,7 @@ export function RichTextEditor({ control }: Props) {
 	return (
 		<Editor
 			name='html'
+			initialValue={text}
 			init={initObject}
 			apiKey={EDITOR_API_KEY}
 			// @ts-expect-error

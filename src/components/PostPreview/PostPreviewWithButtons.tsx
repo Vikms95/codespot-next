@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { PostButtonContainer } from './_styles';
 import { Button } from '../../style/Button';
 import { TChildren, TSetter, TUser } from '@/types';
+import { setToStorage } from '@/utils/setToStorage';
 
 type Props = {
 	id: string;
@@ -22,6 +23,7 @@ export default function PostPreviewWithButtons(props: Props) {
 	const router = useRouter();
 
 	const handleUpdate = () => {
+		setLastClickedPost(id);
 		return router.push('/update/' + id);
 	};
 

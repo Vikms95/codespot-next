@@ -64,7 +64,7 @@ export async function createPost(
 	formDataRequest.append('timestamp', timestamp);
 
 	try {
-		const { data } = await axios.post(rootURL + url, formDataRequest, {});
+		const { data } = await axios.post(url, formDataRequest, {});
 		return data;
 	} catch (err: any) {
 		throw new Error(err);
@@ -73,13 +73,13 @@ export async function createPost(
 
 export async function updatePost(
 	url: string,
-	user: TUser,
+	user: TUser['_id'],
 	title: string,
 	text: string,
 	isPublic: boolean,
 	image: string,
 	postToUpdate: string,
-	formData: Record<string, any>,
+	timestamp: string,
 ) {
 	const formDataRequest = createFormData({
 		title,
@@ -89,16 +89,12 @@ export async function updatePost(
 		image,
 	});
 
-	formDataRequest.append('formerTimeStamp', formData.timestamp);
+	formDataRequest.append('formerTimeStamp', timestamp);
 
 	try {
-		const data = await axios.put(
-			rootURL + url + postToUpdate,
-			formDataRequest,
-			{},
-		);
+		const data = await axios.put(url, formDataRequest, {});
 
-		return data;
+		return data as unknown as TPost;
 	} catch (err: any) {
 		console.warn('data', err);
 		return new Error(err);

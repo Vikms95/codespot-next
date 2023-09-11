@@ -16,7 +16,7 @@ export default function Dashboard() {
 	const { posts, setPosts, setLastClickedPost } = usePostsContext();
 
 	const { data, error } = useSWR(
-		() => ENDPOINTS.USER_POSTS(user),
+		() => ENDPOINTS.GET_USER_POSTS(user),
 		getUserPosts,
 	);
 

@@ -23,11 +23,13 @@ import { FaCheck } from 'react-icons/fa';
 import useSWRMutation from 'swr/mutation';
 import { z } from 'zod';
 import { postFields, postSchema } from '../../data/formFields';
+import { ENDPOINTS } from '@/constants';
 
 export default function PostForm() {
 	const isActive = useFadeIn();
 	const router = useRouter();
 	const { postid } = useParams();
+	console.log('Filter hello world: ', postid);
 
 	const { user } = useAuthContext();
 	const { setPosts } = usePostsContext();
@@ -42,25 +44,8 @@ export default function PostForm() {
 		data: createdPost,
 		isMutating: isCreateLoading,
 		trigger: triggerCreate,
-	} = useSWRMutation('/api/post', url =>
+	} = useSWRMutation(ENDPOINTS.CREATE_POST, url =>
 		createPost(url, user, title, text, isPublic, image),
-	);
-
-	const {
-		data: updatedPost,
-		isMutating: isUpdateLoading,
-		trigger: triggerUpdate,
-	} = useSWRMutation(`/api/post/${postid}`, url =>
-		updatePost(
-			url,
-			user,
-			title,
-			text,
-			isPublic,
-			image,
-			postid,
-			postForm.getValues(),
-		),
 	);
 
 	useEffect(() => {
@@ -69,21 +54,11 @@ export default function PostForm() {
 		return router.push('/dashboard');
 	}, [createdPost]);
 
-	useEffect(() => {
-		if (!updatedPost) return;
-		return router.push('/dashboard');
-	}, [updatedPost]);
-
 	function handleSubmit() {
-		if (postid) {
-			triggerUpdate();
-		} else {
-			triggerCreate();
-		}
+		triggerCreate();
 	}
 
 	const { text, title, isPublic, image } = postForm.getValues();
-	console.warn('FILTER', postForm.formState.isValid);
 
 	return (
 		<section
@@ -165,7 +140,7 @@ export default function PostForm() {
 
 						<br />
 
-						<div className='flex gap-x-5 sm:flex-wrap sm:justify-center sm:gap-y-5 sm:text-xs md:justify-between'>
+						<div className='flex gap-x-5 sm:flex-wrap sm:justify-center sm:gap-y-4 sm:text-xs md:justify-between'>
 							<FormField
 								control={postForm.control}
 								name='isPublic'
@@ -189,19 +164,9 @@ export default function PostForm() {
 
 							<Button
 								type='submit'
-								disabled={
-									!postForm.formState.isValid ||
-									isCreateLoading ||
-									isUpdateLoading
-								}
+								disabled={!postForm.formState.isValid || isCreateLoading}
 							>
-								{isCreateLoading || isUpdateLoading ? (
-									<div className='spinner' />
-								) : postid ? (
-									'Update post'
-								) : (
-									'Submit post'
-								)}
+								{isCreateLoading ? <div className='spinner' /> : 'Submit post'}
 							</Button>
 						</div>
 					</article>

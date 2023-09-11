@@ -30,21 +30,23 @@ function createUrl<T extends string>(
 	...parts: UrlPart<T>
 ): Url<T> {
 	// Whatever we return, it will be a composition of type of BASE_ENDPOINT and T
+
 	return `${BASE_ENDPOINT}${parts.join('')}` as Url<T>;
 }
 
 export const ENDPOINTS = {
 	USER: createUrl('/user'),
 	SESSION: createUrl('/session'),
-	POSTS: createUrl('/posts'),
-	SINGLE_POST: createUrl('/post'),
-	COMMENT: createUrl('/comment'),
+	GET_POSTS: createUrl('/posts'),
+	CREATE_POST: createUrl('/post'),
+	CREATE_COMMENT: createUrl('/comment'),
 	FLAG_ALL_COMMENTS: createUrl('/comments'),
-	USER_POSTS: (id: TUser['_id']) => createUrl('/', id, '/posts'),
-	POST_COMMENTS: (id: TPost['_id']) => createUrl('/', id, 'comments'),
-	POST_COMMENTS_COUNT: (id: TPost['_id']) =>
-		createUrl('/', id, 'comments-count'),
-	UPDATE_COMMENT_BY_POST: (postId: TPost['_id'], commentId: TComment['_id']) =>
-		createUrl('/', postId, 'comments', commentId),
+	GET_USER_POSTS: (id: TUser['_id']) => createUrl('/', id, '/posts'),
+	UPDATE_POST: (id: TPost['_id']) => createUrl('/posts/', id),
+	GET_POST_COMMENTS: (id: TPost['_id']) => createUrl('/', id, '/comments'),
+	GET_POST_COMMENTS_COUNT: (id: TPost['_id']) =>
+		createUrl('/', id, '/comments-count'),
+	UPDATE_COMMENT: (postId: TPost['_id'], commentId: TComment['_id']) =>
+		createUrl('/', postId, '/comments', commentId),
 	DELETE_COMMENT: (id: TComment['_id']) => createUrl('/', id),
 };
