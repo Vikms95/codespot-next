@@ -1,5 +1,5 @@
 'use client';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 
 import { PostBotRowContainer } from './_styles';
 import { PostPreviewImage } from './PostPreviewImage';
@@ -14,8 +14,7 @@ type Props = {
 	text: string;
 	image: string;
 	timestamp: string;
-	buttons?: any;
-};
+} & PropsWithChildren;
 
 export default function PostPreview({
 	id,
@@ -24,12 +23,12 @@ export default function PostPreview({
 	text,
 	image,
 	timestamp,
-	buttons,
+	children,
 }: Props) {
 	return (
 		<>
 			<article className='h-auto max-w-full object-cover'>
-				<PostPreviewImage buttons={buttons} image={image} id={id} />
+				<PostPreviewImage buttons={children} image={image} id={id} />
 			</article>
 
 			<article className='flex h-full flex-col justify-between gap-x-4 p-6'>

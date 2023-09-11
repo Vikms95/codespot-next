@@ -17,7 +17,11 @@ type Props = {
 } & TChildren;
 
 export default function PostPreviewWithButtons(props: Props) {
-	return <PostPreview buttons={<PostButtons {...props} />} {...props} />;
+	return (
+		<PostPreview {...props}>
+			<PostButtons {...props} />
+		</PostPreview>
+	);
 }
 
 function PostButtons({ id, setIsModalActive, setLastClickedPost }: Props) {
