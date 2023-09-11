@@ -35,14 +35,17 @@ export default function PostForm() {
 	const { user } = useAuthContext();
 	const { setPosts } = usePostsContext();
 	const imageInputRef = useRef<HTMLInputElement>(null!);
-	const post = findByID(JSON.parse(localStorage.getItem('posts')!), postid);
+	const post = findByID(
+		JSON.parse(localStorage.getItem('posts') || ''),
+		postid,
+	);
 
 	const postForm = useForm<z.infer<typeof postSchema>>({
 		resolver: zodResolver(postSchema),
 		defaultValues: {
-			title: post.title,
+			title: post?.title,
 			text: '',
-			isPublic: post.public,
+			isPublic: post?.public,
 			image: '',
 		},
 	});
@@ -176,137 +179,3 @@ export default function PostForm() {
 		</section>
 	);
 }
-
-// export default function PostForm() {
-// 	const isActive = useFadeIn();
-// 	const router = useRouter();
-// 	const { postid } = useParams();
-// 	const editorRef = useRef(null);
-// 	const { user } = useAuthContext();
-// 	const { posts, setPosts } = usePostsContext();
-
-// 	const {
-// 		formData,
-// 		setFormData,
-// 		handleChange,
-// 		handleImageChange,
-// 		handleEditorChange,
-// 		handlePrivacyChange,
-// 	} = usePostForm(editorRef, postFields);
-// 	usePostToUpdate(postid, posts, setFormData);
-// 	const { isFormValid } = useValidation(postVal, formData);
-
-// 	const { title, text, isPublic, image } = formData;
-
-// 	const {
-// 		data: updatedPost,
-// 		isMutating: isUpdateLoading,
-// 		trigger: triggerUpdate,
-// 		// } = useSWRMutation(`/api/post/${postid}`, url =>
-// 	} = useSWRMutation(
-// 		() => ENDPOINTS.UPDATE_POST(postid),
-// 		url =>
-// 			updatePost(
-// 				url,
-// 				user,
-// 				title,
-// 				text,
-// 				isPublic,
-// 				image,
-// 				postid,
-// 				postForm.getValues(),
-// 			),
-// 	);
-
-// 	useEffect(() => {
-// 		if (!updatedPost) return;
-// 		return router.push('/dashboard');
-// 	}, [updatedPost]);
-
-// 	function handleSubmit(e) {
-// 		e.preventDefault();
-// 		if (postid) {
-// 			triggerUpdate();
-// 		}
-// 	}
-// 	return (
-// 		<PostFormContainer isActive={isActive}>
-// 			<StyledPostForm onSubmit={handleSubmit} encType='multipart/form-data'>
-// 				<Label htmlFor='title'>Title </Label>
-// 				<TitleInput
-// 					type='text'
-// 					name='title'
-// 					onChange={handleChange}
-// 					placeholder='Post title ...'
-// 					value={title}
-// 					maxLength='35'
-// 				/>
-// 				<br />
-
-// 				<Label htmlFor='text'>Post </Label>
-// 				<StyledEditor
-// 					onInit={(_e: Event, editor: any) => (editorRef.current = editor)}
-// 					init={{
-// 						height: 600,
-// 						width: 1200,
-// 						elementpath: false,
-// 						plugins: 'code',
-// 						menubar: true,
-// 					}}
-// 					apiKey='k1kgs8qmzd0isvug3s4btubgrps7yutyhiy7jbsi038go8sq'
-// 					name='html'
-// 					value={formData.text}
-// 					onEditorChange={(content, editor) => {
-// 						handleEditorChange(parseEditorData(content, editor));
-// 					}}
-// 				/>
-
-// 				<br />
-// 				<FormBottomRow>
-// 					<InputContainer>
-// 						<Label htmlFor='image'>Attach an image</Label>
-// 						<input
-// 							style={{ display: 'none' }}
-// 							type='file'
-// 							name='image'
-// 							id='image'
-// 							onChange={handleImageChange}
-// 						/>
-// 						{image && <StyledFaCheck />}
-// 					</InputContainer>
-// 					<br />
-// 					<ErrorMessage>
-// 						Image size should not exceed 100 megabytes{' '}
-// 					</ErrorMessage>
-// 					<br />
-// 					<BottomRight>
-// 						<CheckBoxTitle>Make this post public</CheckBoxTitle>
-// 						<CheckBoxContainer>
-// 							<CheckBox
-// 								type='checkbox'
-// 								name='privacy'
-// 								onChange={handlePrivacyChange}
-// 								checked={isPublic}
-// 							/>
-// 							<CheckBoxLabel htmlFor='privacy'></CheckBoxLabel>
-// 						</CheckBoxContainer>
-// 						<br />
-
-// 						<FormButton
-// 							type='submit'
-// 							disabled={isFormValid() || isUpdateLoading}
-// 						>
-// 							{isUpdateLoading ? (
-// 								<Spinner />
-// 							) : postid ? (
-// 								'Update post'
-// 							) : (
-// 								'Submit post'
-// 							)}
-// 						</FormButton>
-// 					</BottomRight>
-// 				</FormBottomRow>
-// 			</StyledPostForm>
-// 		</PostFormContainer>
-// 	);
-// }

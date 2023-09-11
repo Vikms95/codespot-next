@@ -26,7 +26,7 @@ export async function getCommentsCount(commentID: string) {
 
 export async function getComments(url: string) {
 	try {
-		const response = await fetch(rootURL + url, getOptions);
+		const response = await fetch(url, getOptions);
 
 		const data = await response.json();
 

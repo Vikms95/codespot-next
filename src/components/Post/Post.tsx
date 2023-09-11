@@ -27,13 +27,14 @@ export function Post({ children }: TChildren) {
 	}, [user]);
 
 	return (
-		<StyledPost isActive={isActive}>
+		// <StyledPost isActive={isActive}>
+		<section className='m'>
 			{user ? <PostBodyWithUser /> : <PostBodyWithGuest />}
 			<CommentsLayout
 				comments={rootComments}
 				setComments={setComments}
 				getChildComments={getChildComments}
 			/>
-		</StyledPost>
+		</section>
 	);
 }

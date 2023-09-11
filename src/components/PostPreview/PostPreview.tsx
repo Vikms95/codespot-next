@@ -14,9 +14,7 @@ type Props = {
 	text: string;
 	image: string;
 	timestamp: string;
-	setIsModalActive: Dispatch<SetStateAction<boolean>>;
-	setLastClickedPostId: Dispatch<SetStateAction<string>>;
-	children?: TChildren;
+	buttons?: any;
 };
 
 export default function PostPreview({
@@ -26,14 +24,12 @@ export default function PostPreview({
 	text,
 	image,
 	timestamp,
-	setIsModalActive,
-	setLastClickedPostId,
-	children,
+	buttons,
 }: Props) {
 	return (
 		<>
 			<article className='h-auto max-w-full object-cover'>
-				<PostPreviewImage image={image} id={id} />
+				<PostPreviewImage buttons={buttons} image={image} id={id} />
 			</article>
 
 			<article className='flex h-full flex-col justify-between gap-x-4 p-6'>
@@ -44,16 +40,6 @@ export default function PostPreview({
 					timestamp={timestamp}
 				/>
 			</article>
-
-			{children && (
-				<div className='flex content-around pb-6'>
-					{React.cloneElement(children, {
-						id,
-						setIsModalActive,
-						setLastClickedPostId,
-					})}
-				</div>
-			)}
 		</>
 	);
 }
