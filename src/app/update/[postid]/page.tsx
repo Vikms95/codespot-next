@@ -49,22 +49,11 @@ export default function PostForm() {
 
 	const { data, isMutating, trigger } = useSWRMutation(
 		() => ENDPOINTS.UPDATE_POST(postid),
-		url =>
-			updatePost(
-				url,
-				user,
-				title,
-				text,
-				isPublic,
-				image,
-				postid,
-				post?.timestamp,
-			),
+		url => updatePost(url, user, title, text, isPublic, image, post?.timestamp),
 	);
 
 	useEffect(() => {
 		if (!data) return;
-		console.log('Filter response data from back: ', data);
 
 		setPosts(prevPosts => [...prevPosts, data]);
 		return router.push('/dashboard');

@@ -4,7 +4,7 @@ type TFormData = {
 	title: string;
 	text: string;
 	isPublic: boolean;
-	user: TUser;
+	user: TUser['_id'];
 	image: string;
 };
 export const createFormData = ({

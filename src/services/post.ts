@@ -78,7 +78,6 @@ export async function updatePost(
 	text: string,
 	isPublic: boolean,
 	image: string,
-	postToUpdate: string,
 	timestamp: string,
 ) {
 	const formDataRequest = createFormData({
@@ -92,9 +91,8 @@ export async function updatePost(
 	formDataRequest.append('formerTimeStamp', timestamp);
 
 	try {
-		const data = await axios.put(url, formDataRequest, {});
-
-		return data as unknown as TPost;
+		const { data } = await axios.put(url, formDataRequest, {});
+		return data;
 	} catch (err: any) {
 		console.warn('data', err);
 		return new Error(err);
