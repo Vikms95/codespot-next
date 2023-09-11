@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from 'react';
 import { getWindowDimensions } from '../utils/getWindowDimensions';
 
@@ -15,5 +16,7 @@ export function useWindowDimensions() {
 		return () => window.removeEventListener('resize', handleResize);
 	}, []);
 
-	return windowDimensions;
+	const isMobileView = windowDimensions.width <= 640;
+
+	return { windowDimensions, isMobileView };
 }

@@ -1,11 +1,7 @@
 'use client';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 
-import {
-	PostBotRowContainer,
-	PostContentContainer,
-	PostImageContainer,
-} from './_styles';
+import { PostBotRowContainer } from './_styles';
 import { PostPreviewImage } from './PostPreviewImage';
 import { PostPreviewContent } from './PostPreviewContent';
 import { TChildren } from '@/types';
@@ -18,10 +14,7 @@ type Props = {
 	text: string;
 	image: string;
 	timestamp: string;
-	setIsModalActive: Dispatch<SetStateAction<boolean>>;
-	setLastClickedPostId: Dispatch<SetStateAction<string>>;
-	children?: TChildren;
-};
+} & PropsWithChildren;
 
 export default function PostPreview({
 	id,
@@ -30,34 +23,22 @@ export default function PostPreview({
 	text,
 	image,
 	timestamp,
-	setIsModalActive,
-	setLastClickedPostId,
 	children,
 }: Props) {
 	return (
 		<>
-			<PostImageContainer>
-				<PostPreviewImage image={image} id={id} />
-			</PostImageContainer>
+			<article className='h-auto max-w-full object-cover'>
+				<PostPreviewImage buttons={children} image={image} id={id} />
+			</article>
 
-			<PostContentContainer>
+			<article className='flex h-full flex-col justify-between gap-x-4 p-6'>
 				<PostPreviewContent
 					text={text}
 					title={title}
 					username={user.username}
 					timestamp={timestamp}
 				/>
-			</PostContentContainer>
-
-			{children && (
-				<PostBotRowContainer>
-					{React.cloneElement(children, {
-						id,
-						setIsModalActive,
-						setLastClickedPostId,
-					})}
-				</PostBotRowContainer>
-			)}
+			</article>
 		</>
 	);
 }

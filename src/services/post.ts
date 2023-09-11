@@ -4,9 +4,9 @@ import { deleteOptions, getOptions, rootURL } from '../data/requestParams';
 import { TPost, TUser } from '@/types';
 import { createFormData } from '@/utils/createFormData';
 
-const getPosts = async () => {
+export async function getPosts(url: string) {
 	try {
-		const response = await fetch(rootURL + '/api/posts', getOptions);
+		const response = await fetch(url, getOptions);
 
 		const data = await response.json();
 
@@ -14,72 +14,44 @@ const getPosts = async () => {
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
-const getUserPosts = async (
-	userid: string
-): Promise<TPost[] | Error | undefined> => {
-	if (!userid) return;
+export async function getUserPosts(url: string): Promise<TPost[]> {
+	if (!url) throw new Error('Invalid URL');
 
 	try {
-		const response = await fetch(rootURL + `/api/${userid}/posts`, getOptions);
+		const response = await fetch(url, getOptions);
 
-		const data = await response.json();
+		if (!response.ok) {
+			const errorData = await response.json();
+			throw new Error(errorData.message || 'Failed to fetch posts');
+		}
 
+		const data: TPost[] = await response.json();
 		return data;
+	} catch (err: any) {
+		throw new Error(err.message || 'Unknown error occurred');
+	}
+}
+
+export async function getImage(url: string) {
+	try {
+		const data = await fetch(url);
+
+		return data as Response;
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
+}
 
-const getImage = async (url: string) => {
-	try {
-		const data = await fetch(rootURL + url);
-
-		return data;
-	} catch (err: any) {
-		return new Error(err);
-	}
-};
-
-const createPost = async (
-	user: string,
-	title: string,
-	text: string,
-	isPublic: boolean,
-	image: string
-) => {
-	const formDataRequest = createFormData({
-		title,
-		text,
-		isPublic,
-		user,
-		image,
-	});
-	const timestamp = getFormattedDate();
-	formDataRequest.append('timestamp', timestamp);
-
-	try {
-		const { data } = await axios.post(
-			rootURL + '/api/post',
-			formDataRequest,
-			{}
-		);
-		return data;
-	} catch (err: any) {
-		throw new Error(err);
-	}
-};
-
-const updatePost = async (
+export async function createPost(
+	url: string,
 	user: TUser,
 	title: string,
 	text: string,
 	isPublic: boolean,
 	image: string,
-	postToUpdate: string,
-	formData: Record<string, any>
-) => {
+) {
 	const formDataRequest = createFormData({
 		title,
 		text,
@@ -88,30 +60,54 @@ const updatePost = async (
 		image,
 	});
 
-	formDataRequest.append('formerTimeStamp', formData.timestamp);
+	const timestamp = getFormattedDate();
+	formDataRequest.append('timestamp', timestamp);
 
-	console.warn('Hi');
 	try {
-		const data = await axios.put(
-			rootURL + '/api/posts/' + postToUpdate,
-			formDataRequest,
-			{}
-		);
+		const { data } = await axios.post(url, formDataRequest, {});
+		return data;
+	} catch (err: any) {
+		throw new Error(err);
+	}
+}
 
+export async function updatePost(
+	url: string,
+	user: TUser['_id'],
+	title: string,
+	text: string,
+	isPublic: boolean,
+	image: string,
+	timestamp: string,
+) {
+	const formDataRequest = createFormData({
+		title,
+		text,
+		isPublic,
+		user,
+		image,
+	});
+
+	formDataRequest.append('formerTimeStamp', timestamp);
+
+	try {
+		const { data } = await axios.put(url, formDataRequest, {});
 		return data;
 	} catch (err: any) {
 		console.warn('data', err);
 		return new Error(err);
 	}
-};
+}
 
-const deletePost = async (postid: string) => {
+// @Vikms95 TODO Use SWR here
+
+export async function deletePost(postid: string) {
 	if (!postid) return;
 
 	try {
 		const response = await fetch(
 			rootURL + '/api/posts/' + postid,
-			deleteOptions
+			deleteOptions,
 		);
 		const data = await response.json();
 
@@ -119,6 +115,4 @@ const deletePost = async (postid: string) => {
 	} catch (err: any) {
 		return new Error(err);
 	}
-};
-
-export { getPosts, getUserPosts, createPost, deletePost, getImage, updatePost };
+}

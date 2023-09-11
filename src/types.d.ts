@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { BASE_API_ENDPOINT } from './constants';
 
 export type TPost = {
 	_id: string;
@@ -40,3 +41,13 @@ export type TChildren = JSX.Element | JSX.Element[] | ReactElement<any, any>;
 export type TSetter<T> = Dispatch<SetStateAction<T>>;
 
 export type TMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+export type ImageSrc = {
+	url: string;
+};
+
+export type SetState<T> = Dispatch<React.SetStateAction<T>>;
+
+type BaseEndpointType = typeof BASE_API_ENDPOINT;
+type UrlPart<T extends string> = T[];
+type Url<T extends string> = `${BaseEndpointType}${T}`;

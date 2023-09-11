@@ -1,5 +1,5 @@
 import { TChildren } from '@/types';
-import { useEffect } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { StyledPost } from './_styles';
 import { PostBodyWithGuest, PostBodyWithUser } from './index';
 import { useAuthContext } from '@context/AuthContext';
@@ -10,7 +10,7 @@ import { CommentsLayout } from '@/layouts';
 import { useCommentsContext } from '@/context/CommentsContext';
 import { useDerivedComments } from '@/hooks/useDerivedComments';
 
-export function Post({ children }: TChildren) {
+export function Post({ children }: PropsWithChildren) {
 	const { user } = useAuthContext();
 	const isActive = useFadeIn();
 	const { postid } = useParams();
@@ -27,13 +27,13 @@ export function Post({ children }: TChildren) {
 	}, [user]);
 
 	return (
-		<StyledPost isActive={isActive}>
+		<section className='m:my-3 min-h-screen sm:mx-0 md:mx-auto md:px-4 lg:mx-20 lg:my-5'>
 			{user ? <PostBodyWithUser /> : <PostBodyWithGuest />}
 			<CommentsLayout
 				comments={rootComments}
 				setComments={setComments}
 				getChildComments={getChildComments}
 			/>
-		</StyledPost>
+		</section>
 	);
 }

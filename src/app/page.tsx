@@ -1,12 +1,13 @@
 'use client';
 import { useEffect } from 'react';
-import { TSetter } from '@/types';
+import { TPost, TSetter } from '@/types';
 import { LazyPostPreview as PostPreview } from '@/components/PostPreview';
 import { PostsLayout } from '@/layouts';
 import { usePostsContext } from '@/context/PostsContext';
 import { getPosts } from '@/services/post';
-import { StyledHome } from '@/components/Home/_styles';
 import useSWR from 'swr';
+import { MainPostLayout } from '@/components/PostPreview/MainPostsLayout';
+import { ENDPOINTS } from '@/constants';
 
 type Props = {
 	setLastClickedPostId: TSetter<string>;
@@ -18,34 +19,54 @@ export default function Home({
 	setIsModalActive,
 }: Props) {
 	const { posts, setPosts } = usePostsContext();
-	const { data } = useSWR('/api/posts', getPosts);
+	const { data: fetchedPosts } = useSWR(ENDPOINTS.GET_POSTS, getPosts);
 
 	useEffect(() => {
-		setPosts(data?.reverse());
-	}, [data]);
+		if (!fetchedPosts) return;
+
+		const publicPosts = fetchedPosts
+			.filter((post: TPost) => post.public)
+			.reverse();
+
+		setPosts(publicPosts);
+	}, [fetchedPosts]);
 
 	return (
-		<StyledHome>
-			{posts && (
-				<PostsLayout title='Latest post' section='home'>
-					{posts.map(
-						post =>
-							post.public && (
-								<PostPreview
-									key={post._id}
-									id={post._id}
-									user={post.user}
-									text={post.text}
-									title={post.title}
-									image={post.image}
-									timestamp={post.timestamp}
+		<main className='m:my-3 min-h-screen sm:mx-0 md:mx-auto md:px-4 lg:mx-20 lg:my-5'>
+			{posts.length > 0 &&
+				(() => {
+					const [first, second, ...rest] = posts;
+					return (
+						<>
+							{first && second && (
+								<MainPostLayout
+									posts={[first, second]}
 									setIsModalActive={setIsModalActive}
 									setLastClickedPostId={setLastClickedPostId}
 								/>
-							)
-					)}
-				</PostsLayout>
-			)}
-		</StyledHome>
+							)}
+
+							<PostsLayout section='home'>
+								{rest.map(({ _id, user, text, title, image, timestamp }) => {
+									if (!_id || !user.username) return null;
+									return (
+										<PostPreview
+											key={_id}
+											id={_id}
+											user={user}
+											text={text}
+											title={title}
+											image={image}
+											timestamp={timestamp}
+											setIsModalActive={setIsModalActive}
+											setLastClickedPostId={setLastClickedPostId}
+										/>
+									);
+								})}
+							</PostsLayout>
+						</>
+					);
+				})()}
+		</main>
 	);
 }

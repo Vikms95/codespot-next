@@ -23,10 +23,8 @@ export function LazyPostPreviewWithButtons(props: Props) {
 	const { isNearScreen, fromRef } = useNearScreen({ distance: '200px' });
 
 	return (
-		<StyledPostPreview ref={fromRef}>
-			{/* {isNearScreen ? ( */}
+		<section className='flex flex-col content-between outline-none text-ellipsis sm:col-span-4 l:col-span-2' ref={fromRef}>
 			<PostPreviewWithButtons {...props}></PostPreviewWithButtons>
-			{/* ) : null} */}
-		</StyledPostPreview>
+		</section>
 	);
 }

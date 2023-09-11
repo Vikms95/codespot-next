@@ -1,7 +1,7 @@
 import { useCommentsContext } from '@/context/CommentsContext';
 import { createComment, updateComment } from '@/services/comment';
 import { Spinner } from '@/style/Spinner';
-import { TComment, TFormFuncionality, TSetter } from '@/types';
+import { SetState, TComment, TFormFuncionality, TSetter } from '@/types';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import useSWRMutation from 'swr/mutation';
 import { useAuthContext } from '@context/AuthContext';
@@ -24,7 +24,7 @@ type Props = {
 	isCommentForm?: boolean;
 	autoFocus?: boolean;
 	commentid?: string;
-	setIsFormActive?: Dispatch<SetStateAction<boolean>>;
+	setIsFormActive?: SetState<boolean>;
 };
 
 export function CommentForm({
@@ -35,7 +35,7 @@ export function CommentForm({
 	isCommentForm,
 	setIsFormActive,
 }: Props) {
-	const { user: userid } = useAuthContext();
+	const { user } = useAuthContext();
 	const { postid } = useParams();
 	const { formData, setFormData, handleChange } = useForm(commentFields);
 	const { isFormValid } = useValidation(commentVal, formData);
@@ -66,8 +66,8 @@ export function CommentForm({
 		data: commentCreated,
 		trigger: triggerCreate,
 		isMutating: isLoadingCreate,
-	} = useSWRMutation('/api/comment', () =>
-		createComment(text, postid, userid, commentid)
+	} = useSWRMutation('/api/comment', url =>
+		createComment(url, text, postid, user._id, commentid!),
 	);
 
 	useEffect(() => {
@@ -85,8 +85,8 @@ export function CommentForm({
 		data: commentUpdated,
 		trigger: triggerUpdate,
 		isMutating: isLoadingUpdate,
-	} = useSWRMutation(`/api/${postid}/comments/${commentid}`, () =>
-		updateComment(text, postid, userid, commentid, comments)
+	} = useSWRMutation(`/api/${postid}/comments/${commentid}`, (url: string) =>
+		updateComment(url, text, postid, user._id, commentid!, comments),
 	);
 
 	useEffect(() => {
@@ -94,8 +94,8 @@ export function CommentForm({
 
 		setComments(prevComments =>
 			prevComments.map(prevComment =>
-				prevComment._id === commentid ? commentUpdated : prevComment
-			)
+				prevComment._id === commentid ? commentUpdated : prevComment,
+			),
 		);
 
 		setFormData(commentFields);
@@ -133,7 +133,7 @@ export function CommentForm({
 					disabled={isFormValid() || isLoadingCreate || isLoadingUpdate}
 				>
 					{isLoadingCreate || isLoadingUpdate ? (
-						<Spinner />
+						<div data-testid='spinner' className='spinner' />
 					) : (
 						checkFormFunctionality(type)
 					)}

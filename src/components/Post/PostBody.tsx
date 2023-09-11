@@ -1,25 +1,23 @@
-import { TChildren } from '@/types';
-import React, { useEffect } from 'react';
-import useSWR from 'swr';
-import { CommentsTitle, Text } from './_styles';
-import { PostHero } from './PostHero';
+import { ENDPOINTS } from '@/constants';
 import { useCommentsContext } from '@context/CommentsContext';
 import { usePostsContext } from '@context/PostsContext';
 import { useHtmlAsText } from '@hooks/useHtmlAsText';
 import { usePost } from '@hooks/usePost';
 import { getPosts } from '@services/post';
 import { useParams } from 'next/navigation';
+import React, { PropsWithChildren, useEffect } from 'react';
+import useSWR from 'swr';
+import { PostHero } from './PostHero';
+import { CommentsTitle, Text } from './_styles';
 
-type Params = { postid: string };
-
-export function PostBody({ children }: TChildren) {
+export function PostBody({ children }: PropsWithChildren) {
 	const { posts, setPosts } = usePostsContext();
 	const { postid } = useParams();
 	const post = usePost(postid, posts);
 	const { title, image, text } = post;
 	const textRef = useHtmlAsText(text);
 	const { comments } = useCommentsContext();
-	const { data } = useSWR('/api/posts', getPosts);
+	const { data } = useSWR(ENDPOINTS.GET_POSTS, getPosts);
 
 	useEffect(() => {
 		if (!posts) {
@@ -28,15 +26,15 @@ export function PostBody({ children }: TChildren) {
 	}, []);
 
 	return (
-		<>
+		<section className='sm:p-4 md:p-0'>
 			<PostHero image={image} post={post} title={title} />
-			<Text ref={textRef}></Text>
+			<p className='text-lg sm:text-xs' ref={textRef}></p>
 
 			{children}
 
-			<CommentsTitle>
+			<h1 className='self-start pb-4 pl-4 pt-8'>
 				{comments?.length > 0 ? 'Comments' : 'There are no comments...'}
-			</CommentsTitle>
-		</>
+			</h1>
+		</section>
 	);
 }

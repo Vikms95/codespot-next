@@ -91,7 +91,6 @@ const FormImage = styled.img`
 `;
 
 const PostFormContainer = styled.section`
-	margin: 0 5em;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -101,6 +100,7 @@ const PostFormContainer = styled.section`
 	transition: opacity 1s;
 `;
 
+// aqui usar react-hook form
 const StyledPostForm = styled.form`
 	display: grid;
 	grid-template-rows: 1fr 1fr 1fr 1fr;

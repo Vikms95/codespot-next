@@ -1,12 +1,13 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { getComments } from '@services/comment';
+import { ENDPOINTS } from '@/constants';
+import { TComment } from '@/types';
 import { Post } from '@components/Post/Post';
 import { PostWithComments } from '@components/Post/PostWithComments';
 import { CommentsContextProvider } from '@context/CommentsContext';
-import useSWR from 'swr';
-import { TComment } from '@/types';
+import { getComments } from '@services/comment';
 import { useParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 export default function PostWrapper() {
 	const { postid } = useParams();
@@ -24,8 +25,10 @@ export default function PostWrapper() {
 			},
 		},
 	]);
-	const { data } = useSWR(`/api/${postid}/comments`, () =>
-		getComments(postid!)
+
+	const { data } = useSWR(
+		() => ENDPOINTS.GET_POST_COMMENTS(postid),
+		getComments,
 	);
 
 	useEffect(() => setComments(data), [data]);

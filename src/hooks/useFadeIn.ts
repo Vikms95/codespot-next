@@ -4,7 +4,7 @@ export function useFadeIn() {
 	const [isActive, setIsActive] = useState<boolean>(false);
 
 	useEffect(() => {
-		setIsActive(true);
+		setTimeout(() => setIsActive(true), 0);
 		return () => setIsActive(false);
 	});
 

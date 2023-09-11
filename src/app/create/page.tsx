@@ -1,71 +1,51 @@
 'use client';
-import { useRef, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { RichTextEditor } from '@/components/Form/RichTextEditor';
+import { Button } from '@/components/ui/button';
+import { FormLabel } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+} from '@components/ui/form';
 import { useAuthContext } from '@context/AuthContext';
 import { usePostsContext } from '@context/PostsContext';
-import { postFields } from '../../data/formFields';
-import { postVal } from '../../data/validationValues';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useFadeIn } from '@hooks/useFadeIn';
-import { usePostForm } from '@hooks/usePostForm';
-import { usePostToUpdate } from '@hooks/usePostToUpdate';
-import { useValidation } from '@hooks/useValidation';
 import { createPost, updatePost } from '@services/post';
-import { Label } from '../../style/Label';
-import { Spinner } from '../../style/Spinner';
-import { parseEditorData } from '../../utils/parseEditorData';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { FaCheck } from 'react-icons/fa';
 import useSWRMutation from 'swr/mutation';
-import {
-	PostFormContainer,
-	StyledPostForm,
-	TitleInput,
-	FormBottomRow,
-	StyledFaCheck,
-	InputContainer,
-	BottomRight,
-	CheckBoxContainer,
-	CheckBoxTitle,
-	CheckBoxLabel,
-	CheckBox,
-	FormButton,
-	ErrorMessage,
-	StyledEditor,
-} from './_styles';
+import { z } from 'zod';
+import { postFields, postSchema } from '../../data/formFields';
+import { ENDPOINTS } from '@/constants';
 
 export default function PostForm() {
 	const isActive = useFadeIn();
 	const router = useRouter();
 	const { postid } = useParams();
-	const editorRef = useRef(null);
+	console.log('Filter hello world: ', postid);
+
 	const { user } = useAuthContext();
-	const { posts, setPosts } = usePostsContext();
+	const { setPosts } = usePostsContext();
+	const imageInputRef = useRef<HTMLInputElement>(null!);
 
-	const {
-		formData,
-		setFormData,
-		handleChange,
-		handleImageChange,
-		handleEditorChange,
-		handlePrivacyChange,
-	} = usePostForm(editorRef, postFields);
-	usePostToUpdate(postid, posts, setFormData);
-	const { isFormValid } = useValidation(postVal, formData);
-
-	const { title, text, isPublic, image } = formData;
+	const postForm = useForm<z.infer<typeof postSchema>>({
+		resolver: zodResolver(postSchema),
+		defaultValues: postFields,
+	});
 
 	const {
 		data: createdPost,
 		isMutating: isCreateLoading,
 		trigger: triggerCreate,
-	} = useSWRMutation('/api/post', () =>
-		createPost(user, title, text, isPublic, image)
-	);
-
-	const {
-		data: updatedPost,
-		isMutating: isUpdateLoading,
-		trigger: triggerUpdate,
-	} = useSWRMutation(`/api/post/${postid}`, () =>
-		updatePost(user, title, text, isPublic, image, postid, formData)
+	} = useSWRMutation(ENDPOINTS.CREATE_POST, url =>
+		createPost(url, user, title, text, isPublic, image),
 	);
 
 	useEffect(() => {
@@ -74,97 +54,124 @@ export default function PostForm() {
 		return router.push('/dashboard');
 	}, [createdPost]);
 
-	useEffect(() => {
-		if (!updatedPost) return;
-		return router.push('/dashboard');
-	}, [updatedPost]);
-
-	function handleSubmit(e) {
-		e.preventDefault();
-		if (postid) {
-			triggerUpdate();
-		} else {
-			triggerCreate();
-		}
+	function handleSubmit() {
+		triggerCreate();
 	}
+
+	const { text, title, isPublic, image } = postForm.getValues();
+
 	return (
-		<PostFormContainer isActive={isActive}>
-			<StyledPostForm onSubmit={handleSubmit} encType='multipart/form-data'>
-				<Label htmlFor='title'>Title </Label>
-				<TitleInput
-					type='text'
-					name='title'
-					onChange={handleChange}
-					placeholder='Post title ...'
-					value={title}
-					maxLength='35'
-				/>
-				<br />
+		<section
+			className='flex w-10/12 items-center justify-center bg-white sm:mx-auto sm:my-5 lg:my-8'
+			// isActive={isActive}
+		>
+			<Form
+				data-testid='post-form'
+				// @ts-expect-error
+				encType='multipart/form-data'
+				{...postForm}
+			>
+				<form onSubmit={postForm.handleSubmit(async () => handleSubmit())}>
+					<FormField
+						control={postForm.control}
+						name='title'
+						render={({ field }) => (
+							<FormItem>
+								<FormControl>
+									<Input
+										className='sm:w-64 md:w-full'
+										autoComplete='on'
+										placeholder='Post title'
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-				<Label htmlFor='text'>Post </Label>
-				<StyledEditor
-					onInit={(_e: Event, editor: any) => (editorRef.current = editor)}
-					init={{
-						height: 600,
-						width: 1200,
-						elementpath: false,
-						plugins: 'code',
-						menubar: true,
-					}}
-					apiKey='k1kgs8qmzd0isvug3s4btubgrps7yutyhiy7jbsi038go8sq'
-					name='html'
-					value={formData.text}
-					onEditorChange={(content, editor) => {
-						handleEditorChange(parseEditorData(content, editor));
-					}}
-				/>
+					<br />
 
-				<br />
-				<FormBottomRow>
-					<InputContainer>
-						<Label htmlFor='image'>Attach an image</Label>
-						<input
-							style={{ display: 'none' }}
-							type='file'
-							name='image'
-							id='image'
-							onChange={handleImageChange}
-						/>
-						{image && <StyledFaCheck />}
-					</InputContainer>
+					<FormField
+						control={postForm.control}
+						name='text'
+						render={control => (
+							<FormItem>
+								<FormControl>
+									<RichTextEditor control={control} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
 					<br />
-					<ErrorMessage>
-						Image size should not exceed 100 megabytes{' '}
-					</ErrorMessage>
-					<br />
-					<BottomRight>
-						<CheckBoxTitle>Make this post public</CheckBoxTitle>
-						<CheckBoxContainer>
-							<CheckBox
-								type='checkbox'
-								name='privacy'
-								onChange={handlePrivacyChange}
-								checked={isPublic}
-							/>
-							<CheckBoxLabel htmlFor='privacy'></CheckBoxLabel>
-						</CheckBoxContainer>
+
+					<article className='flex sm:flex-wrap sm:justify-center md:justify-between'>
+						<div className='flex flex-row justify-center'>
+							<>
+								<FormField
+									control={postForm.control}
+									name='image'
+									render={({ field }) => (
+										<FormItem className='pt-1.5'>
+											<FormLabel
+												onClick={() => imageInputRef.current.click()}
+												className='cursor-pointer text-main-orange'
+											>
+												Attach an image
+											</FormLabel>
+											<FormControl className='h-0'>
+												<Input
+													className='invisible h-0 w-0'
+													type='file'
+													id='image'
+													{...field}
+													ref={imageInputRef}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								{image && <FaCheck className='mt-1 text-green-500' />}
+							</>
+						</div>
+
 						<br />
 
-						<FormButton
-							type='submit'
-							disabled={isFormValid() || isCreateLoading || isUpdateLoading}
-						>
-							{isCreateLoading || isUpdateLoading ? (
-								<Spinner />
-							) : postid ? (
-								'Update post'
-							) : (
-								'Submit post'
-							)}
-						</FormButton>
-					</BottomRight>
-				</FormBottomRow>
-			</StyledPostForm>
-		</PostFormContainer>
+						<div className='flex gap-x-5 sm:flex-wrap sm:justify-center sm:gap-y-4 sm:text-xs md:justify-between'>
+							<FormField
+								control={postForm.control}
+								name='isPublic'
+								render={({ field }) => (
+									<FormItem className='flex gap-x-2 rounded-lg '>
+										<FormLabel className='cursor-pointer pt-3'>
+											Make this post public
+										</FormLabel>
+										<FormControl>
+											<Switch
+												className='bg-main-orange'
+												checked={field.value}
+												onCheckedChange={field.onChange}
+												aria-readonly
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+							<br />
+
+							<Button
+								type='submit'
+								disabled={!postForm.formState.isValid || isCreateLoading}
+							>
+								{isCreateLoading ? <div className='spinner' /> : 'Submit post'}
+							</Button>
+						</div>
+					</article>
+				</form>
+			</Form>
+		</section>
 	);
 }

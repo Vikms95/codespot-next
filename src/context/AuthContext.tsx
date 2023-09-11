@@ -1,15 +1,9 @@
-import { TSetter } from '@/types';
-import {
-	Dispatch,
-	SetStateAction,
-	createContext,
-	useContext,
-	JSX,
-} from 'react';
+import { TSetter, TUser } from '@/types';
+import { createContext, useContext, JSX } from 'react';
 
 type Context = {
-	user: string;
-	setUser: TSetter<string>;
+	user: TUser['_id'];
+	setUser: TSetter<TUser['_id']>;
 };
 
 type Provider = { value: Context; children: JSX.Element[] | JSX.Element };

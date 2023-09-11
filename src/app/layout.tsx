@@ -1,12 +1,13 @@
 'use client';
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { ReactElement, ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { NavbarWithGuest, NavbarWithUser } from '../components/Navbar';
-import { AppLayout } from '../layouts';
 import { AuthContextProvider } from '@/context/AuthContext';
 import { PostsContextProvider } from '@/context/PostsContext';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { TChildren } from '@/types';
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -15,10 +16,7 @@ export const metadata = {
 	description: 'Blog to share your code ideas.',
 };
 
-type Props = {
-	children: JSX.Element;
-};
-export default function RootLayout({ children }: Props) {
+export default function RootLayout({ children }: TChildren) {
 	const [user, setUser] = useState('');
 	const [posts, setPosts] = useLocalStorage('posts', []);
 	const [lastClickedPost, setLastClickedPost] = useState('');
@@ -26,16 +24,18 @@ export default function RootLayout({ children }: Props) {
 	return (
 		<html lang='en'>
 			<body className={inter.className}>
-				<AppLayout>
-					<AuthContextProvider value={{ user, setUser }}>
-						<PostsContextProvider
-							value={{ posts, setPosts, lastClickedPost, setLastClickedPost }}
-						>
+				<AuthContextProvider value={{ user, setUser }}>
+					<PostsContextProvider
+						value={{ posts, setPosts, lastClickedPost, setLastClickedPost }}
+					>
+						<section className='flex h-full flex-col sm:mx-0 md:mx-auto lg:mx-auto lg:my-10'>
 							{user ? <NavbarWithUser /> : <NavbarWithGuest />}
-							{children}
-						</PostsContextProvider>
-					</AuthContextProvider>
-				</AppLayout>
+							<div className='main-content flex h-full flex-col'>
+								{children}
+							</div>
+						</section>
+					</PostsContextProvider>
+				</AuthContextProvider>
 			</body>
 		</html>
 	);

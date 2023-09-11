@@ -20,11 +20,12 @@ export function Modal({
 	const { setPosts } = usePostsContext();
 
 	const handleDelete = async () => {
+		// @Vikms95 TODO Use SWR here
 		const data = await deletePost(lastClickedPostId);
 		if (!data) return;
 
 		setPosts(prevPosts =>
-			prevPosts.filter(post => post._id !== lastClickedPostId)
+			prevPosts.filter(post => post._id !== lastClickedPostId),
 		);
 
 		handleCancel();

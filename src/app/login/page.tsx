@@ -1,45 +1,48 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import useSWR from 'swr';
-import loginImage from '@assets/login-image.webp';
-import { loginFields } from '../../data/formFields';
-import { loginVal } from '../../data/validationValues';
+
+import { Button } from '@/components/ui/button';
+import { CheckboxWithText } from '@/components/ui/checkbox-with-text';
+import { loginFields, loginSchema } from '@/data/formFields';
+import { Spinner } from '@/style/Spinner';
+import { formatError } from '@/utils/formatError';
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@components/ui/form';
+import { Input } from '@components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useFadeIn } from '@hooks/useFadeIn';
-import { useForm } from '@hooks/useForm';
-import { useValidation } from '@hooks/useValidation';
-import { UserFormLayout } from '../../layouts/UserFormLayout';
 import { loginUser } from '@services/user';
-import { Spinner } from '../../style/Spinner';
+import clsx from 'clsx';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { FaGoogle } from 'react-icons/fa';
+import useSWRMutation from 'swr/mutation';
+import * as z from 'zod';
 import { getFromStorage } from '../../utils/getFromStorage';
 import { setToStorage } from '../../utils/setToStorage';
-
-import {
-	UserFormContainer,
-	UserForm,
-	HeroTitle,
-	StyledLabel,
-	Input,
-	InputHeader,
-	LoginButton,
-	FormImage,
-	ErrorMessage,
-	ServerErrorDisplay,
-} from './_styles';
 import { useAuthContext } from '@/context/AuthContext';
+import { ENDPOINTS } from '@/constants';
 
 export default function LoginForm() {
 	const router = useRouter();
 	const isActive = useFadeIn();
 	const { setUser } = useAuthContext();
 
-	const { formData, handleChange, handleBlur } = useForm(loginFields);
-	const { isFormValid, shouldMarkErr } = useValidation(loginVal, formData);
-	const { username, password } = formData;
-	const [shouldFetch, setShouldFetch] = useState(false);
-	const { data, error, isLoading } = useSWR(
-		shouldFetch ? 'api/session' : null,
-		() => loginUser(username, password)
+	const loginForm = useForm<z.infer<typeof loginSchema>>({
+		resolver: zodResolver(loginSchema),
+		defaultValues: loginFields,
+	});
+	const { username, password } = loginForm.getValues();
+
+	const { data, error, isMutating, trigger } = useSWRMutation(
+		ENDPOINTS.SESSION,
+		url => loginUser(url, username, password),
 	);
 
 	useEffect(() => {
@@ -47,82 +50,125 @@ export default function LoginForm() {
 
 		setUser(data.user);
 		setToStorage('token', data.token);
-		setShouldFetch(false);
 
 		if (hasPostToRedirect()) {
-			return redirectToPost();
+			redirectToPost();
+		} else {
+			router.push('/dashboard');
 		}
-
-		router.push('/dashboard');
 	});
 
-	const handleSubmit = async (e: Event) => {
-		e.preventDefault();
-		setShouldFetch(true);
-	};
-
-	const redirectToPost = () => {
+	function redirectToPost() {
 		const postid = getFromStorage('postToRedirect');
-		// return navigate(`/posts/${postid}`);
-	};
+		return router.push(`/posts/${postid}`);
+	}
 
-	const hasPostToRedirect = () => {
+	function hasPostToRedirect() {
 		const postToRedirect = getFromStorage('postToRedirect');
 		if (postToRedirect) return postToRedirect;
-	};
+	}
 
 	return (
-		<UserFormLayout isActive={isActive}>
-			<UserFormContainer>
-				<UserForm onSubmit={handleSubmit} autoComplete='on'>
-					<HeroTitle> Share your ideas with the world.</HeroTitle>
-					<InputHeader>
-						<StyledLabel htmlFor='username'> Username </StyledLabel>
-						<ErrorMessage shouldMarkError={shouldMarkErr('username')}>
-							{' '}
-							Username is required{' '}
-						</ErrorMessage>
-					</InputHeader>
-					<Input
-						type='text'
-						id='username'
+		<section className='flex'>
+			<Form data-testid='login-form' {...loginForm}>
+				<form
+					onSubmit={loginForm.handleSubmit(async () => trigger())}
+					className={clsx(
+						'mx-auto my-16 flex w-full flex-col space-y-8  transition-opacity duration-150 sm:max-w-xs md:max-w-sm',
+						// isActive && 'opacity-100',
+					)}
+				>
+					<p className='mb-5 flex justify-center text-2xl font-medium text-main-orange'>
+						Share your ideas with the world.
+					</p>
+
+					<FormField
+						control={loginForm.control}
 						name='username'
-						autoComplete='on'
-						maxLength={20}
-						minLength={1}
-						value={username}
-						onBlur={handleBlur}
-						onChange={handleChange}
-						shouldMarkError={shouldMarkErr('username')}
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Username</FormLabel>
+								<FormControl>
+									<Input autoComplete='on' placeholder='Username' {...field} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
 					/>
-					<InputHeader>
-						<StyledLabel htmlFor='password'> Password </StyledLabel>
-						<ErrorMessage shouldMarkError={shouldMarkErr('password')}>
-							{' '}
-							Password is required{' '}
-						</ErrorMessage>
-					</InputHeader>
-					<Input
-						type='password'
-						id='password'
+
+					<FormField
+						control={loginForm.control}
 						name='password'
-						autoComplete='on'
-						maxLength={20}
-						minLength={5}
-						value={password}
-						onBlur={handleBlur}
-						onChange={handleChange}
-						shouldMarkError={shouldMarkErr('password')}
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Password</FormLabel>
+								<FormControl>
+									<Input
+										autoComplete='on'
+										type='password'
+										placeholder='Password'
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
 					/>
-					<ServerErrorDisplay serverError={error}>
-						{error || 'No error'}
-					</ServerErrorDisplay>
-					<LoginButton type='submit' disabled={isFormValid() || isLoading}>
-						{isLoading ? <Spinner></Spinner> : 'Login'}
-					</LoginButton>
-				</UserForm>
-			</UserFormContainer>
-			<FormImage src={loginImage}></FormImage>
-		</UserFormLayout>
+
+					<div className='flex justify-between'>
+						<CheckboxWithText id='remember' text='Remember for 30 days' />
+						<p className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+							Forgot password
+						</p>
+					</div>
+
+					<div className='flex flex-col space-y-5'>
+						<FormMessage className={clsx(error ? 'opacity-100' : 'opacity-0')}>
+							{error ? formatError(error) : 'No error'}
+						</FormMessage>
+
+						<Button className='mx-auto my-auto flex w-full' type='submit'>
+							{isMutating ? (
+								<div data-testid='spinner' className='spinner' />
+							) : (
+								'Login'
+							)}
+						</Button>
+
+						<Button
+							className='mx-auto my-auto flex w-full bg-white text-black outline outline-1 outline-black hover:bg-main-grey'
+							type='submit'
+						>
+							{isMutating ? (
+								<div data-testid='spinner' className='spinner' />
+							) : (
+								<div className='flex content-center justify-center gap-x-5'>
+									<FaGoogle className='text-xl hover:cursor-pointer' />
+									<div>Sign in with Google</div>
+								</div>
+							)}
+						</Button>
+					</div>
+					<div className='flex justify-center gap-x-2'>
+						<p className='text-main-grey sm:text-sm md:text-base'>
+							Don't have an account?
+						</p>
+						<a
+							className='transition-all hover:cursor-pointer hover:underline sm:text-sm md:text-base'
+							onClick={() => router.push('/register')}
+						>
+							Sign up for free
+						</a>
+					</div>
+				</form>
+			</Form>
+			{/* <Image
+				width={420}
+				height={150}
+				className='hidden lg:flex'
+				alt='login'
+				src={loginImage.src}
+			/> */}
+		</section>
 	);
 }

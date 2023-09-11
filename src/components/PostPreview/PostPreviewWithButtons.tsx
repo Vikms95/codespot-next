@@ -1,11 +1,9 @@
 'use client';
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, MouseEvent, SetStateAction } from 'react';
 import PostPreview from './PostPreview';
 import { useRouter } from 'next/navigation';
-import { useNavigate } from 'react-router-dom';
-import { PostButtonContainer } from './_styles';
-import { Button } from '../../style/Button';
-import { TChildren, TSetter, TUser } from '@/types';
+import { TChildren, TUser } from '@/types';
+import { FaPencilAlt, FaTrash } from 'react-icons/fa';
 
 type Props = {
 	id: string;
@@ -19,24 +17,41 @@ type Props = {
 } & TChildren;
 
 export default function PostPreviewWithButtons(props: Props) {
-	const { id, setIsModalActive, setLastClickedPost } = props;
+	return (
+		<PostPreview {...props}>
+			<PostButtons {...props} />
+		</PostPreview>
+	);
+}
+
+function PostButtons({ id, setIsModalActive, setLastClickedPost }: Props) {
 	const router = useRouter();
 
-	const handleUpdate = () => {
+	const handleUpdate = (e: MouseEvent<HTMLDivElement>) => {
+		e.preventDefault();
+
+		setLastClickedPost(id);
 		return router.push('/update/' + id);
 	};
 
-	const revealDeleteModal = () => {
+	const revealDeleteModal = (e: MouseEvent<HTMLDivElement>) => {
+		e.preventDefault();
+
 		setIsModalActive(true);
 		setLastClickedPost(id);
 	};
 
 	return (
-		<PostPreview {...props}>
-			<PostButtonContainer>
-				<Button onClick={handleUpdate}>Update</Button>
-				<Button onClick={revealDeleteModal}>Delete</Button>
-			</PostButtonContainer>
-		</PostPreview>
+		<article className='flex gap-x-4'>
+			<div role='button' onClick={handleUpdate}>
+				<FaPencilAlt
+					className='transition-all hover:scale-110'
+					color='#DE004A'
+				/>
+			</div>
+			<div role='button' onClick={revealDeleteModal}>
+				<FaTrash className='transition-all hover:scale-110' color='#DE004A' />
+			</div>
+		</article>
 	);
 }

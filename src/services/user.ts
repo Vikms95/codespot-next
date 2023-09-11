@@ -1,16 +1,17 @@
 import { userCreateOptions, rootURL } from '../data/requestParams';
 
 const createUser = async (
+	url: string,
 	username: string,
 	password: string,
-	password2: string
+	password2: string,
 ) => {
 	if (!username || !password || !password2) return;
 
 	try {
 		const response = await fetch(
-			rootURL + '/api/user',
-			userCreateOptions('POST', { username, password, password2 })
+			rootURL + url,
+			userCreateOptions('POST', { username, password, password2 }),
 		);
 
 		const data = await response.json();
@@ -26,13 +27,13 @@ const createUser = async (
 	}
 };
 
-const loginUser = async (username: string, password: string) => {
+const loginUser = async (url: string, username: string, password: string) => {
 	if (!username || !password) return;
 
 	try {
 		const response = await fetch(
-			rootURL + '/api/session',
-			userCreateOptions('POST', { username, password })
+			url,
+			userCreateOptions('POST', { username, password }),
 		);
 
 		const data = await response.json();
@@ -48,9 +49,9 @@ const loginUser = async (username: string, password: string) => {
 	}
 };
 
-const verifyUser = async () => {
+const verifyUser = async (url: string) => {
 	try {
-		const response = await fetch(rootURL + '/api/session', {
+		const response = await fetch(rootURL + url, {
 			method: 'GET',
 			headers: {
 				'content-type': 'application/json',

@@ -1,3 +1,3 @@
 export const formatError = (err: Error) => {
-	return err.toString().split(':')[1].trim();
+	return err?.message.toString().split(':')[1].trim();
 };

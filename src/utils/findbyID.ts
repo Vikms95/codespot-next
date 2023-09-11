@@ -1,4 +1,8 @@
-import { TPost } from '@/types';
+import { TComment, TPost } from '@/types';
 
-export const findByID = (posts: TPost[], postid: string) =>
-	posts.find(post => post._id === postid);
+export const findByID = <T extends TPost | TComment>(
+	array: T[],
+	id: T['_id'],
+): T | undefined => {
+	return array.find(el => el._id === id);
+};

@@ -1,32 +1,19 @@
+'use client';
 import React from 'react';
 import { Navbar } from './Navbar';
-import { logoutUser } from '../../utils/logoutUser';
-import { FaBook, FaTable, FaDoorOpen } from 'react-icons/fa';
-import { StyledLink, NavItem, LinkText } from './_styles';
+import { Link } from './Link';
+import { logoutUser } from '@/utils/logoutUser'
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import { NavbarText } from './NavbarText'
 
 export function NavbarWithUser() {
 	return (
 		<Navbar>
-			<StyledLink href='/dashboard'>
-				<NavItem>
-					<FaTable />
-					<LinkText> Dashboard </LinkText>
-				</NavItem>
-			</StyledLink>
-
-			<StyledLink href='/create'>
-				<NavItem>
-					<FaBook />
-					<LinkText> New post </LinkText>
-				</NavItem>
-			</StyledLink>
-
-			<StyledLink href='/' onClick={logoutUser}>
-				<NavItem>
-					<FaDoorOpen />
-					<LinkText> Logout </LinkText>
-				</NavItem>
-			</StyledLink>
+			<Link href='/dashboard' testid='dashboard-button' text='Dashboard' />
+			<Link href='/create' testid='create-button' text='Create' />
+			<NavigationMenu.Item onClick={logoutUser}>
+					<NavbarText text='Logout'/>
+		    </NavigationMenu.Item>
 		</Navbar>
 	);
 }

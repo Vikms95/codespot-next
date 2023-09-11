@@ -27,7 +27,7 @@
       "@context/*": ["./src/context/*"],
       "@assets/*": ["./src/assets/*"],
       "@constants": ["./src/constants.ts"],
-      "@types": ["./src/types.d.ts"]
+        "@types": ["./src/types.d.ts"]
     },
     "plugins": [
       {
@@ -35,6 +35,15 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/test.ts",
+    "**/test.tsx",
+    "jest.setup.js",
+    "next.config.js"
+  ],
   "exclude": ["node_modules"]
 }

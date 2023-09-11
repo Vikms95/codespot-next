@@ -88,7 +88,7 @@ const NavItem = styled.li`
 
 const StyledNavbar = styled.nav`
 	background-color: white;
-	position: fixed;
+	/* position: fixed;
 	left: 0;
 	display: flex;
 	flex-direction: column;
@@ -109,7 +109,7 @@ const StyledNavbar = styled.nav`
 
 	@media only screen and (min-width: 600px) {
 		top: 0;
-		width: 7em;
+		width: 7rem;
 		height: 100%;
 
 		&:hover {
@@ -142,7 +142,7 @@ const StyledNavbar = styled.nav`
 		&:hover ${LinkText} {
 			display: none;
 		}
-	}
+	} */
 `;
 
 export {

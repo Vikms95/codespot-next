@@ -1,26 +1,29 @@
 'use client';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import useSWR from 'swr';
-import { StyledDashboard } from './_styles';
+import { ENDPOINTS } from '@/constants';
 import { EmptyDashboard } from '@components/Dashboard/EmptyDashboard';
+import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '@components/PostPreview';
 import { useAuthContext } from '@context/AuthContext';
 import { usePostsContext } from '@context/PostsContext';
 import { getUserPosts } from '@services/post';
-import { PostsLayout } from '../../layouts';
-import { LazyPostPreviewWithButtons as PostPreviewWithButtons } from '@components/PostPreview';
 import { TPost } from '@types';
+import { useEffect } from 'react';
+import useSWR from 'swr';
+import { PostsLayout } from '../../layouts';
 
-type Props = {
-	setIsModalActive: Dispatch<SetStateAction<boolean>>;
-};
-
-export default function Dashboard({ setIsModalActive }: Props) {
+export default function Dashboard() {
 	const { user } = useAuthContext();
+
 	const { posts, setPosts, setLastClickedPost } = usePostsContext();
-	const { data } = useSWR(`/api/${user}/posts`, () => getUserPosts(user));
+
+	const { data, error } = useSWR(
+		() => ENDPOINTS.GET_USER_POSTS(user),
+		getUserPosts,
+	);
 
 	useEffect(() => {
-		setPosts((data as TPost[])?.reverse());
+		if (error || !data?.length) return;
+		// I want the last post to be the first to show up
+		setPosts(data.reverse());
 	}, [data]);
 
 	const getPreviewProps = (post: TPost) => {
@@ -33,7 +36,6 @@ export default function Dashboard({ setIsModalActive }: Props) {
 			image: post.image,
 			timestamp: post.timestamp,
 			isPublic: post.public,
-			// setIsModalActive,
 			setLastClickedPost,
 		};
 	};
@@ -43,39 +45,43 @@ export default function Dashboard({ setIsModalActive }: Props) {
 	const hasPrivatePost = () => posts?.some((post: TPost) => !post.public);
 
 	return (
-		<StyledDashboard>
+		<main className='m:my-3 min-h-screen sm:mx-0 md:mx-auto md:px-4 lg:mx-20 lg:my-5'>
 			{hasNoPost() ? (
 				<EmptyDashboard />
 			) : (
-				<>
+				<section className='flex flex-col'>
 					{hasPublicPost() && (
-						<PostsLayout title='Published posts' section='dashboard'>
-							{posts?.map(
-								post =>
-									post.public && (
-										<PostPreviewWithButtons
-											{...getPreviewProps!(post)}
-											key={post._id}
-										/>
-									)
-							)}
-						</PostsLayout>
+						<>
+							<PostsLayout title='Published posts'>
+								{posts?.map(
+									post =>
+										post.public && (
+											<PostPreviewWithButtons
+												data-testid='post-preview'
+												{...getPreviewProps!(post)}
+												key={post._id}
+											/>
+										),
+								)}
+							</PostsLayout>
+						</>
 					)}
 					{hasPrivatePost() && (
-						<PostsLayout title='Unpublished posts' section='dashboard'>
+						<PostsLayout title='Unpublished posts'>
 							{posts?.map(
 								post =>
 									!post.public && (
 										<PostPreviewWithButtons
+											data-testid='post-preview'
 											{...getPreviewProps!(post)}
 											key={post._id}
 										/>
-									)
+									),
 							)}
 						</PostsLayout>
 					)}
-				</>
+				</section>
 			)}
-		</StyledDashboard>
+		</main>
 	);
 }
